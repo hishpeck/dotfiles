@@ -43,10 +43,10 @@ return {
 
 		-- utility function to check if nvim-tree is focused and get current directory
 		local function get_nvim_tree_dir()
-			local lib = require("nvim-tree.lib")
+			local core = require("nvim-tree.core")
 			local view = require("nvim-tree.view")
-			if view.is_visible() then
-				local node = lib.get_node_at_cursor()
+			if view.is_visible() and vim.api.nvim_get_current_win() == view.get_winnr() then
+				local node = core.get_explorer():get_node_at_cursor()
 				if node then
 					return node.absolute_path
 				end

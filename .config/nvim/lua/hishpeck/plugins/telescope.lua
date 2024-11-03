@@ -54,58 +54,61 @@ return {
 			return nil
 		end
 
-		-- keymap utility to call telescope with dynamic directory
-		local function telescope_find_files()
-			local nvim_tree_dir = get_nvim_tree_dir()
-			if nvim_tree_dir then
-				require("telescope.builtin").find_files({ cwd = nvim_tree_dir })
-			else
-				require("telescope.builtin").find_files()
-			end
-		end
+		local function telescope_call_method(name)
+			return function()
+				local builtin = require("telescope.builtin")
 
-		local function telescope_live_grep()
-			local nvim_tree_dir = get_nvim_tree_dir()
-			if nvim_tree_dir then
-				require("telescope.builtin").live_grep({ cwd = nvim_tree_dir })
-			else
-				require("telescope.builtin").live_grep()
+				if not builtin[name] then
+					print("Telescope method '" .. name .. "' not found.")
+					return
+				end
+
+				local nvim_tree_dir = get_nvim_tree_dir()
+
+				if nvim_tree_dir then
+					builtin[name]({ cwd = nvim_tree_dir })
+				else
+					builtin[name]()
+				end
 			end
 		end
 
 		-- set keymaps
 		local keymap = vim.keymap -- for conciseness
 
-		-- keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Fuzzy find files in cwd" })
-		-- keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>", { desc = "Find string in cwd" })
 		keymap.set(
 			"n",
 			"<leader>ff",
-			telescope_find_files,
+			telescope_call_method("find_files"),
 			{ desc = "Fuzzy find files in current directory or project" }
 		)
-		keymap.set("n", "<leader>fs", telescope_live_grep, { desc = "Find string in current directory or project" })
+		keymap.set(
+			"n",
+			"<leader>fs",
+			telescope_call_method("live_grep"),
+			{ desc = "Find string in current directory or project" }
+		)
 		keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Find recent files" })
 		keymap.set(
 			"n",
 			"<leader>fw",
-			"<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
+			telescope_call_method("lsp_dynamic_workspace_symbols"),
 			{ desc = "Fuzzy find project symbols" }
 		)
 		keymap.set(
 			"n",
 			"<leader>fd",
-			"<cmd>Telescope lsp_document_symbols<cr>",
+			telescope_call_method("lsp_document_symbols"),
 			{ desc = "Fuzzy find document symbols" }
 		)
 		keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", { desc = "Find string under cursor in cwd" })
 		keymap.set(
 			"n",
 			"<leader>fb",
-			"<cmd>Telescope buffers<cr>",
+			telescope_call_method("buffers"),
 			{ desc = "Fuzzy find open buffers in current neovim instance" }
 		)
-		keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { desc = "Fuzzy find available help tags" })
+		keymap.set("n", "<leader>fh", telescope_call_method("help_tags"), { desc = "Fuzzy find available help tags" })
 		keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
 	end,
 }

@@ -26,7 +26,7 @@ return {
 					},
 				},
 				history = {
-					path = "~/.local/share/nvim/databases/telescope_history.sqlite3",
+					path = vim.fn.stdpath("cache") .. "/telescope_history.sqlite3",
 					limit = 100,
 				},
 			},

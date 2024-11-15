@@ -4,8 +4,30 @@ This repository contains my current dev setup. I plan on documenting the way I u
 
 # Installation
 
-To install the dotfiles you can use this shell script based on the awesome guide about [storing dotfiles by Atlassian](https://www.atlassian.com/git/tutorials/dotfiles). Of course make sure to review it's contents first 😁
+1. To install the dotfiles you can use this shell script based on the awesome guide about [storing dotfiles by Atlassian](https://www.atlassian.com/git/tutorials/dotfiles). Of course make sure to review it's contents first 😁
 
-```
+```shell
 curl -Lks https://raw.githubusercontent.com/hishpeck/dotfiles/refs/heads/master/install.sh | /bin/bash
+```
+
+2. Next, in order to install the commonly used binaries, use Nix with Home Manager
+
+Install Nix using this command
+
+```shell
+sh <(curl -L https://nixos.org/nix/install) --daemon
+```
+
+Install Home Manager
+
+```shell
+nix-channel --add https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz home-manager
+nix-channel --update
+nix-shell '<home-manager>' -A install
+```
+
+Run Home Manager
+
+```shell
+home-manager switch
 ```

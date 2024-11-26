@@ -69,7 +69,7 @@ in
       alias config-nvim="nvim ~/.config/nvim"
       alias config-zsh="nvim ~/.config/home-manager/zsh.nix"
       alias config-nix="nvim ~/.config/home-manager"
-      alias hms="home-manager switch"
+      alias hms="home-manager switch --flake ~/.config/home-manager/flake.nix#ac-$(uname -m)-linux"
       alias docker-compose="docker compose"
 
       # Custom function using bat for log tailing

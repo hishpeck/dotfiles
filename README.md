@@ -26,8 +26,12 @@ nix-channel --update
 nix-shell '<home-manager>' -A install
 ```
 
-Run Home Manager
+Run Home Manager with the command that fits your current operating system
 
 ```shell
-home-manager switch
+home-manager switch --flake path/to/your/flake.nix#ac-x86_64-linux
+```
+
+```shell
+home-manager switch --flake path/to/your/flake.nix#ac-aarch64-linux
 ```

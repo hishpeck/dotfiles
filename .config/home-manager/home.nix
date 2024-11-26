@@ -32,7 +32,7 @@
     btop
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
 
-    php
+    php83
     phpPackages.composer
 
     # # Adds the 'hello' command to your environment. It prints a friendly

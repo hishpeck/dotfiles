@@ -15,6 +15,7 @@ return {
 			"saadparwaiz1/cmp_luasnip", -- for autocompletion
 			"rafamadriz/friendly-snippets", -- useful snippets
 			"hrsh7th/cmp-nvim-lua", -- neovim Lua API
+			"zbirenbaum/copilot-cmp", -- autocompletion for Copilot
 			-- "kristijanhusak/vim-dadbod-completion",
 		},
 		config = function()
@@ -31,6 +32,8 @@ return {
 			})
 
 			luasnip.filetype_extend("php", { "blade" })
+
+			require("copilot_cmp").setup()
 
 			cmp.setup({
 				completion = {
@@ -52,6 +55,7 @@ return {
 				}),
 
 				sources = cmp.config.sources({
+					{ name = "copilot" }, -- copilot
 					{ name = "nvim_lsp" }, -- lsp
 					{ name = "luasnip" }, -- snippets
 					{ name = "buffer" }, -- text within current buffer
@@ -62,9 +66,15 @@ return {
 				-- configure lspkind for vs-code like icons
 				formatting = {
 					format = lspkind.cmp_format({
+						mode = "symbol",
 						maxwidth = 50,
 						ellipsis_char = "...",
+						symbol_map = { Copilot = "" },
 					}),
+				},
+
+				experimental = {
+					ghost_text = true,
 				},
 			})
 

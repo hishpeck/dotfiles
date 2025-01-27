@@ -19,9 +19,10 @@ return {
 				markdown = { "prettier" },
 				graphql = { "prettier" },
 				lua = { "stylua" },
-				php = { "pint" },
+				php = { "php_cs_fixer" },
 				blade = { "prettier" },
 				rust = { "rustfmt" },
+				go = { "goimports" },
 			},
 			format_on_save = {
 				lsp_fallback = true,

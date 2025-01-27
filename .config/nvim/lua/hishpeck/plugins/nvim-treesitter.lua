@@ -71,6 +71,7 @@ return {
 					"glsl",
 					"blade",
 					"php_only",
+					"go",
 				},
 				incremental_selection = {
 					enable = true,

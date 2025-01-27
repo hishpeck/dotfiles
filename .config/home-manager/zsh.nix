@@ -101,7 +101,7 @@ in
       export VISUAL=nvim
       export EDITOR="$VISUAL"
 
-      export PATH="$HOME/projects/open-source/flutter/bin:$HOME/Android/Sdk/tools:$HOME/Android/Sdk/platform-tools:$PATH"
+      export PATH="$HOME/projects/open-source/flutter/bin:$HOME/Android/Sdk/tools:$HOME/Android/Sdk/platform-tools:/usr/local/go/bin:$PATH"
     '';
   };
 }

@@ -1,7 +1,7 @@
 return {
 	"nvim-focus/focus.nvim",
 	keys = {
-		{ "<leader>sm", "<cmd>FocusMaximise<CR>", desc = "Maximize/minimize a split" },
+		{ "<leader>sm", "<cmd>FocusMaxOrEqual<CR>", desc = "Maximize/minimize a split" },
 	},
 	opts = {
 		ui = {

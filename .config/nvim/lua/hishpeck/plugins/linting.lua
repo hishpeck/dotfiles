@@ -12,7 +12,8 @@ return {
 			svelte = { "eslint_d" },
 			vue = { "eslint_d" },
 			glsl = { "glslc" },
-			php = { "phpstan" },
+			-- php = { "phpstan" },
+			go = { "golangcilint" },
 		}
 
 		local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })

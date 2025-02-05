@@ -14,6 +14,7 @@
     pkg-config     # Helper tool used during compilation
     fzf            # Fuzzy finder
     ripgrep        # For Telescope.nvim
+    sqlite         # For Telescope History
     # Add other tools if necessary
   ];
 }

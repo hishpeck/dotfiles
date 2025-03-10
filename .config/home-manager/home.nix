@@ -30,14 +30,23 @@
     zoxide
     fzf
     btop
-    (nerdfonts.override { fonts = [ "FiraCode" ]; })
+    nerd-fonts.fira-code
 
-    php83
-    phpPackages.composer
+    (php84.withExtensions ({ enabled, all }: enabled ++ [
+      all.amqp
+      all.xsl
+      all.redis
+      all.mbstring
+    ]))
+    php84Packages.composer
+    symfony-cli
 
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
+    rustup
+    libclang
+    clang
+    glibc.dev
+
+    go
 
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
@@ -89,7 +98,8 @@
   #  /etc/profiles/per-user/ac/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    # EDITOR = "emacs";
+    CPATH = "${pkgs.glibc.dev}/include";  
+    LIBRARY_PATH = "${pkgs.glibc.dev}/lib";
   };
 
   # Let Home Manager install and manage itself.

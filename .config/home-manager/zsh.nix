@@ -69,7 +69,7 @@ in
       alias config-nvim="nvim ~/.config/nvim"
       alias config-zsh="nvim ~/.config/home-manager/zsh.nix"
       alias config-nix="nvim ~/.config/home-manager"
-      alias hms="home-manager switch --flake ~/.config/home-manager/flake.nix#ac-$(uname -m)-linux"
+      alias hms="home-manager switch --flake ~/.config/home-manager#ac-$(uname -m)-linux"
       alias docker-compose="docker compose"
 
       # Custom function using bat for log tailing
@@ -101,7 +101,7 @@ in
       export VISUAL=nvim
       export EDITOR="$VISUAL"
 
-      export PATH="$HOME/projects/open-source/flutter/bin:$HOME/Android/Sdk/tools:$HOME/Android/Sdk/platform-tools:/usr/local/go/bin:$PATH"
+      export PATH="$HOME/projects/open-source/flutter/bin:$HOME/Android/Sdk/tools:$HOME/Android/Sdk/platform-tools:/usr/local/go/bin:$HOME/.config/composer/vendor/bin:$PATH"
     '';
   };
 }

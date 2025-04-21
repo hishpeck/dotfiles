@@ -37,9 +37,13 @@
       all.xsl
       all.redis
       all.mbstring
+      all.pdo_pgsql
+      all.iconv
     ]))
     php84Packages.composer
     symfony-cli
+
+    postgresql
 
     rustup
     libclang

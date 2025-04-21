@@ -35,6 +35,12 @@ return {
 			args = { "--stdin", "--wrap-atts=preserve" },
 		}
 
+		conform.formatters["php_cs_fixer"] = {
+			env = {
+				PHP_CS_FIXER_IGNORE_ENV = "1",
+			},
+		}
+
 		vim.keymap.set({ "n", "v" }, "<leader>mp", function()
 			conform.format({
 				lsp_fallback = true,

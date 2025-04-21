@@ -101,8 +101,8 @@ return {
 				plugins = {
 					{
 						name = "@vue/typescript-plugin",
-						-- location = vue_language_server_path,
-						location = "/usr/local/lib/node_modules/@vue/language-server",
+						location = vue_language_server_path,
+						-- location = "/usr/local/lib/node_modules/@vue/language-server",
 						languages = { "typescript", "javascript", "vue" },
 					},
 				},

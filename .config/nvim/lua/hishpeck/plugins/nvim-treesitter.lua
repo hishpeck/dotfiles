@@ -70,6 +70,7 @@ return {
 					"sql",
 					"glsl",
 					"blade",
+					"twig",
 					"php_only",
 					"go",
 				},

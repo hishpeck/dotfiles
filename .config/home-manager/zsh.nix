@@ -102,6 +102,8 @@ in
       export EDITOR="$VISUAL"
 
       export PATH="$HOME/projects/open-source/flutter/bin:$HOME/Android/Sdk/tools:$HOME/Android/Sdk/platform-tools:/usr/local/go/bin:$HOME/.config/composer/vendor/bin:$PATH"
+
+      eval "$(symfony self:completion zsh)"
     '';
   };
 }

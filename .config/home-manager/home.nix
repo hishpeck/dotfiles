@@ -47,6 +47,7 @@
 
     rustup
     libclang
+    openssl
     clang
     glibc.dev
 

@@ -61,7 +61,7 @@ in
       export ZSH="$HOME/.oh-my-zsh"
 
       # Set aliases
-      alias my-config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+      alias cfg='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
       alias sail="./vendor/bin/sail"
       alias refresh-tmux="tmux source-file ~/.config/tmux/tmux.conf"
       alias refresh-zsh=". ~/.zshrc"

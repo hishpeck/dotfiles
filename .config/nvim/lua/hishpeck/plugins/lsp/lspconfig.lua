@@ -91,7 +91,8 @@ return {
 
 		-- configure typescript server with plugin
 		local mason_registry = require("mason-registry")
-		local vue_language_server_path = mason_registry.get_package("vue-language-server"):get_install_path()
+		-- local vue_language_server_path = mason_registry.get_package("vue-language-server"):get_install_path()
+		local vue_language_server_path = vim.fn.expand("$MASON/packages/vue-language-server/")
 			-- .. "/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin"
 			.. "/node_modules/@vue/language-server"
 		lspconfig["ts_ls"].setup({

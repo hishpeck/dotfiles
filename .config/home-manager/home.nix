@@ -24,6 +24,9 @@
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
+    git
+
+    unzip
     bat
     lazygit
     lazydocker
@@ -45,11 +48,14 @@
 
     postgresql
 
+    nodejs_23
+
     rustup
     libclang
     openssl
     clang
     glibc.dev
+    gnumake
 
     go
 

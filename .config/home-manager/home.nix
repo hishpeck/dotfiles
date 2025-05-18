@@ -48,7 +48,7 @@
 
     postgresql
 
-    nodejs_23
+    nodejs_latest
 
     rustup
     libclang

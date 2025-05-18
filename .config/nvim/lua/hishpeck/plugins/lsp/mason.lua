@@ -34,7 +34,7 @@ return {
 				"volar",
 				"astro",
 				"intelephense",
-				"phpactor",
+				-- "phpactor",
 				"gopls",
 			},
 		})

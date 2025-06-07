@@ -11,12 +11,12 @@ return {
 	config = function()
 		require("neotest").setup({
 			adapters = {
-				require("neotest-pest")({
-					-- parallel = function()
-					-- 	return #vim.loop.cpu_info()
-					-- end,
-				}),
-				-- require("neotest-phpunit"),
+				-- require("neotest-pest")({
+				-- 	-- parallel = function()
+				-- 	-- 	return #vim.loop.cpu_info()
+				-- 	-- end,
+				-- }),
+				require("neotest-phpunit"),
 			},
 			quickfix = {
 				enabled = true, -- This opens the quickfix window for test failures.
@@ -54,5 +54,8 @@ return {
 			"<cmd>lua require('neotest').summary.toggle()<CR>",
 			{ desc = "Toggle test results summary" }
 		)
+		vim.api.nvim_set_keymap("n", "<leader>tr", "<cmd>lua require('neotest').output.open()<cr>", {
+			desc = "Open test output",
+		})
 	end,
 }

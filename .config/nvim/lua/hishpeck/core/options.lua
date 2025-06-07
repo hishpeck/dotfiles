@@ -40,3 +40,5 @@ opt.splitbelow = true
 -- spell checking
 opt.spelllang = "en"
 opt.spell = true
+
+opt.laststatus = 3

@@ -52,7 +52,7 @@ return {
 					{
 						"branch",
 						fmt = function(str)
-							return str:sub(0, 9)
+							return str:sub(0, 7)
 						end,
 					},
 				},

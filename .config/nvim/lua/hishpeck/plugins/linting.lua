@@ -12,7 +12,7 @@ return {
 			svelte = { "eslint_d" },
 			vue = { "eslint_d" },
 			glsl = { "glslc" },
-			-- php = { "phpstan" },
+			php = { "phpstan" },
 			go = { "golangcilint" },
 		}
 

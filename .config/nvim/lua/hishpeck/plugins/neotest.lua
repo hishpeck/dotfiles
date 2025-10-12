@@ -7,8 +7,16 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		"V13Axel/neotest-pest",
 		"olimorris/neotest-phpunit",
+		"marilari88/neotest-vitest",
 	},
 	config = function()
+		local function find_project_root()
+			local start_dir = vim.fn.expand("%:p:h")
+			local root_markers = { "package.json", ".git", "eslint.config.js", ".eslintrc.js" }
+			local project_root = vim.fs.find(root_markers, { path = start_dir, upward = true, stop = vim.env.HOME })[1]
+			return project_root and vim.fs.dirname(project_root) or start_dir
+		end
+
 		require("neotest").setup({
 			adapters = {
 				-- require("neotest-pest")({
@@ -16,7 +24,15 @@ return {
 				-- 	-- 	return #vim.loop.cpu_info()
 				-- 	-- end,
 				-- }),
-				require("neotest-phpunit"),
+				require("neotest-phpunit")({
+					filter_dirs = { "vendor" },
+				}),
+				require("neotest-vitest")({
+					cwd = find_project_root(),
+					filter_dir = function(name, rel_path, root)
+						return name ~= "node_modules"
+					end,
+				}),
 			},
 			quickfix = {
 				enabled = true, -- This opens the quickfix window for test failures.

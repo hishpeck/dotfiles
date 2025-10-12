@@ -23,6 +23,16 @@ return {
 			local luasnip = require("luasnip")
 			local lspkind = require("lspkind")
 
+			local function is_in_start_tag()
+				local ts_utils = require("nvim-treesitter.ts_utils")
+				local node = ts_utils.get_node_at_cursor()
+				if not node then
+					return false
+				end
+				local node_to_check = { "start_tag", "self_closing_tag", "directive_attribute" }
+				return vim.tbl_contains(node_to_check, node:type())
+			end
+
 			-- load vs-code like snippets from plugins (e.g. friendly-snippets)
 			require("luasnip.loaders.from_vscode").lazy_load()
 
@@ -56,7 +66,35 @@ return {
 
 				sources = cmp.config.sources({
 					{ name = "copilot" }, -- copilot
-					{ name = "nvim_lsp" }, -- lsp
+					{
+						name = "nvim_lsp",
+						---@param entry cmp.Entry
+						---@param ctx cmp.Context
+						entry_filter = function(entry, ctx)
+							if ctx.filetype ~= "vue" then
+								return true
+							end
+
+							local bufnr = ctx.bufnr
+							if vim.b[bufnr]._vue_ts_cached_is_in_start_tag == nil then
+								vim.b[bufnr]._vue_ts_cached_is_in_start_tag = is_in_start_tag()
+							end
+
+							if vim.b[bufnr]._vue_ts_cached_is_in_start_tag == false then
+								return true
+							end
+
+							local cursor_before_line = ctx.cursor_before_line
+							if cursor_before_line:sub(-1) == "@" then
+								return entry.completion_item.label:match("^@")
+							elseif cursor_before_line:sub(-1) == ":" then
+								return entry.completion_item.label:match("^:")
+									and not entry.completion_item.label:match("^:on%-")
+							else
+								return true
+							end
+						end,
+					}, -- lsp
 					{ name = "luasnip" }, -- snippets
 					{ name = "buffer" }, -- text within current buffer
 					{ name = "path" }, -- file system paths

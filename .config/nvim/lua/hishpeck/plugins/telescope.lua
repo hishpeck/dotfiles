@@ -1,6 +1,5 @@
 return {
 	"nvim-telescope/telescope.nvim",
-	branch = "0.1.x",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
@@ -21,8 +20,12 @@ return {
 						["<C-k>"] = actions.move_selection_previous, -- move to prev result
 						["<C-j>"] = actions.move_selection_next, -- move to next result
 						-- ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-						["<C-Down>"] = actions.cycle_history_next,
-						["<C-Up>"] = actions.cycle_history_prev,
+						["<C-PageDown>"] = actions.cycle_history_next,
+						["<C-PageUp>"] = actions.cycle_history_prev,
+						["<C-Up>"] = actions.preview_scrolling_up,
+						["<C-Down>"] = actions.preview_scrolling_down,
+						["<C-Left>"] = actions.preview_scrolling_left,
+						["<C-Right>"] = actions.preview_scrolling_right,
 					},
 				},
 				history = {
@@ -48,14 +51,24 @@ return {
 		local function get_nvim_tree_dir()
 			local api = require("nvim-tree.api")
 
-			-- Check if nvim-tree is visible and the current window is an nvim-tree window
-			if api.tree.is_visible() and api.win.is_tree_win(0) then
+			-- Get the current buffer number
+			local current_buf = vim.api.nvim_get_current_buf()
+
+			-- Check if the buffer is an nvim-tree buffer and the tree is visible
+			if api.tree.is_visible() and api.tree.is_tree_buf(current_buf) then
 				local node = api.tree.get_node_under_cursor()
 				if node then
-					return node.absolute_path
+					-- For a directory, return its path. For a file, return its parent directory.
+					if node.type == "directory" then
+						return node.absolute_path
+					else
+						return vim.fn.fnamemodify(node.absolute_path, ":h")
+					end
 				end
 			end
-			return nil
+
+			-- Fallback to the current working directory if nvim-tree isn't focused
+			return vim.fn.getcwd()
 		end
 
 		local function telescope_call_method(name)

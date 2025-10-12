@@ -33,6 +33,7 @@ in
         "git"
         "web-search"
         "docker"
+        "fzf"
       ];
     };
 

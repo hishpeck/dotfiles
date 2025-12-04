@@ -4,20 +4,20 @@ return {
 		event = "VeryLazy",
 		version = false, -- Never set this value to "*"! Never!
 		opts = {
-			provider = "claude",
+			provider = "openrouter",
 			-- Disabled due to MCP Hub integration
-			-- disabled_tools = {
-			-- 	"list_files", -- Built-in file operations
-			-- 	"search_files",
-			-- 	"read_file",
-			-- 	"create_file",
-			-- 	"rename_file",
-			-- 	"delete_file",
-			-- 	"create_dir",
-			-- 	"rename_dir",
-			-- 	"delete_dir",
-			-- 	"bash", -- Built-in terminal access
-			-- },
+			disabled_tools = {
+				"list_files", -- Built-in file operations
+				"search_files",
+				"read_file",
+				"create_file",
+				"rename_file",
+				"delete_file",
+				"create_dir",
+				"rename_dir",
+				"delete_dir",
+				"bash", -- Built-in terminal access
+			},
 			providers = {
 				deepseek = {
 					__inherited_from = "openai",
@@ -37,11 +37,17 @@ return {
 						max_tokens = 20480,
 					},
 				},
+				openrouter = {
+					__inherited_from = "openai",
+					endpoint = "https://openrouter.ai/api/v1",
+					api_key_name = "OPENROUTER_API_KEY",
+					model = "minimax/minimax-m2",
+				},
 			},
+			file_selector = { provider = "telescope" },
 			system_prompt = function()
-				-- local hub = require("mcphub").get_hub_instance()
-				-- local prompt = hub and hub:get_active_servers_prompt() or ""
-				local prompt = ""
+				local hub = require("mcphub").get_hub_instance()
+				local prompt = hub and hub:get_active_servers_prompt() or ""
 				local guidelines_path = vim.fn.stdpath("config") .. "/.junie/guidelines.md"
 				local guidelines_file = io.open(guidelines_path, "r")
 				if guidelines_file then
@@ -51,12 +57,11 @@ return {
 				end
 				return prompt
 			end,
-			-- Using function prevents requiring mcphub before it's loaded
-			-- custom_tools = function()
-			-- 	return {
-			-- 		require("mcphub.extensions.avante").mcp_tool(),
-			-- 	}
-			-- end,
+			custom_tools = function()
+				return {
+					require("mcphub.extensions.avante").mcp_tool(),
+				}
+			end,
 		},
 		build = "make",
 		dependencies = {
@@ -68,7 +73,7 @@ return {
 			"ibhagwan/fzf-lua", -- for file_selector provider fzf
 			"stevearc/dressing.nvim",
 			"nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-			-- "ravitemer/mcphub.nvim",
+			"ravitemer/mcphub.nvim",
 			{
 				-- Make sure to set this up properly if you have lazy=true
 				"MeanderingProgrammer/render-markdown.nvim",
@@ -79,22 +84,22 @@ return {
 			},
 		},
 	},
-	-- {
-	-- 	"ravitemer/mcphub.nvim",
-	-- 	dependencies = {
-	-- 		"nvim-lua/plenary.nvim",
-	-- 	},
-	-- 	build = "bundled_build.lua", -- Bundles `mcp-hub` binary along with the neovim plugin
-	-- 	config = function()
-	-- 		require("mcphub").setup({
-	-- 			use_bundled_binary = true, -- Use local `mcp-hub` binary
-	-- 			auto_approve = true,
-	-- 			extensions = {
-	-- 				avante = {
-	-- 					make_slash_commands = true, -- make /slash commands from MCP server prompts
-	-- 				},
-	-- 			},
-	-- 		})
-	-- 	end,
-	-- },
+	{
+		"ravitemer/mcphub.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+		},
+		build = "bundled_build.lua", -- Bundles `mcp-hub` binary along with the neovim plugin
+		config = function()
+			require("mcphub").setup({
+				use_bundled_binary = true, -- Use local `mcp-hub` binary
+				auto_approve = true,
+				extensions = {
+					avante = {
+						make_slash_commands = true, -- make /slash commands from MCP server prompts
+					},
+				},
+			})
+		end,
+	},
 }

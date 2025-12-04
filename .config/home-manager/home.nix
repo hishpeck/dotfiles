@@ -33,6 +33,7 @@
     zoxide
     fzf
     btop
+    yazi
     nerd-fonts.fira-code
 
     (php84.withExtensions ({ enabled, all }: enabled ++ [
@@ -48,7 +49,6 @@
     symfony-cli
 
     mariadb
-
     postgresql
 
     nodejs_latest

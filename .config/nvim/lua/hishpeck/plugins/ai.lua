@@ -47,15 +47,7 @@ return {
 			file_selector = { provider = "telescope" },
 			system_prompt = function()
 				local hub = require("mcphub").get_hub_instance()
-				local prompt = hub and hub:get_active_servers_prompt() or ""
-				local guidelines_path = vim.fn.stdpath("config") .. "/.junie/guidelines.md"
-				local guidelines_file = io.open(guidelines_path, "r")
-				if guidelines_file then
-					local guidelines_content = guidelines_file:read("*a")
-					io.close(guidelines_file)
-					prompt = prompt .. "\\\\n\\\\n# Project Guidelines\\\\n" .. guidelines_content
-				end
-				return prompt
+				return hub and hub:get_active_servers_prompt() or ""
 			end,
 			custom_tools = function()
 				return {
@@ -71,7 +63,7 @@ return {
 			"nvim-telescope/telescope.nvim", -- for file_selector provider telescope
 			"hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
 			"ibhagwan/fzf-lua", -- for file_selector provider fzf
-			"stevearc/dressing.nvim",
+			"folke/snacks.nvim", -- for input provider snacks
 			"nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
 			"ravitemer/mcphub.nvim",
 			{
@@ -93,7 +85,18 @@ return {
 		config = function()
 			require("mcphub").setup({
 				use_bundled_binary = true, -- Use local `mcp-hub` binary
-				auto_approve = true,
+				auto_approve = false, -- Disable global auto-approve
+				-- Auto-approve only read-only tools that don't modify anything
+				auto_approve_list = {
+					-- Neovim read-only tools
+					"read_file",
+					"read_multiple_files",
+					"find_files",
+					"list_directory",
+					"get_diagnostics",
+					-- MCPHub read-only tools
+					"get_current_servers",
+				},
 				extensions = {
 					avante = {
 						make_slash_commands = true, -- make /slash commands from MCP server prompts

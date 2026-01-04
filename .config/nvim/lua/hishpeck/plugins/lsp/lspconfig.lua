@@ -73,12 +73,12 @@ return {
 			"emmet_ls",
 			"astro",
 			"intelephense",
+			"phpactor",
 			"pyright",
 			"glsl_analyzer",
 			"rust_analyzer",
 			"gopls",
 			"lua_ls",
-			"laravel_ls",
 		}
 
 		-- Configure each server using vim.lsp.config()
@@ -142,6 +142,26 @@ return {
 					"vue",
 					"blade.php",
 				}
+			elseif server_name == "phpactor" then
+				-- local phpactor_phar = vim.fn.stdpath("data") .. "/mason/packages/phpactor/phpactor.phar"
+				--
+				-- server_opts.cmd = {
+				-- 	"php",
+				-- 	"-d",
+				-- 	"memory_limit=2G",
+				-- 	phpactor_phar,
+				-- 	"language-server",
+				-- }
+				server_opts.cmd = { "phpactor", "language-server" }
+				server_opts.root_markers = { "composer.json", ".git" }
+				-- server_opts.on_attach = function(client, bufnr)
+				-- 	on_attach(client, bufnr)
+				--
+				-- 	-- client.server_capabilities.completionProvider = false
+				-- 	-- client.server_capabilities.hoverProvider = false
+				-- 	-- client.server_capabilities.definitionProvider = false
+				-- 	-- client.server_capabilities.referenceProvider = false
+				-- end
 			elseif server_name == "intelephense" then
 				server_opts.settings = {
 					intelephense = { compatibility = { preferPsalmPhpstanPrefixedAnnotations = true } },

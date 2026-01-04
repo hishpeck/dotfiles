@@ -44,7 +44,6 @@ return {
 		})
 
 		telescope.load_extension("fzf")
-		telescope.load_extension("notify")
 		telescope.load_extension("smart_history")
 
 		-- utility function to check if nvim-tree is focused and get current directory

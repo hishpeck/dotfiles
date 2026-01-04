@@ -34,9 +34,8 @@ return {
 				"vue_ls",
 				"astro",
 				"intelephense",
-				-- "phpactor",
+				"phpactor",
 				"gopls",
-				"laravel_ls",
 			},
 		})
 

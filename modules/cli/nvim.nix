@@ -3,7 +3,6 @@
 {
   programs.neovim = {
     enable = true;
-    # No need to override the package
   };
 
   # Include development tools in home.packages
@@ -21,4 +20,6 @@
   home.sessionVariables = {
     LIBSQLITE = "${pkgs.sqlite.out}/lib/libsqlite3${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}";
   };
+
+  xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nvim";
 }

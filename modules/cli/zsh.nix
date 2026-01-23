@@ -7,7 +7,7 @@ let
       owner = "romkatv";
       repo = "powerlevel10k";
       rev = "v1.20.0";
-      sha256 = "1ha7qb601mk97lxvcj9dmbypwx7z5v0b7mkqahzsq073f4jnybhi";  # Replace with the correct hash
+      sha256 = "1ha7qb601mk97lxvcj9dmbypwx7z5v0b7mkqahzsq073f4jnybhi";
     };
     installPhase = ''
       mkdir -p $out/share/powerlevel10k
@@ -26,7 +26,6 @@ in
   programs.zsh = {
     enable = true;
 
-    # Enable Oh My Zsh and plugins
     oh-my-zsh = {
       enable = true;
       plugins = [
@@ -37,13 +36,11 @@ in
       ];
     };
 
-    # Source Powerlevel10k theme early
     initExtraFirst = ''
     # Source Powerlevel10k theme
     source "${powerlevel10k}/share/powerlevel10k/powerlevel10k.zsh-theme"
     '';
 
-    # Extra Zsh configuration
     initExtra = ''
       # Source Powerlevel10k configuration if it exists
       [[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
@@ -62,7 +59,7 @@ in
       export ZSH="$HOME/.oh-my-zsh"
 
       # Set aliases
-      alias cfg='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+      alias cfg='/usr/bin/git --work-tree=$HOME/dotfiles/'
       alias sail="./vendor/bin/sail"
       alias refresh-tmux="tmux source-file ~/.config/tmux/tmux.conf"
       alias refresh-zsh=". ~/.zshrc"
@@ -106,8 +103,6 @@ in
       export PATH="$HOME/projects/open-source/flutter/bin:$HOME/Android/Sdk/tools:$HOME/Android/Sdk/platform-tools:/usr/local/go/bin:$HOME/.config/composer/vendor/bin:$PATH"
 
       eval "$(symfony self:completion zsh)"
-
-      source "$HOME/.bash_aliases"
     '';
   };
 }

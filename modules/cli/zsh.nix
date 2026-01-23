@@ -14,9 +14,8 @@ let
       cp -r $src/* $out/share/powerlevel10k/
     '';
   };
-in
 
-{
+in {
   home.packages = with pkgs; [
     zsh
     zsh-syntax-highlighting
@@ -28,17 +27,12 @@ in
 
     oh-my-zsh = {
       enable = true;
-      plugins = [
-        "git"
-        "web-search"
-        "docker"
-        "fzf"
-      ];
+      plugins = [ "git" "web-search" "docker" "fzf" ];
     };
 
     initExtraFirst = ''
-    # Source Powerlevel10k theme
-    source "${powerlevel10k}/share/powerlevel10k/powerlevel10k.zsh-theme"
+      # Source Powerlevel10k theme
+      source "${powerlevel10k}/share/powerlevel10k/powerlevel10k.zsh-theme"
     '';
 
     initExtra = ''
@@ -63,13 +57,12 @@ in
       alias sail="./vendor/bin/sail"
       alias refresh-tmux="tmux source-file ~/.config/tmux/tmux.conf"
       alias refresh-zsh=". ~/.zshrc"
-      alias config-tmux="nvim ~/.config/home-manager/tmux.nix"
-      alias config-nvim="nvim ~/.config/nvim"
-      alias config-zsh="nvim ~/.config/home-manager/zsh.nix"
-      alias config-nix="nvim ~/.config/home-manager"
-      alias hms="home-manager switch --flake ~/.config/home-manager#ac-$(uname -m)-linux"
-      alias hms-update="z ~/.config/home-manager/ && nix flake update && hms && z -"
-      alias docker-compose="docker compose"
+      alias config-tmux="nvim ~/dotfiles/modules/cli/tmux.nix"
+      alias config-nvim="nvim ~/dotfiles/config/nvim"
+      alias config-zsh="nvim ~/dotfiles/modules/cli/zsh.nix"
+      alias config-nix="nvim ~/dotfiles"
+      alias hms="home-manager switch --flake ~/dotfiles#ac-$(uname -m)-linux"
+      alias hms-update="cd ~/dotfiles && nix flake update && hms && cd -"
 
       # Custom function using bat for log tailing
       batlog() {

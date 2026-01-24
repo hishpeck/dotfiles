@@ -13,7 +13,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-cosmix, ... }: {
+  outputs = { self, nixpkgs, home-manager, nixos-cosmic, ... }: {
     nixosConfigurations.zenbook-2022 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [

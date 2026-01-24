@@ -5,7 +5,6 @@
     ./hardware-configuration.nix
     ../../modules/system/default.nix
     ../../modules/system/laptop.nix
-    ../../modules/gui
     ../../modules/desktop/cosmic.nix
     # ../../modules/desktop/hyprland.nix
   ];

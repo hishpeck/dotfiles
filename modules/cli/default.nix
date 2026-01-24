@@ -45,7 +45,6 @@
     nodejs_latest
 
     rustup
-    libclang
     openssl
     glibc.dev
     gnumake

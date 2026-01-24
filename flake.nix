@@ -7,26 +7,12 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-cosmic = {
-      url = "github:lilyinstarlight/nixos-cosmic";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-cosmic, ... }: {
+  outputs = { self, nixpkgs, home-manager, ... }: {
     nixosConfigurations.zenbook-2022 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        {
-          nix.settings = {
-            substituters = [ "https://cosmic.cachix.org" ];
-            trusted-public-keys = [
-              "cosmic.cachix.org-1:Dya9IyXD4xdBehWjX81e605KsE0fGjEBrsBv4JNaGVk="
-            ];
-          };
-        }
-        nixos-cosmic.nixosModules.default
-
         ./hosts/zenbook-2022/default.nix
 
         home-manager.nixosModules.home-manager

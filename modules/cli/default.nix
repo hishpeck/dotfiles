@@ -69,7 +69,7 @@
   programs.zoxide.enable = true;
 
   xdg.configFile = {
-      "mcphub".source = ../config/mcphub;
-      "bat".source = ../config/bat;
+      "mcphub".source = ../../config/mcphub;
+      "bat".source = ../../config/bat;
   };
 }

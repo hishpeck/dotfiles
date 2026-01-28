@@ -3,17 +3,19 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    stylix.url = "github:danth/stylix";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }: {
-    nixosConfigurations.zenbook-2022 = nixpkgs.lib.nixosSystem {
+  outputs = { self, nixpkgs, home-manager, stylix, ... }: {
+    nixosConfigurations.ac-zenbook-2022 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        ./hosts/zenbook-2022/default.nix
+        ./hosts/ac-zenbook-2022/default.nix
+        stylix.nixosModules.stylix
 
         home-manager.nixosModules.home-manager
         {

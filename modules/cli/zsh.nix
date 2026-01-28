@@ -63,6 +63,7 @@ in {
       alias config-nix="nvim ~/dotfiles"
       alias hms="home-manager switch --flake ~/dotfiles#ac-$(uname -m)-linux"
       alias hms-update="cd ~/dotfiles && nix flake update && hms && cd -"
+      alias nix-update="sudo nixos-rebuild switch --flake ~/dotfiles#$(hostname)"
 
       # Custom function using bat for log tailing
       batlog() {

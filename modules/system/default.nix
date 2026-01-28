@@ -53,5 +53,25 @@
     jack.enable = true;
   };
 
-  environment.systemPackages = with pkgs; [ vim wget curl git home-manager ];
+    services.xserver.videoDrivers = ["amdgpu"];
+
+  hardware.graphics = {
+        enable = true;
+        enable32Bit = true;
+        extraPackages = with pkgs; [
+            libva-utils
+            libva-vdpau-driver
+            libvdpau-va-gl
+            rocmPackages.clr
+        ];
+  };
+
+  hardware.cpu.amd.updateMicrocode = true;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  environment.variables = {
+  NIXOS_OZONE_WL = "1";
+  };
+
+  environment.systemPackages = with pkgs; [ vim wget curl git home-manager  nps];
 }

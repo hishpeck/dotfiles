@@ -11,7 +11,7 @@
 
   networking.hostName = "ac-zenbook-2022";
 
-  services.logind.lidSwitch = "suspend";
+  services.logind.settings.Login.HandleLidSwitch = "suspend";
 
   system.stateVersion = "24.05";
 }

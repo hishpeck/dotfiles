@@ -1,13 +1,30 @@
 {
   "mcpServers": {
-    "github.com/upstash/context7-mcp": {
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+    "fetch": {
+      "args": ["mcp-server-fetch"],
+      "command": "uvx"
     },
     "github.com/modelcontextprotocol/servers/tree/main/src/git": {
+      "autoApprove": [
+        "git_status",
+        "git_diff_unstaged",
+        "git_diff_staged",
+        "git_diff",
+        "git_log",
+        "git_show",
+        "git_branch"
+      ],
       "command": "uvx",
-      "args": ["mcp-server-git"]
+      "args": ["mcp-server-git"],
+      "disabled": true
+    },
+    "github.com/upstash/context7-mcp": {
+      "autoApprove": ["resolve-library-id", "get-library-docs"],
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "disabled": false
     }
   },
   "nativeMCPServers": []
 }
+

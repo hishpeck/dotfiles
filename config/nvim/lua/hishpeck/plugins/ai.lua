@@ -41,7 +41,8 @@ return {
 					__inherited_from = "openai",
 					endpoint = "https://openrouter.ai/api/v1",
 					api_key_name = "OPENROUTER_API_KEY",
-					model = "minimax/minimax-m2",
+					model = "minimax/minimax-m2.1",
+					-- use_ReAct_prompt = true,
 				},
 			},
 			file_selector = { provider = "telescope" },
@@ -54,6 +55,9 @@ return {
 					require("mcphub.extensions.avante").mcp_tool(),
 				}
 			end,
+			web_search_engine = {
+				provider = "google",
+			},
 		},
 		build = "make",
 		dependencies = {

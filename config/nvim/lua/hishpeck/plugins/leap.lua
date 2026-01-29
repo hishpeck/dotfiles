@@ -1,5 +1,5 @@
 return {
-	"ggandor/leap.nvim",
+	url = "https://codeberg.org/andyg/leap.nvim",
 	priority = 100,
 	config = function()
 		vim.keymap.set("n", "<leader>l", function()

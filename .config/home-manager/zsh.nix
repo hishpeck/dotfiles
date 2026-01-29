@@ -74,9 +74,18 @@ in
       alias hms-update="z ~/.config/home-manager/ && nix flake update && hms && z -"
       alias docker-compose="docker compose"
 
-      # Custom function using bat for log tailing
+      # Custom functions
       batlog() {
           tail -f "$1" -n 200 | bat --paging=never -l log
+      }
+      nvim() {
+          if [ -f .env ]; then
+              # Load .env variables (ignoring comments) and run nvim
+              # We use 'command nvim' to call the actual executable, preventing a loop
+              env $(grep -v '^#' ~/.env | xargs) nvim "$@"
+          else
+              command nvim "$@"
+          fi
       }
 
       # Set NVM directory and source nvm if it exists

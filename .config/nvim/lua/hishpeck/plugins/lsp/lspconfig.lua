@@ -143,25 +143,22 @@ return {
 					"blade.php",
 				}
 			elseif server_name == "phpactor" then
-				-- local phpactor_phar = vim.fn.stdpath("data") .. "/mason/packages/phpactor/phpactor.phar"
-				--
-				-- server_opts.cmd = {
-				-- 	"php",
-				-- 	"-d",
-				-- 	"memory_limit=2G",
-				-- 	phpactor_phar,
-				-- 	"language-server",
-				-- }
 				server_opts.cmd = { "phpactor", "language-server" }
-				server_opts.root_markers = { "composer.json", ".git" }
-				-- server_opts.on_attach = function(client, bufnr)
-				-- 	on_attach(client, bufnr)
-				--
-				-- 	-- client.server_capabilities.completionProvider = false
-				-- 	-- client.server_capabilities.hoverProvider = false
-				-- 	-- client.server_capabilities.definitionProvider = false
-				-- 	-- client.server_capabilities.referenceProvider = false
-				-- end
+				server_opts.root_markers = { "composer.json" }
+				server_opts.workspace_required = true
+				server_opts.init_options = {
+					["language_server_phpstan.enabled"] = true,
+
+					["language_server_worse_reflection.diagnostics.enable"] = false,
+				}
+				server_opts.on_attach = function(client, bufnr)
+					on_attach(client, bufnr)
+
+					client.server_capabilities.completionProvider = false
+					client.server_capabilities.hoverProvider = false
+					client.server_capabilities.definitionProvider = false
+					client.server_capabilities.referenceProvider = false
+				end
 			elseif server_name == "intelephense" then
 				server_opts.settings = {
 					intelephense = { compatibility = { preferPsalmPhpstanPrefixedAnnotations = true } },

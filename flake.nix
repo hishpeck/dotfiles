@@ -24,7 +24,7 @@
           home-manager.useUserPackages = true;
 
           home-manager.users.ac = {
-            imports = [ ./modules/cli ];
+            imports = [ ./modules/cli ./modules/home/hyprland ];
           };
         }
       ];

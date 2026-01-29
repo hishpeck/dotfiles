@@ -1,10 +1,29 @@
 { pkgs, ... }:
 
 {
-  programs.hyprland.enable = true;
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
 
-  services.displayManager.sddm.enable = true;
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  };
 
-  environment.systemPackages = with pkgs; [ waybar wofi dunst wl-clipboard ];
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+    theme = "breeze";
+  };
 
+  environment.systemPackages = with pkgs; [
+    kitty       
+    rofi-wayland 
+    waybar      
+    dunst      
+    swww      
+    libnotify
+    networkmanagerapplet 
+  ];
 }

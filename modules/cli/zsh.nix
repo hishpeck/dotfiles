@@ -1,102 +1,55 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-let
-  powerlevel10k = pkgs.stdenv.mkDerivation {
-    name = "powerlevel10k";
-    src = pkgs.fetchFromGitHub {
-      owner = "romkatv";
-      repo = "powerlevel10k";
-      rev = "v1.20.0";
-      sha256 = "1ha7qb601mk97lxvcj9dmbypwx7z5v0b7mkqahzsq073f4jnybhi";
-    };
-    installPhase = ''
-      mkdir -p $out/share/powerlevel10k
-      cp -r $src/* $out/share/powerlevel10k/
-    '';
-  };
-
-in {
-  home.packages = with pkgs; [
-    zsh
-    zsh-syntax-highlighting
-    zsh-autosuggestions
-  ];
-
+{
   programs.zsh = {
     enable = true;
+    enableCompletion = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
 
     oh-my-zsh = {
       enable = true;
       plugins = [ "git" "web-search" "docker" "fzf" ];
     };
 
-    initExtraFirst = ''
-      # Source Powerlevel10k theme
-      source "${powerlevel10k}/share/powerlevel10k/powerlevel10k.zsh-theme"
-    '';
+    shellAliases = {
+      cfg = "/usr/bin/git --work-tree=$HOME/dotfiles/";
+      sail = "./vendor/bin/sail";
+      refresh-tmux = "tmux source-file ~/.config/tmux/tmux.conf";
+      refresh-zsh = ". ~/.zshrc";
+      config-tmux = "nvim ~/dotfiles/modules/cli/tmux.nix";
+      config-nvim = "nvim ~/dotfiles/config/nvim";
+      config-zsh = "nvim ~/dotfiles/modules/cli/zsh.nix";
+      config-nix = "nvim ~/dotfiles";
+      hms = "home-manager switch --flake ~/dotfiles#ac-$(uname -m)-linux";
+      hms-update = "cd ~/dotfiles && nix flake update && hms && cd -";
+      nix-update = "sudo nixos-rebuild switch --flake ~/dotfiles#$(hostname)";
+    };
 
-    initExtra = ''
-      # Source Powerlevel10k configuration if it exists
-      [[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
+    initContent = lib.mkMerge [
+      (lib.mkBefore ''
+        if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
+          source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
+        fi
+      '')
 
-      # Enable Powerlevel10k instant prompt
-      P10K_INSTANT_PROMPT="$XDG_CACHE_HOME/p10k-instant-prompt-''${(%):-%n}.zsh"
-      [[ ! -r "$P10K_INSTANT_PROMPT" ]] || source "$P10K_INSTANT_PROMPT"
+      ''
+        source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+        [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
-      # Source zsh-syntax-highlighting
-      source "${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+        batlog() {
+            tail -f "$1" -n 200 | bat --paging=never -l log
+        }
 
-      # Source zsh-autosuggestions
-      source "${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        
+        if [ -f "$HOME/.platformsh/shell-config.rc" ]; then
+          . "$HOME/.platformsh/shell-config.rc"
+        fi
 
-      # Set oh-my-zsh path
-      export ZSH="$HOME/.oh-my-zsh"
-
-      # Set aliases
-      alias cfg='/usr/bin/git --work-tree=$HOME/dotfiles/'
-      alias sail="./vendor/bin/sail"
-      alias refresh-tmux="tmux source-file ~/.config/tmux/tmux.conf"
-      alias refresh-zsh=". ~/.zshrc"
-      alias config-tmux="nvim ~/dotfiles/modules/cli/tmux.nix"
-      alias config-nvim="nvim ~/dotfiles/config/nvim"
-      alias config-zsh="nvim ~/dotfiles/modules/cli/zsh.nix"
-      alias config-nix="nvim ~/dotfiles"
-      alias hms="home-manager switch --flake ~/dotfiles#ac-$(uname -m)-linux"
-      alias hms-update="cd ~/dotfiles && nix flake update && hms && cd -"
-      alias nix-update="sudo nixos-rebuild switch --flake ~/dotfiles#$(hostname)"
-
-      # Custom function using bat for log tailing
-      batlog() {
-          tail -f "$1" -n 200 | bat --paging=never -l log
-      }
-
-      # Set NVM directory and source nvm if it exists
-      export NVM_DIR="$HOME/.nvm"
-      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
-      # Platform.sh CLI configuration
-      export PATH="$HOME/.platformsh/bin:$PATH"
-      if [ -f "$HOME/.platformsh/shell-config.rc" ]; then
-        . "$HOME/.platformsh/shell-config.rc"
-      fi
-
-      # bun completions
-      [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
-      export BUN_INSTALL="$HOME/.bun"
-      export PATH="$BUN_INSTALL/bin:$PATH"
-
-      # Set PATHs and environment variables
-      export PATH="$PATH:/opt/nvim-linux64/bin"
-      export PATH="$PATH:$HOME/.local/bin"
-
-      # Set preferred editor
-      export VISUAL=nvim
-      export EDITOR="$VISUAL"
-
-      export PATH="$HOME/projects/open-source/flutter/bin:$HOME/Android/Sdk/tools:$HOME/Android/Sdk/platform-tools:/usr/local/go/bin:$HOME/.config/composer/vendor/bin:$PATH"
-
-      eval "$(symfony self:completion zsh)"
-    '';
+        eval "$(symfony self:completion zsh)"
+      ''
+    ];
   };
 }

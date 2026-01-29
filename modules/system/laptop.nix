@@ -35,6 +35,15 @@
     };
   };
 
+  services.fprintd.enable = true;
+  services.fwupd.enable = true;
+
+  security.pam.services = {
+    login.fprintAuth = true;
+    sudo.fprintAuth = true;
+    polkit-1.fprintAuth = true;
+  };
+
   environment.systemPackages = with pkgs; [ brightnessctl pamixer ];
 
   hardware.enableAllFirmware = true;

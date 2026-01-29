@@ -1,6 +1,14 @@
 { pkgs, ... }:
 
 {
+  programs._1password.enable = true;
+  programs._1password-gui = {
+    enable = true;
+    polkitPolicyOwners = [ "ac" ];
+  };
+
+    home-manager.users.ac = {pkgs, ...}: {
+
   home.packages = with pkgs; [
     nerd-fonts.fira-code
     nerd-fonts.jetbrains-mono
@@ -9,12 +17,9 @@
     pavucontrol
   ];
 
-  programs._1password.enable = true;
-  programs._1password-gui = {
-    enable = true;
-    polkitPolicyOwners = [ "ac" ];
-  }
-
   fonts.fontconfig.enable = true;
 
-  }
+    };
+
+
+}

@@ -15,6 +15,7 @@
       system = "x86_64-linux";
       modules = [
         ./hosts/ac-zenbook-2022/default.nix
+        ./modules/gui/default.nix
         stylix.nixosModules.stylix
 
         home-manager.nixosModules.home-manager
@@ -23,7 +24,7 @@
           home-manager.useUserPackages = true;
 
           home-manager.users.ac = {
-            imports = [ ./modules/cli ./modules/gui ];
+            imports = [ ./modules/cli ];
           };
         }
       ];

@@ -41,6 +41,14 @@
             tail -f "$1" -n 200 | bat --paging=never -l log
         }
 
+        nvim() {
+            if [ -f .env ]; then
+                env $(grep -v '^#' ~/.env | xargs) nvim "$@"
+            else
+                command nvim "$@"
+            fi
+        }
+
         export NVM_DIR="$HOME/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         

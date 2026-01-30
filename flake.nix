@@ -10,9 +10,10 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, stylix, ... }: {
+  outputs = { self, nixpkgs, home-manager, stylix, ... }@inputs: {
     nixosConfigurations.ac-zenbook-2022 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
+      specialArgs = { inherit inputs; };
       modules = [
         ./hosts/ac-zenbook-2022/default.nix
         ./modules/gui/default.nix
@@ -22,6 +23,9 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+
+          home-manager.sharedModules =
+            [ inputs.stylix.homeManagerModules.stylix ];
 
           home-manager.users.ac = {
             imports = [ ./modules/cli ./modules/home/hyprland ];

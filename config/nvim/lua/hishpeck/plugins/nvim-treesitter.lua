@@ -4,7 +4,10 @@ return {
 		event = { "BufReadPre", "BufNewFile" },
 		build = ":TSUpdate",
 		dependencies = {
-			"nvim-treesitter/nvim-treesitter-textobjects",
+			{
+				"nvim-treesitter/nvim-treesitter-textobjects",
+				branch = "main",
+			},
 			"windwp/nvim-ts-autotag",
 			"JoosepAlviste/nvim-ts-context-commentstring",
 			"nvim-treesitter/nvim-treesitter-context",
@@ -18,7 +21,7 @@ return {
 			})
 
 			-- import nvim-treesitter plugin
-			local treesitter = require("nvim-treesitter.configs")
+			local treesitter = require("nvim-treesitter.config")
 
 			-- configure treesitter
 			treesitter.setup({ -- enable syntax highlighting

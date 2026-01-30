@@ -49,6 +49,7 @@ return {
 				"php-cs-fixer",
 				"golangci-lint",
 				"goimports",
+				"nixfmt",
 			},
 		})
 	end,

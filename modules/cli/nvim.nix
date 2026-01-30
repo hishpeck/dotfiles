@@ -1,27 +1,38 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
-  programs.neovim = { enable = true; };
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
 
-  # Include development tools in home.packages
-  home.packages = with pkgs; [
-    wl-clipboard # Clipboard provider
-    glibc.dev # GNU C Library development files
-    pkg-config # Helper tool used during compilation
-    fzf # Fuzzy finder
-    ripgrep # For Telescope.nvim
-    sqlite.dev # For Telescope History
-    sqlite
-    # Add other tools if necessary
-  ];
+    extraPackages = with pkgs; [ wl-clipboard fzf ripgrep fd unzip ];
 
-  home.sessionVariables = {
-    LIBSQLITE =
-      "${pkgs.sqlite.out}/lib/libsqlite3${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}";
+    extraWrapperArgs = [
+      "--prefix"
+      "PATH"
+      ":"
+      "${lib.makeBinPath [ pkgs.gcc pkgs.gnumake pkgs.pkg-config ]}"
+
+      "--prefix"
+      "CPATH"
+      ":"
+      "${pkgs.glibc.dev}/include"
+      "--prefix"
+      "LIBRARY_PATH"
+      ":"
+      "${pkgs.glibc.dev}/lib"
+
+      "--set"
+      "LIBSQLITE"
+      "${pkgs.sqlite.out}/lib/libsqlite3${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}"
+    ];
   };
 
   xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink
     "${config.home.homeDirectory}/dotfiles/config/nvim";
+
   xdg.configFile.".vimrc".source = config.lib.file.mkOutOfStoreSymlink
     "${config.home.homeDirectory}/dotfiles/config/.vimrc";
 }

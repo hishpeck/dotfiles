@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-programs.nix-ld.enable = true;
+  programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
     stdenv.cc.cc
     zlib
@@ -19,19 +19,14 @@ programs.nix-ld.enable = true;
     polkitPolicyOwners = [ "ac" ];
   };
 
-    home-manager.users.ac = {pkgs, ...}: {
+  home-manager.users.ac = { pkgs, ... }: {
+    home.packages = with pkgs; [
+      nerd-fonts.fira-code
 
-  home.packages = with pkgs; [
-    nerd-fonts.fira-code
-    nerd-fonts.jetbrains-mono
+      google-chrome
+      pavucontrol
+    ];
 
-    google-chrome
-    pavucontrol
-  ];
-
-  fonts.fontconfig.enable = true;
-
-    };
-
-
+    fonts.fontconfig.enable = true;
+  };
 }

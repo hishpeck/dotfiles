@@ -1,5 +1,5 @@
 {
-  description = "Home Manager configuration of ac";
+  description = "Universal Config for ac";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -10,52 +10,60 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, stylix, ... }@inputs: {
-    nixosConfigurations.ac-zenbook-2022 = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit inputs; };
-      modules = [
-        ./hosts/ac-zenbook-2022/default.nix
-        ./modules/gui/default.nix
-        stylix.nixosModules.stylix
+  outputs = { self, nixpkgs, home-manager, stylix, ... }@inputs:
+    let
+      user = "ac";
 
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
+      mkNixOS = host: system:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit inputs user; };
+          modules = [
+            ./hosts/${host}/default.nix
 
-          home-manager.sharedModules =
-            [ inputs.stylix.homeManagerModules.stylix ];
+            stylix.nixosModules.stylix
 
-          home-manager.users.ac = {
-            imports = [ ./modules/cli ./modules/home/hyprland ];
-          };
-        }
-      ];
-    };
-    homeConfigurations = {
-      "ac-x86_64-linux" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages."x86_64-linux";
-        modules = [
-          ./modules/cli/default.nix
-          {
-            home.username = "ac";
-            home.homeDirectory = "/home/ac";
-          }
-        ];
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = { inherit inputs user; };
+              home-manager.backupFileExtension = "backup";
+
+              home-manager.sharedModules = [ stylix.homeManagerModules.stylix ];
+
+              home-manager.users.${user} = import ./hosts/${host}/home.nix;
+            }
+          ];
+        };
+
+      mkHome = host: system:
+        home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.${system};
+          extraSpecialArgs = { inherit inputs user; };
+          modules = [
+            ./hosts/${host}/default.nix
+
+            stylix.homeManagerModules.stylix
+
+            {
+              home.username = user;
+              home.homeDirectory = if system == "aarch64-darwin" then
+                "/Users/${user}"
+              else
+                "/home/${user}";
+            }
+          ];
+        };
+    in {
+      nixosConfigurations = {
+        ac-zenbook-2022 = mkNixOS "ac-zenbook-2022" "x86_64-linux";
+        ac-gaming-pc = mkNixOS "ac-gaming-pc" "x86_64-linux";
       };
 
-      "ac-aarch64-linux" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages."aarch64-linux";
-        modules = [
-          ./modules/cli/default.nix
-          {
-            home.username = "ac";
-            home.homeDirectory = "/home/ac";
-          }
-        ];
+      homeConfigurations = {
+        "${user}-x86_64-linux" = mkHome "" "x86_64-linux";
+        "${user}-aarch64-linux" = mkHome "rpi5" "aarch64-linux";
       };
     };
-  };
 }
-

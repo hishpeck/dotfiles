@@ -19,7 +19,7 @@
 
   environment.systemPackages = with pkgs; [
     kitty       
-    rofi-wayland 
+    rofi
     waybar      
     dunst      
     swww      

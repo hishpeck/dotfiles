@@ -3,6 +3,8 @@
 {
   imports = [ ./zsh.nix ./nvim.nix ./tmux.nix ];
 
+  nixpkgs.config.allowUnfree = true;
+
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     warn-dirty = false;
@@ -60,7 +62,7 @@
 
   home.file = { };
 
-  programs.home-manager.enable = true;
+  
   programs.zoxide.enable = true;
 
   xdg.configFile = {

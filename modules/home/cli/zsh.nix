@@ -17,9 +17,9 @@
       sail = "./vendor/bin/sail";
       refresh-tmux = "tmux source-file ~/.config/tmux/tmux.conf";
       refresh-zsh = ". ~/.zshrc";
-      config-tmux = "nvim ~/dotfiles/modules/cli/tmux.nix";
+      config-tmux = "nvim ~/dotfiles/modules/home/cli/tmux.nix";
       config-nvim = "nvim ~/dotfiles/config/nvim";
-      config-zsh = "nvim ~/dotfiles/modules/cli/zsh.nix";
+      config-zsh = "nvim ~/dotfiles/modules/home/cli/zsh.nix";
       config-nix = "nvim ~/dotfiles";
       hms = "home-manager switch --flake ~/dotfiles#ac-$(uname -m)-linux";
       hms-update = "cd ~/dotfiles && nix flake update && hms && cd -";
@@ -51,7 +51,7 @@
 
         export NVM_DIR="$HOME/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-        
+
         if [ -f "$HOME/.platformsh/shell-config.rc" ]; then
           . "$HOME/.platformsh/shell-config.rc"
         fi

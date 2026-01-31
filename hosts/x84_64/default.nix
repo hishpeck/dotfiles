@@ -1,5 +1,5 @@
 { pkgs, ... }: {
-  imports = [ ../../modules/cli/default.nix ];
+  imports = [ ../../modules/home/cli/default.nix ];
 
   targets.genericLinux.enable = true;
 

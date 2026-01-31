@@ -10,8 +10,10 @@
 
   programs.git = {
     enable = true;
-    userName = "Adrian Castillo";
-    userEmail = "adr.cas97@gmail.com";
+    settings = {
+      user.name = "Adrian Castillo";
+      user.email = "adr.cas97@gmail.com";
+    };
   };
 
   home.stateVersion = "24.05";

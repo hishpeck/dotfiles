@@ -30,7 +30,7 @@
               home-manager.extraSpecialArgs = { inherit inputs user; };
               home-manager.backupFileExtension = "backup";
 
-              home-manager.sharedModules = [ stylix.homeManagerModules.stylix ];
+              home-manager.sharedModules = [ stylix.homeModules.stylix ];
 
               home-manager.users.${user} = import ./hosts/${host}/home.nix;
             }
@@ -44,7 +44,7 @@
           modules = [
             ./hosts/${host}/default.nix
 
-            stylix.homeManagerModules.stylix
+            stylix.homeModules.stylix
 
             {
               home.username = user;

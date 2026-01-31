@@ -7,13 +7,20 @@
     viAlias = true;
     vimAlias = true;
 
-    extraPackages = with pkgs; [ wl-clipboard fzf ripgrep fd unzip ];
-
     extraWrapperArgs = [
       "--prefix"
       "PATH"
       ":"
-      "${lib.makeBinPath [ pkgs.gcc pkgs.gnumake pkgs.pkg-config ]}"
+      "${lib.makeBinPath [
+        pkgs.gcc
+        pkgs.gnumake
+        pkgs.pkg-config
+        pkgs.ripgrep
+        pkgs.fd
+        pkgs.unzip
+        pkgs.wl-clipboard
+        pkgs.fzf
+      ]}"
 
       "--prefix"
       "CPATH"
@@ -32,7 +39,6 @@
 
   xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink
     "${config.home.homeDirectory}/dotfiles/config/nvim";
-
   xdg.configFile.".vimrc".source = config.lib.file.mkOutOfStoreSymlink
     "${config.home.homeDirectory}/dotfiles/config/.vimrc";
 }

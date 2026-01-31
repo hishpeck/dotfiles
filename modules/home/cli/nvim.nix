@@ -7,6 +7,12 @@
     viAlias = true;
     vimAlias = true;
 
+    extraLuaConfig = ''
+      require("hishpeck.core.keymaps")
+      require("hishpeck.core.options")
+      require("hishpeck.plugins-setup")
+    '';
+
     extraWrapperArgs = [
       "--prefix"
       "PATH"
@@ -37,8 +43,17 @@
     ];
   };
 
-  xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink
-    "${config.home.homeDirectory}/dotfiles/config/nvim";
-  xdg.configFile.".vimrc".source = config.lib.file.mkOutOfStoreSymlink
-    "${config.home.homeDirectory}/dotfiles/config/.vimrc";
+  xdg.configFile = {
+    "nvim/lua".source = config.lib.file.mkOutOfStoreSymlink
+      "${config.home.homeDirectory}/dotfiles/config/nvim/lua";
+    "nvim/after".source = config.lib.file.mkOutOfStoreSymlink
+      "${config.home.homeDirectory}/dotfiles/config/nvim/after";
+    "nvim/spell".source = config.lib.file.mkOutOfStoreSymlink
+      "${config.home.homeDirectory}/dotfiles/config/nvim/spell";
+    "nvim/lazy-lock.json".source = config.lib.file.mkOutOfStoreSymlink
+      "${config.home.homeDirectory}/dotfiles/config/nvim/lazy-lock.json";
+
+    ".vimrc".source = config.lib.file.mkOutOfStoreSymlink
+      "${config.home.homeDirectory}/dotfiles/config/.vimrc";
+  };
 }

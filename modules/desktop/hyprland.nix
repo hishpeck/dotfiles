@@ -14,16 +14,13 @@
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
-    theme = "breeze";
   };
 
   environment.systemPackages = with pkgs; [
-    kitty       
-    rofi
-    waybar      
-    dunst      
-    swww      
+    waybar
+    dunst
+    swww
     libnotify
-    networkmanagerapplet 
+    networkmanagerapplet
   ];
 }

@@ -4,13 +4,14 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     stylix.url = "github:danth/stylix";
+    catppuccin.url = "github:catppuccin/nix";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, stylix, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, stylix, catppuccin, ... }@inputs:
     let
       user = "ac";
 
@@ -22,6 +23,7 @@
             ./hosts/${host}/default.nix
 
             stylix.nixosModules.stylix
+            catppuccin.nixosModules.catppuccin
 
             home-manager.nixosModules.home-manager
             {
@@ -29,8 +31,12 @@
               home-manager.extraSpecialArgs = { inherit inputs user; };
               home-manager.backupFileExtension = "backup";
 
-              home-manager.sharedModules =
-                [ stylix.homeModules.stylix ./modules/system/theme.nix ];
+              home-manager.sharedModules = [
+                stylix.homeModules.stylix
+                catppuccin.homeModules.catppuccin
+                ./modules/system/theme.nix
+                ./modules/system/kitty.nix
+              ];
 
               home-manager.users.${user} = import ./hosts/${host}/home.nix;
             }
@@ -45,6 +51,7 @@
             ./hosts/${host}/default.nix
 
             stylix.homeModules.stylix
+            catppuccin.homeModules.catppuccin
             ./modules/system/theme.nix
 
             {

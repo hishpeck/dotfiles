@@ -7,7 +7,7 @@
     viAlias = true;
     vimAlias = true;
 
-    extraLuaConfig = ''
+    initLua = ''
       require("hishpeck.core.keymaps")
       require("hishpeck.core.options")
       require("hishpeck.plugins-setup")

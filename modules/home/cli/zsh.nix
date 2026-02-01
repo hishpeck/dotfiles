@@ -42,10 +42,23 @@
         }
 
         nvim() {
-            if [ -f .env ]; then
+            if [ -f ~/.env ]; then
                 env $(grep -v '^#' ~/.env | xargs) nvim "$@"
             else
                 command nvim "$@"
+            fi
+        }
+
+        if [[ "$TERM" == "xterm-kitty" ]]; then
+            alias ssh="kitty +kitten ssh"
+        fi
+
+          # Image preview function that checks if we are in Kitty
+        icat() {
+            if [[ "$TERM" == "xterm-kitty" ]]; then
+                kitty +kitten icat "$@"
+            else
+                echo "Not in Kitty terminal; image preview unavailable."
             fi
         }
 

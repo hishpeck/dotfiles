@@ -1,12 +1,9 @@
-{ pkgs, ... }: {
+{ pkgs, config, ... }: {
   stylix = {
     enable = true;
     image = ../../wallpaper.png;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-latte.yaml";
-    targets = {
-      tmux.enable = true;
-      neovim.enable = true;
-    };
+    targets = { neovim.enable = false; };
 
     cursor = {
       package = pkgs.bibata-cursors;
@@ -20,5 +17,16 @@
         name = "FiraCode Nerd Font";
       };
     };
+  };
+
+  catppuccin = {
+    enable = true;
+    flavor = "latte";
+
+    chromium.enable = true;
+    lazygit.enable = true;
+    btop.enable = true;
+    kitty.enable = true;
+    tmux.enable = true;
   };
 }

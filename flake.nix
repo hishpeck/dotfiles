@@ -5,13 +5,19 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     stylix.url = "github:danth/stylix";
     catppuccin.url = "github:catppuccin/nix";
+    elephant.url = "github:abenz1267/elephant";
+    walker = {
+      url = "github:abenz1267/walker";
+      inputs.elephant.follows = "elephant";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, stylix, catppuccin, ... }@inputs:
+  outputs =
+    { self, nixpkgs, home-manager, stylix, catppuccin, walker, ... }@inputs:
     let
       user = "ac";
 
@@ -36,6 +42,8 @@
                 catppuccin.homeModules.catppuccin
                 ./modules/system/theme.nix
                 ./modules/system/kitty.nix
+                ./modules/desktop/walker.nix
+                walker.homeManagerModules.default
               ];
 
               home-manager.users.${user} = import ./hosts/${host}/home.nix;
@@ -53,6 +61,7 @@
             stylix.homeModules.stylix
             catppuccin.homeModules.catppuccin
             ./modules/system/theme.nix
+            walker.homeManagerModules.default
 
             {
               home.username = user;

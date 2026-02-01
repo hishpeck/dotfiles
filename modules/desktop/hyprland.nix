@@ -23,4 +23,11 @@
     libnotify
     networkmanagerapplet
   ];
+
+  wayland.windowManager.hyprland.settings = {
+    bind = [
+      "SUPER, Space, exec, walker"
+      "SUPER, ;, exec, walker --modules emojis"
+    ];
+  };
 }

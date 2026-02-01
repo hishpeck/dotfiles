@@ -26,6 +26,7 @@
         pkgs.unzip
         pkgs.wl-clipboard
         pkgs.fzf
+        pkgs.nixd
       ]}"
 
       "--prefix"

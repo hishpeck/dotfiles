@@ -1,8 +1,8 @@
-{ pkgs, config, ... }: {
+{ pkgs, ... }: {
   stylix = {
     enable = true;
     image = ../../wallpaper.png;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-latte.yaml";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocca.yaml";
     targets = { neovim.enable = false; };
 
     cursor = {
@@ -21,7 +21,7 @@
 
   catppuccin = {
     enable = true;
-    flavor = "latte";
+    flavor = "mocca";
 
     chromium.enable = true;
     lazygit.enable = true;

@@ -21,6 +21,7 @@
 
   home-manager.users.ac = { pkgs, ... }: {
     home.packages = with pkgs; [
+      lato
       nerd-fonts.fira-code
 
       google-chrome

@@ -2,7 +2,7 @@
   stylix = {
     enable = true;
     image = ../../wallpaper.png;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocca.yaml";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
     targets = { neovim.enable = false; };
 
     cursor = {
@@ -12,6 +12,10 @@
     };
 
     fonts = {
+      sansSerif = {
+        package = pkgs.lato;
+        name = "Lato";
+      };
       monospace = {
         package = pkgs.nerd-fonts.fira-code;
         name = "FiraCode Nerd Font";
@@ -21,7 +25,7 @@
 
   catppuccin = {
     enable = true;
-    flavor = "mocca";
+    flavor = "mocha";
 
     chromium.enable = true;
     lazygit.enable = true;

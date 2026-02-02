@@ -8,6 +8,7 @@
     elephant.url = "github:abenz1267/elephant";
     walker = {
       url = "github:abenz1267/walker";
+      inputs.nixpkgs.follows = "nixpkgs";
       inputs.elephant.follows = "elephant";
     };
     home-manager = {
@@ -42,8 +43,8 @@
                 catppuccin.homeModules.catppuccin
                 ./modules/system/theme.nix
                 ./modules/system/kitty.nix
-                ./modules/desktop/walker.nix
                 walker.homeManagerModules.default
+                ./modules/desktop/walker.nix
               ];
 
               home-manager.users.${user} = import ./hosts/${host}/home.nix;
@@ -61,7 +62,6 @@
             stylix.homeModules.stylix
             catppuccin.homeModules.catppuccin
             ./modules/system/theme.nix
-            walker.homeManagerModules.default
 
             {
               home.username = user;
@@ -75,7 +75,7 @@
     in {
       nixosConfigurations = {
         ac-zenbook-2022 = mkNixOS "ac-zenbook-2022" "x86_64-linux";
-        ac-gaming-pc = mkNixOS "ac-gaming-pc" "x86_64-linux";
+        ac-main-pc = mkNixOS "ac-main-pc" "x86_64-linux";
       };
 
       homeConfigurations = {

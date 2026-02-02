@@ -1,63 +1,95 @@
-{ inputs, pkgs, config, ... }:
-
+{ inputs, pkgs, config, lib, ... }:
 let
-  # This grabs the actual hex colors from the catppuccin module
-  palette = config.lib.catppuccin.getPalette { };
+  elephantPkg = inputs.elephant.packages.${pkgs.system}.default;
+
+  depsPath = pkgs.lib.makeBinPath [
+    elephantPkg
+    pkgs.wl-clipboard
+    pkgs.mpv
+    pkgs.xdg-utils
+    pkgs.dbus
+    pkgs.wtype
+  ];
 in {
   programs.walker = {
     enable = true;
     package = inputs.walker.packages.${pkgs.system}.default;
+    runAsService = true;
 
     config = {
-      search.placeholder = "Search...";
+      theme = "default";
+      terminal = "kitty";
+      placeholders.default = {
+        input = "Search...";
+        list = "Results";
+      };
       ui.width = 400;
-
-      # Activation mode (Raycast style)
-      activation_mode.disabled = false;
-
-      # Enable the plugins you want
-      plugins = [
+      builtins = {
+        windows = {
+          weight = 100;
+          icon = "view-restore";
+        };
+        applications = { weight = 5; };
+        emojis = { exec = "wtype"; };
+        websearch.entries = [
+          {
+            name = "Google";
+            url = "https://google.com/search?q=%s";
+          }
+          {
+            name = "DuckDuckGo";
+            url = "https://duckduckgo.com/?q=%s";
+          }
+          {
+            name = "NixOS Packages";
+            url = "https://search.nixos.org/packages?channel=unstable&query=%s";
+          }
+          {
+            name = "NixOS Options";
+            url = "https://search.nixos.org/options?channel=unstable&query=%s";
+          }
+        ];
+      };
+      providers.prefixes = [
         {
-          name = "apps";
-          placeholder = "Applications";
+          provider = "windows";
+          prefix = "";
         }
         {
-          name = "emojis";
-          placeholder = "Emojis";
-          switcher_only = true;
+          provider = "applications";
+          prefix = "";
         }
         {
-          name = "finder";
-          placeholder = "Files";
+          provider = "websearch";
+          prefix = "?";
+        }
+        {
+          provider = "finder";
+          prefix = "/";
+        }
+        {
+          provider = "commands";
+          prefix = ">";
+        }
+        {
+          provider = "todo";
+          prefix = "]";
         }
       ];
     };
-
-    style = ''
-      #window {
-        background: transparent;
-      }
-      #box {
-        /* We use the 'palette' variable here */
-        background: #${palette.base}; 
-        border: 2px solid #${palette.mauve};
-        border-radius: 15px;
-        padding: 16px;
-      }
-      #search {
-        color: #${palette.text};
-        background: #${palette.surface0};
-        border-radius: 8px;
-        padding: 8px;
-      }
-      #entry:selected {
-        background: #${palette.surface1};
-      }
-      #entry:selected #text {
-        color: #${palette.mauve};
-      }
-    '';
   };
 
-  home.packages = with pkgs; [ wl-clipboard mpv ];
+  systemd.user.services.walker.Service = {
+    Environment = lib.mkForce [
+      "PATH=${depsPath}:/etc/profiles/per-user/${config.home.username}/bin:/run/current-system/sw/bin"
+      "XDG_DATA_DIRS=/etc/profiles/per-user/${config.home.username}/share:/run/current-system/sw/share"
+    ];
+  };
+  systemd.user.services.elephant.Service = {
+    Environment = lib.mkForce [
+      "PATH=${depsPath}:/etc/profiles/per-user/${config.home.username}/bin:/run/current-system/sw/bin"
+    ];
+  };
+
+  home.packages = [ elephantPkg pkgs.wtype ];
 }

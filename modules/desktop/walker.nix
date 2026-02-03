@@ -52,10 +52,6 @@ in {
       };
       providers.prefixes = [
         {
-          provider = "windows";
-          prefix = "";
-        }
-        {
           provider = "applications";
           prefix = "";
         }

@@ -27,7 +27,7 @@
     lazydocker
     zoxide
     fzf
-    btop
+    (btop.override { rocmSupport = true; })
     yazi
     nerd-fonts.fira-code
 
@@ -62,7 +62,6 @@
 
   home.file = { };
 
-  
   programs.zoxide.enable = true;
 
   xdg.configFile = {

@@ -1,0 +1,85 @@
+{ pkgs, ... }:
+
+let
+  version = "5.2.1";
+
+  src = pkgs.fetchzip {
+    url =
+      "https://github.com/sn4k3/UVtools/releases/download/v${version}/UVtools_linux-x64_v${version}.zip";
+    hash = "sha256-arGdYS18+SQ5y+68zLsrsEHXa6M2HKwbhvOyYinJceo=";
+    stripRoot = false;
+  };
+in pkgs.stdenv.mkDerivation {
+  pname = "uvtools";
+  inherit version src;
+
+  nativeBuildInputs = with pkgs; [
+    autoPatchelfHook
+    makeWrapper
+    copyDesktopItems
+  ];
+
+  buildInputs = with pkgs; [
+    icu
+    zlib
+    openssl
+    libgdiplus
+    libglvnd
+    xorg.libX11
+    xorg.libICE
+    xorg.libSM
+    xorg.libXi
+    xorg.libXcursor
+    xorg.libXrandr
+    fontconfig
+    lttng-ust
+  ];
+
+  autoPatchelfIgnoreMissingDeps = [ "liblttng-ust.so.0" ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/uvtools
+    cp -r * $out/share/uvtools/
+
+    mkdir -p $out/bin
+
+    # --- UPDATED LIBRARIES ---
+    # Added libXinerama (multi-monitor support) and libXft (font scaling)
+    makeWrapper $out/share/uvtools/UVtools $out/bin/uvtools \
+      --prefix LD_LIBRARY_PATH : ${
+        pkgs.lib.makeLibraryPath [
+          pkgs.libglvnd
+          pkgs.xorg.libX11
+          pkgs.xorg.libICE
+          pkgs.xorg.libSM
+          pkgs.icu
+          pkgs.openssl
+          pkgs.zlib
+          pkgs.libgdiplus
+          pkgs.fontconfig
+          pkgs.xorg.libXinerama
+          pkgs.xorg.libXft
+        ]
+      }
+
+    if [ -f $out/share/uvtools/icon.png ]; then
+      install -D $out/share/uvtools/icon.png $out/share/icons/hicolor/512x512/apps/uvtools.png
+    fi
+
+    runHook postInstall
+  '';
+
+  desktopItems = [
+    (pkgs.makeDesktopItem {
+      name = "uvtools";
+      desktopName = "UVTools";
+      exec = "uvtools";
+      icon = "uvtools";
+      comment =
+        "MSLA/DLP, File analysis, calibration, repair, conversion and manipulation";
+      categories = [ "Graphics" "Engineering" ];
+    })
+  ];
+}

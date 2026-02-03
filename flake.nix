@@ -75,6 +75,7 @@
     in {
       nixosConfigurations = {
         ac-zenbook-2022 = mkNixOS "ac-zenbook-2022" "x86_64-linux";
+        ac-zenbook-2025 = mkNixOS "ac-zenbook-2025" "x86_64-linux";
         ac-main-pc = mkNixOS "ac-main-pc" "x86_64-linux";
       };
 

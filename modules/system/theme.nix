@@ -3,7 +3,10 @@
     enable = true;
     image = ../../wallpaper.png;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
-    targets = { neovim.enable = false; };
+    targets = {
+      neovim.enable = false;
+      gtk.enable = false;
+    };
 
     cursor = {
       package = pkgs.bibata-cursors;

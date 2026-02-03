@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  home.packages = with pkgs; [ telegram-desktop discord steam ];
+  home.packages = with pkgs; [ telegram-desktop discord steam lychee-slicer blender uvtools freecad ];
 }
 

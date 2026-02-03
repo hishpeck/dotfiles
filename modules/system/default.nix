@@ -51,11 +51,13 @@
   users.users.ac = {
     isNormalUser = true;
     description = "ac";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "video" "render" ];
     shell = pkgs.zsh;
   };
 
   programs.zsh.enable = true;
+
+  virtualisation.docker.enable = true;
 
   security.rtkit.enable = true;
   services.pipewire = {

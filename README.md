@@ -13,6 +13,52 @@ It is a hybrid setup based on Nix:
 
 ### Installation
 
+0. Launch the NixOS installation USB
+1. Create three partitions on your disk
+- 512 MiB, FAT32, boot, boot, esp
+- 16384 MiB, linux-swap, swap
+- Rest, ext-4, nixos
+2. Mount the nixos and boot partitions
+```bash
+sudo -i
+mount /dev/disk/by-label/nixos /mnt
+mkdir -p /mnt/boot
+mount /dev/disk/by-label/BOOT /mnt/boot
+```
+3. Clone the dotfiles
+```bash
+mkdir -p /mnt/etc
+cd /mnt/etc
+git clone https://github.com/hishpeck/dotfiles.git nixos
+cd nixos
+```
+4. Create the directory for the new host and generate hardware for the device. Set the NEW_HOSTNAME to whatever you want
+```bash
+cp ./hosts/ac-zenbook-2025 ./hosts/NEW_HOSTNAME
+rm ./hosts/NEW_HOSTNAME/hardware-configuration.nix
+nixos-generate-config --root /mnt --show-hardware-config > ./hosts/NEW_HOSTNAME/hardware-configuration.nix
+```
+5. Remember to add the hostname to flake.nix, together with the default.nix and home.nix configuration in the 
+```nix
+    in {
+      nixosConfigurations = {
+        NEW_HOSTNAME = mkNixOS "NEW_HOSTNAME" "x86_64-linux";
+      };
+```
+6. Run the install, after which you'll be prompted to set a root password
+```bash
+nixos-install --flake .#NEW_HOSTNAME
+```
+7. Enter the newly installed NixOS and set the user password
+```bash
+nixos-enter --root '/mnt'
+passwd ac
+```
+
+---
+
+# OLD
+
 1. To install the dotfiles you can use this shell script based on the awesome guide about [storing dotfiles by Atlassian](https://www.atlassian.com/git/tutorials/dotfiles). Of course make sure to review it's contents first 😁
 
 ```bash

@@ -10,7 +10,24 @@
     # ../../modules/desktop/hyprland.nix
   ];
 
-  networking.hostName = "ac-zenbook-2022";
+  networking.hostName = "ac-zenbook-2025";
+  services.cloudflare-warp.enable = true;
+
+  networking.hosts = {
+    "127.0.0.10" = [
+      "dev.carandclassic.com"
+      "dev.api.carandclassic.com"
+      "dev.lesanciennes.com"
+      "internal.lesanciennes.com"
+    ];
+  };
+
+  security.pki.certificateFiles = [
+    ./la.crt
+    ./cnc.crt
+  ];
+
+  boot.kernelParams = [ "i915.enable_psr=0" ];
 
   system.stateVersion = "24.05";
 }

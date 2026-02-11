@@ -5,8 +5,6 @@
     slack
     notion
     zoom
-    # wireguard
     cloudflare-warp
   ];
 }
-

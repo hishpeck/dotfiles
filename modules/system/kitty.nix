@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   programs.kitty = {
     enable = true;
 
@@ -17,6 +18,12 @@
 
       allow_remote_control = "yes";
       listen_on = "unix:/tmp/mykitty";
+
+      detect_urls = "yes";
+      open_url_with = "default";
+      copy_on_select = "yes";
+
+      mouse_map = "left click ungrabbed mouse_handle_click selection link prompt";
     };
 
     keybindings = {

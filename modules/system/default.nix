@@ -4,7 +4,10 @@
   nixpkgs.config.allowUnfree = true;
 
   nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
     auto-optimise-store = true;
   };
 
@@ -51,7 +54,13 @@
   users.users.ac = {
     isNormalUser = true;
     description = "ac";
-    extraGroups = [ "networkmanager" "wheel" "docker" "video" "render" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+      "video"
+      "render"
+    ];
     shell = pkgs.zsh;
   };
 
@@ -68,23 +77,11 @@
     jack.enable = true;
   };
 
-  services.xserver.videoDrivers = [ "amdgpu" ];
-
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-    extraPackages = with pkgs; [
-      libva-utils
-      libva-vdpau-driver
-      libvdpau-va-gl
-      rocmPackages.clr
-    ];
-  };
-
-  hardware.cpu.amd.updateMicrocode = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  environment.variables = { NIXOS_OZONE_WL = "1"; };
+  environment.variables = {
+    NIXOS_OZONE_WL = "1";
+  };
 
   environment.systemPackages = with pkgs; [
     vim

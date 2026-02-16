@@ -3,6 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ../../modules/system/intel.nix
     ../../modules/gui/default.nix
     ../../modules/system/default.nix
     ../../modules/system/laptop.nix

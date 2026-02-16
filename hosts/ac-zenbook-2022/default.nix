@@ -3,6 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ../../modules/system/amd.nix
     ../../modules/gui/default.nix
     ../../modules/system/default.nix
     ../../modules/system/laptop.nix

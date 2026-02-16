@@ -3,6 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ../../modules/system/amd.nix
     ../../modules/gui/default.nix
     ../../modules/system/default.nix
     ../../modules/desktop/cosmic.nix
@@ -13,4 +14,3 @@
 
   system.stateVersion = "24.05";
 }
-

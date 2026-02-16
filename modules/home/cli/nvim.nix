@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   programs.neovim = {
@@ -27,6 +32,7 @@
         pkgs.wl-clipboard
         pkgs.fzf
         pkgs.nixd
+        pkgs.tree-sitter
       ]}"
 
       "--prefix"
@@ -45,16 +51,16 @@
   };
 
   xdg.configFile = {
-    "nvim/lua".source = config.lib.file.mkOutOfStoreSymlink
-      "${config.home.homeDirectory}/dotfiles/config/nvim/lua";
-    "nvim/after".source = config.lib.file.mkOutOfStoreSymlink
-      "${config.home.homeDirectory}/dotfiles/config/nvim/after";
-    "nvim/spell".source = config.lib.file.mkOutOfStoreSymlink
-      "${config.home.homeDirectory}/dotfiles/config/nvim/spell";
-    "nvim/lazy-lock.json".source = config.lib.file.mkOutOfStoreSymlink
-      "${config.home.homeDirectory}/dotfiles/config/nvim/lazy-lock.json";
+    "nvim/lua".source =
+      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nvim/lua";
+    "nvim/after".source =
+      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nvim/after";
+    "nvim/spell".source =
+      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nvim/spell";
+    "nvim/lazy-lock.json".source =
+      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nvim/lazy-lock.json";
 
-    ".vimrc".source = config.lib.file.mkOutOfStoreSymlink
-      "${config.home.homeDirectory}/dotfiles/config/.vimrc";
+    ".vimrc".source =
+      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/.vimrc";
   };
 }

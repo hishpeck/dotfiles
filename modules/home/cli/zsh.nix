@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   programs.zsh = {
@@ -9,7 +14,12 @@
 
     oh-my-zsh = {
       enable = true;
-      plugins = [ "git" "web-search" "docker" "fzf" ];
+      plugins = [
+        "git"
+        "web-search"
+        "docker"
+        "fzf"
+      ];
     };
 
     shellAliases = {
@@ -23,7 +33,7 @@
       config-nix = "nvim ~/dotfiles";
       hms = "home-manager switch --flake ~/dotfiles#ac-$(uname -m)-linux";
       hms-update = "cd ~/dotfiles && nix flake update && hms && cd -";
-      nix-update = "sudo nixos-rebuild switch --flake ~/dotfiles#$(hostname)";
+      nix-update = "sudo nix flake update --flake ~/dotfiles && sudo nixos-rebuild switch --flake ~/dotfiles#$(hostname)";
     };
 
     initContent = lib.mkMerge [

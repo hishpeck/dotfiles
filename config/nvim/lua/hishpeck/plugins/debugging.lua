@@ -93,9 +93,5 @@ return {
 				port = 9003,
 			},
 		}
-
-		require("dap.ext.vscode").load_launchjs(nil, {
-			gdb = { "rs" },
-		})
 	end,
 }

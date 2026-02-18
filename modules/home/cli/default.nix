@@ -1,12 +1,19 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./zsh.nix ./nvim.nix ./tmux.nix ];
+  imports = [
+    ./zsh.nix
+    ./nvim.nix
+    ./tmux.nix
+  ];
 
   nixpkgs.config.allowUnfree = true;
 
   nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
     warn-dirty = false;
   };
 
@@ -20,6 +27,12 @@
 
   home.stateVersion = "24.05";
 
+  home.sessionVariables = {
+    XDG_CONFIG_HOME = "$HOME/.config";
+    XDG_DATA_HOME = "$HOME/.local/share";
+    XDG_CACHE_HOME = "$HOME/.cache";
+  };
+
   home.packages = with pkgs; [
     unzip
     bat
@@ -31,8 +44,10 @@
     yazi
     nerd-fonts.fira-code
 
-    (php84.withExtensions ({ enabled, all }:
-      enabled ++ [
+    (php84.withExtensions (
+      { enabled, all }:
+      enabled
+      ++ [
         all.amqp
         all.xsl
         all.redis
@@ -40,7 +55,8 @@
         all.pdo_pgsql
         all.iconv
         all.memcached
-      ]))
+      ]
+    ))
     php84Packages.composer
     symfony-cli
 

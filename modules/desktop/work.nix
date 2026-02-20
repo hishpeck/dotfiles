@@ -4,7 +4,7 @@
   home.packages = with pkgs; [
     slack
     notion
-    zoom
+    zoom-us
     cloudflare-warp
 
     font-adobe-100dpi

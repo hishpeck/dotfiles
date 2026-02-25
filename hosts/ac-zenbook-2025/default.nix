@@ -28,7 +28,5 @@
     ./cnc.crt
   ];
 
-  boot.kernelParams = [ "i915.enable_psr=0" ];
-
   system.stateVersion = "24.05";
 }

@@ -30,4 +30,6 @@
 
     "i915.enable_psr=0"
   ];
+
+  hardware.cpu.intel.updateMicrocode = true;
 }

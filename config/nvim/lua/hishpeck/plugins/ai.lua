@@ -26,7 +26,7 @@ return {
 					model = "deepseek-coder",
 				},
 				gemini = {
-					model = "gemini-2.5-flash",
+					model = "gemini-3-flash-preview",
 				},
 				claude = {
 					endpoint = "https://api.anthropic.com",

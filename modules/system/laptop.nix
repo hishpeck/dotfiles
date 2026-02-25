@@ -6,14 +6,18 @@
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-    settings = { General = { Experimental = true; }; };
+    settings = {
+      General = {
+        Experimental = true;
+      };
+    };
   };
   services.blueman.enable = true;
 
   services.upower.enable = true;
   services.power-profiles-daemon.enable = false;
   services.tlp = {
-    enable = true;
+    enable = false;
     settings = {
       CPU_SCALING_GOVERNOR_ON_AC = "performance";
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
@@ -44,8 +48,10 @@
     polkit-1.fprintAuth = true;
   };
 
-  environment.systemPackages = with pkgs; [ brightnessctl pamixer ];
+  environment.systemPackages = with pkgs; [
+    brightnessctl
+    pamixer
+  ];
 
   hardware.enableAllFirmware = true;
-  hardware.cpu.amd.updateMicrocode = true;
 }

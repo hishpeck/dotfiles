@@ -7,6 +7,7 @@
     targets = {
       neovim.enable = false;
       gtk.enable = false;
+      yazi.enable = false;
     };
 
     cursor = {

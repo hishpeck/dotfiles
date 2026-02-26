@@ -23,6 +23,7 @@
     home.packages = with pkgs; [
       lato
       nerd-fonts.fira-code
+      noto-fonts-cjk-sans
 
       google-chrome
       pavucontrol

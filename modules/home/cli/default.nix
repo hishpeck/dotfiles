@@ -1,19 +1,12 @@
 { config, pkgs, ... }:
 
 {
-  imports = [
-    ./zsh.nix
-    ./nvim.nix
-    ./tmux.nix
-  ];
+  imports = [ ./zsh.nix ./nvim.nix ./tmux.nix ];
 
   nixpkgs.config.allowUnfree = true;
 
   nix.settings = {
-    experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
+    experimental-features = [ "nix-command" "flakes" ];
     warn-dirty = false;
   };
 
@@ -22,6 +15,24 @@
     settings = {
       user.name = "Adrian Castillo";
       user.email = "adr.cas97@gmail.com";
+    };
+  };
+
+  programs.yazi = {
+    enable = true;
+    settings = {
+      plugin = {
+        prepend_previewers = [
+          {
+            mime = "model/stl";
+            run = "fstl";
+          }
+          {
+            name = "*.stl";
+            run = "fstl";
+          }
+        ];
+      };
     };
   };
 
@@ -41,13 +52,9 @@
     zoxide
     fzf
     (btop.override { rocmSupport = true; })
-    yazi
-    nerd-fonts.fira-code
 
-    (php84.withExtensions (
-      { enabled, all }:
-      enabled
-      ++ [
+    (php84.withExtensions ({ enabled, all }:
+      enabled ++ [
         all.amqp
         all.xsl
         all.redis
@@ -55,8 +62,7 @@
         all.pdo_pgsql
         all.iconv
         all.memcached
-      ]
-    ))
+      ]))
     php84Packages.composer
     symfony-cli
 

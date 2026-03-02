@@ -18,4 +18,8 @@
 
     config.common.default = [ "cosmic" ];
   };
+
+  environment.systemPackages = with pkgs; [ f3d shared-mime-info ];
+
+  environment.pathsToLink = [ "/share/thumbnailers" ];
 }

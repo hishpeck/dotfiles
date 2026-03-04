@@ -1,6 +1,6 @@
 { inputs, pkgs, config, lib, ... }:
 let
-  elephantPkg = inputs.elephant.packages.${pkgs.system}.default;
+  elephantPkg = inputs.elephant.packages.${pkgs.stdenv.hostPlatform.system}.default;
 
   depsPath = pkgs.lib.makeBinPath [
     elephantPkg
@@ -13,7 +13,7 @@ let
 in {
   programs.walker = {
     enable = true;
-    package = inputs.walker.packages.${pkgs.system}.default;
+    package = inputs.walker.packages.${pkgs.stdenv.hostPlatform.system}.default;
     runAsService = true;
 
     config = {

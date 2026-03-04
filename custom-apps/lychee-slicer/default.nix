@@ -1,13 +1,13 @@
 { pkgs, ... }:
 
 let
-  version = "7.6.0";
+  version = "7.6.2";
   pname = "lychee-slicer";
 
   src = pkgs.fetchurl {
     url =
       "https://mango-lychee.nyc3.cdn.digitaloceanspaces.com/LycheeSlicer-${version}.AppImage";
-    hash = "sha256-jxZ7jtIkf3olC6nZYW6X2v88qSSUT4v4kCWfuekbeMI=";
+    hash = "sha256-F76Bw6ydPu0pD8xzYmgqchVKmolhDuDmj8w4I/g21VA=";
   };
 
   appimageContents = pkgs.appimageTools.extract { inherit pname version src; };
@@ -16,10 +16,10 @@ in pkgs.appimageTools.wrapType2 {
 
   extraPkgs = pkgs:
     with pkgs; [
-      xorg.libxshmfence
+      libxshmfence
       udev
       libglvnd
-      xorg.libX11
+      libX11
       icu
       zlib
       gtk3

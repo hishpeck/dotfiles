@@ -25,12 +25,12 @@ in pkgs.stdenv.mkDerivation {
     openssl
     libgdiplus
     libglvnd
-    xorg.libX11
-    xorg.libICE
-    xorg.libSM
-    xorg.libXi
-    xorg.libXcursor
-    xorg.libXrandr
+    libx11
+    libice
+    libsm
+    libxi
+    libxcursor
+    libxrandr
     fontconfig
     lttng-ust
   ];
@@ -51,16 +51,16 @@ in pkgs.stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : ${
         pkgs.lib.makeLibraryPath [
           pkgs.libglvnd
-          pkgs.xorg.libX11
-          pkgs.xorg.libICE
-          pkgs.xorg.libSM
+          pkgs.libx11
+          pkgs.libice
+          pkgs.libsm
           pkgs.icu
           pkgs.openssl
           pkgs.zlib
           pkgs.libgdiplus
           pkgs.fontconfig
-          pkgs.xorg.libXinerama
-          pkgs.xorg.libXft
+          pkgs.libxinerama
+          pkgs.libxft
         ]
       }
 

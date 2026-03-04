@@ -9,6 +9,7 @@
     # freecad
     (pkgs.callPackage ../../custom-apps/lychee-slicer/default.nix { })
     (pkgs.callPackage ../../custom-apps/uvtools/default.nix { })
+    bambu-studio
     fstl
     exiftool
   ];
@@ -35,6 +36,8 @@
       "application/vnd.ms-pki.stl" = "fstl.desktop";
       "application/sla" = "fstl.desktop";
       "application/x-navistyle" = "fstl.desktop";
+      "application/pdf" = "google-chrome.desktop";
+      "application/x-pdf" = "google-chrome.desktop";
     };
   };
 

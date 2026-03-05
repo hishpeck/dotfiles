@@ -6,18 +6,14 @@
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-    settings = {
-      General = {
-        Experimental = true;
-      };
-    };
+    settings = { General = { Experimental = true; }; };
   };
   services.blueman.enable = true;
 
   services.upower.enable = true;
   services.power-profiles-daemon.enable = false;
   services.tlp = {
-    enable = false;
+    enable = true;
     settings = {
       CPU_SCALING_GOVERNOR_ON_AC = "performance";
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
@@ -28,6 +24,8 @@
       USB_AUTOSUSPEND = 0;
     };
   };
+
+  services.asusd = { enable = true; };
 
   services.libinput = {
     enable = true;
@@ -48,10 +46,9 @@
     polkit-1.fprintAuth = true;
   };
 
-  environment.systemPackages = with pkgs; [
-    brightnessctl
-    pamixer
-  ];
+  environment.systemPackages = with pkgs; [ brightnessctl pamixer asusctl ];
+
+  boot.kernelModules = [ "asus_wmi" "asus_ec_sensors" ];
 
   hardware.enableAllFirmware = true;
 }

@@ -9,7 +9,7 @@
     # freecad
     (pkgs.callPackage ../../custom-apps/lychee-slicer/default.nix { })
     (pkgs.callPackage ../../custom-apps/uvtools/default.nix { })
-    bambu-studio
+    (pkgs.callPackage ../../custom-apps/bambu-studio/default.nix { })
     fstl
     exiftool
   ];
@@ -44,7 +44,8 @@
   xdg.dataFile."thumbnailers/f3d.thumbnailer".text = ''
     [Thumbnailer Entry]
     TryExec=${pkgs.f3d}/bin/f3d
-    Exec=sh -c '${pkgs.f3d}/bin/f3d --rendering-backend=egl --verbose=quiet --output="$1" --resolution="$2" "$3"' _ %o %s %i
+    # Added azimuth (left/right) and elevation (up/down) angles for a 45-degree isometric view
+    Exec=sh -c '${pkgs.f3d}/bin/f3d --rendering-backend=egl --camera-azimuth-angle=45 --camera-elevation-angle=45 --verbose=quiet --output="$1" --resolution="$2" "$3"' _ %o %s %i
     MimeType=model/stl;application/sla;model/x.stl-binary;model/x.stl-ascii;
   '';
 }

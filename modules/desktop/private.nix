@@ -10,6 +10,7 @@
     (pkgs.callPackage ../../custom-apps/lychee-slicer/default.nix { })
     (pkgs.callPackage ../../custom-apps/uvtools/default.nix { })
     (pkgs.callPackage ../../custom-apps/bambu-studio/default.nix { })
+    (pkgs.callPackage ../../custom-apps/patreon-dl-gui/default.nix { })
     fstl
     exiftool
   ];

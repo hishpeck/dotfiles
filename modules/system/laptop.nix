@@ -27,6 +27,11 @@
 
   services.asusd = { enable = true; };
 
+  services.logind = {
+    lidSwitch = "suspend";
+    lidSwitchExternalPower = "lock";
+  };
+
   services.libinput = {
     enable = true;
     touchpad = {

@@ -27,6 +27,8 @@
 
       google-chrome
       pavucontrol
+
+      p7zip
     ];
 
     fonts.fontconfig.enable = true;

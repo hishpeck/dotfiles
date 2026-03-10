@@ -6,7 +6,7 @@
     discord
     steam
     blender
-    # freecad
+    freecad
     (pkgs.callPackage ../../custom-apps/lychee-slicer/default.nix { })
     (pkgs.callPackage ../../custom-apps/uvtools/default.nix { })
     (pkgs.callPackage ../../custom-apps/bambu-studio/default.nix { })

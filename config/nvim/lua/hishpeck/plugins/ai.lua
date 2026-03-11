@@ -41,7 +41,7 @@ return {
 					__inherited_from = "openai",
 					endpoint = "https://openrouter.ai/api/v1",
 					api_key_name = "OPENROUTER_API_KEY",
-					model = "moonshotai/kimi-k2.5",
+					model = "minimax/minimax-m2.5",
 					-- use_ReAct_prompt = true,
 				},
 			},

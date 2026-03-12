@@ -1,7 +1,11 @@
 return {
 	"folke/flash.nvim",
 	event = "VeryLazy",
-	opts = {},
+	opts = {
+		jump = {
+			autojump = true,
+		},
+	},
 	keys = {
 		{
 			"<leader><leader>",

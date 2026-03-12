@@ -2,17 +2,22 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		event = { "BufReadPre", "BufNewFile" },
+		branch = "main", -- Welcome to the cutting edge
 		build = ":TSUpdate",
 		dependencies = {
 			{
 				"nvim-treesitter/nvim-treesitter-textobjects",
-				branch = "main",
+				branch = "main", -- Textobjects must also track main
 			},
 			"windwp/nvim-ts-autotag",
 			"JoosepAlviste/nvim-ts-context-commentstring",
 			"nvim-treesitter/nvim-treesitter-context",
-			-- "filNaj/tree-setter",
 		},
+		init = function()
+			vim.o.foldlevel = 99
+			vim.o.foldlevelstart = 99
+			vim.o.foldenable = true
+		end,
 		config = function()
 			vim.filetype.add({
 				pattern = {
@@ -20,71 +25,62 @@ return {
 				},
 			})
 
-			-- import nvim-treesitter plugin
-			local treesitter = require("nvim-treesitter.config")
+			local parsers = {
+				"json",
+				"javascript",
+				"typescript",
+				"tsx",
+				"yaml",
+				"html",
+				"css",
+				"markdown",
+				"markdown_inline",
+				"graphql",
+				"bash",
+				"lua",
+				"vim",
+				"vimdoc",
+				"dockerfile",
+				"gitignore",
+				"astro",
+				"jsdoc",
+				"php",
+				"phpdoc",
+				"rust",
+				"tmux",
+				"vue",
+				"sql",
+				"glsl",
+				"blade",
+				"twig",
+				"go",
+			}
+			require("nvim-treesitter").install(parsers)
 
-			-- configure treesitter
-			treesitter.setup({ -- enable syntax highlighting
-				highlight = {
-					enable = true,
-				},
-				-- enable indentation
-				indent = { enable = true },
-				-- enable autotagging (w/ nvim-ts-autotag plugin)
-				autotag = {
-					enable = true,
-				},
-				-- tree_setter = {
-				-- 	enable = true,
-				-- },
-				-- ensure these language parsers are installed
-				ensure_installed = {
-					"json",
-					"javascript",
-					"typescript",
-					"tsx",
-					"yaml",
-					"html",
-					"css",
-					"markdown",
-					"markdown_inline",
-					"graphql",
-					"bash",
-					"lua",
-					"vim",
-					"dockerfile",
-					"gitignore",
-					"astro",
-					"jsdoc",
-					"php",
-					"phpdoc",
-					"rust",
-					"tmux",
-					"vue",
-					"sql",
-					"glsl",
-					"blade",
-					"twig",
-					"go",
-				},
-				incremental_selection = {
-					enable = true,
-					keymaps = {
-						init_selection = "<leader>>",
-						node_incremental = ">",
-						scope_incremental = false,
-						node_decremental = "<",
-					},
-				},
+			vim.api.nvim_create_autocmd("FileType", {
+				group = vim.api.nvim_create_augroup("treesitter_setup", { clear = true }),
+				callback = function(args)
+					local buf = args.buf
+					pcall(vim.treesitter.start, buf)
+
+					vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
+					vim.wo.foldmethod = "expr"
+					vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+				end,
 			})
 
+			-- 4. Setup External Dependencies natively
 			require("ts_context_commentstring").setup({})
+			require("nvim-ts-autotag").setup({}) -- Autotag now requires its own setup call
 
+			-- 5. Setup Textobjects
 			require("nvim-treesitter-textobjects").setup({
 				select = { lookahead = true },
 				move = { set_jumps = true },
 			})
 
+			-- 6. Textobject Keymaps
 			local select_maps = {
 				["a="] = { query = "@assignment.outer", desc = "Select outer part of an assignment" },
 				["i="] = { query = "@assignment.inner", desc = "Select inner part of an assignment" },

@@ -10,6 +10,8 @@
     warn-dirty = false;
   };
 
+  programs.nix-index-database.comma.enable = true;
+
   programs.git = {
     enable = true;
     settings = {

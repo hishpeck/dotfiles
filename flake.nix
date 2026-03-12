@@ -15,10 +15,12 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-index-database.url = "github:nix-community/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs =
-    { self, nixpkgs, home-manager, stylix, catppuccin, walker, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, stylix, catppuccin, walker
+    , nix-index-database, ... }@inputs:
     let
       user = "ac";
 
@@ -31,6 +33,7 @@
 
             stylix.nixosModules.stylix
             catppuccin.nixosModules.catppuccin
+            nix-index-database.nixosModules.nix-index
 
             home-manager.nixosModules.home-manager
             {
@@ -45,6 +48,7 @@
                 ./modules/system/kitty.nix
                 walker.homeManagerModules.default
                 ./modules/desktop/walker.nix
+                nix-index-database.hmModules.nix-index
               ];
 
               home-manager.users.${user} = import ./hosts/${host}/home.nix;
@@ -61,6 +65,7 @@
 
             stylix.homeModules.stylix
             catppuccin.homeModules.catppuccin
+            nix-index-database.hmModules.nix-index
             ./modules/system/theme.nix
 
             {

@@ -17,6 +17,10 @@ in pkgs.appimageTools.wrapType2 {
 
   extraPkgs = pkgs:
     with pkgs; [
+      openssl_3
+      tzdata
+      cacert
+
       gtk3
       gdk-pixbuf
       glib
@@ -60,8 +64,11 @@ in pkgs.appimageTools.wrapType2 {
 
   profile = ''
     export GIO_EXTRA_MODULES="${pkgs.glib-networking}/lib/gio/modules"
-    export SSL_CERT_FILE="${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
     export WEBKIT_DISABLE_COMPOSITING_MODE=1
+
+    # Force the MQTT plugin to find the standard Linux SSL certificates
+    export SSL_CERT_FILE="${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
+    export SSL_CERT_DIR="${pkgs.cacert}/etc/ssl/certs"
   '';
 
   extraInstallCommands = ''

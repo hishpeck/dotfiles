@@ -18,6 +18,12 @@ return {
 			opts.desc = "Show LSP references"
 			keymap.set("n", "gr", "<cmd>Telescope lsp_references<CR>", opts)
 
+			opts.desc = "Show LSP references to the current file"
+			keymap.set("n", "gR", function()
+				local component_name = vim.fn.expand("%:t:r")
+				require("telescope.builtin").grep_string({ search = component_name })
+			end, opts)
+
 			opts.desc = "Go to declaration"
 			keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
 

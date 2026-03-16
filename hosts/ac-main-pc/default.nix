@@ -12,6 +12,7 @@
 
   networking.hostName = "ac-main-pc";
   services.cloudflare-warp.enable = true;
+  services.resolved.enable = true;
 
   networking.hosts = {
     "127.0.0.10" = [

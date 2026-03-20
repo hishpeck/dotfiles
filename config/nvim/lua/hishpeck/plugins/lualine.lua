@@ -12,7 +12,7 @@ return {
 
 		lualine.setup({
 			options = {
-				theme = "catppuccin",
+				theme = "catppuccin-nvim",
 				globalstatus = true,
 			},
 			sections = {

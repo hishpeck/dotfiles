@@ -48,6 +48,9 @@
   };
 
   home.packages = with pkgs; [
+    gemini-cli
+    gh
+
     unzip
     bat
     lazygit

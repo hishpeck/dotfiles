@@ -11,6 +11,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.elephant.follows = "elephant";
     };
+    dms = {
+      url = "github:AvengeMedia/DankMaterialShell/stable";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -44,11 +48,12 @@
               home-manager.sharedModules = [
                 stylix.homeModules.stylix
                 catppuccin.homeModules.catppuccin
+                inputs.dms.homeModules.dank-material-shell
                 ./modules/system/theme.nix
                 ./modules/system/kitty.nix
                 walker.homeManagerModules.default
-                ./modules/desktop/walker.nix
-                nix-index-database.hmModules.nix-index
+                ./modules/desktop/launcher/walker.nix
+                nix-index-database.homeModules.nix-index
               ];
 
               home-manager.users.${user} = import ./hosts/${host}/home.nix;
@@ -65,7 +70,7 @@
 
             stylix.homeModules.stylix
             catppuccin.homeModules.catppuccin
-            nix-index-database.hmModules.nix-index
+            nix-index-database.homeModules.nix-index
             ./modules/system/theme.nix
 
             {

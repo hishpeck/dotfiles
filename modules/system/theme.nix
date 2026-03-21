@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{ pkgs, ... }: {
   stylix = {
     enable = true;
     image = ../../wallpaper.png;
@@ -8,6 +7,7 @@
       neovim.enable = false;
       gtk.enable = false;
       yazi.enable = false;
+      swaync.enable = false;
     };
 
     cursor = {

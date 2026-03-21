@@ -14,6 +14,8 @@
     fstl
     obsidian
     exiftool
+    f3d
+    shared-mime-info
   ];
 
   xdg.desktopEntries.fstl = {

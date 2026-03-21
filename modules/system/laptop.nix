@@ -11,9 +11,10 @@
   services.blueman.enable = true;
 
   services.upower.enable = true;
-  services.power-profiles-daemon.enable = false;
+
+  # TLP is used for non-cosmic environments
   services.tlp = {
-    enable = true;
+    enable = !config.services.desktopManager.cosmic.enable;
     settings = {
       CPU_SCALING_GOVERNOR_ON_AC = "performance";
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
@@ -25,11 +26,11 @@
     };
   };
 
-  services.asusd = { enable = true; };
+  services.power-profiles-daemon.enable = false;
 
   services.logind.settings.Login = {
     HandleLidSwitch = "suspend";
-    HandleLidSwitchExternalPower = "lock";
+    HandleLidSwitchExternalPower = "suspend";
   };
 
   services.libinput = {
@@ -51,9 +52,7 @@
     polkit-1.fprintAuth = true;
   };
 
-  environment.systemPackages = with pkgs; [ brightnessctl pamixer asusctl ];
-
-  boot.kernelModules = [ "asus_wmi" "asus_ec_sensors" ];
+  environment.systemPackages = with pkgs; [ brightnessctl pamixer ];
 
   hardware.enableAllFirmware = true;
 }

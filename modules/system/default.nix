@@ -4,10 +4,7 @@
   nixpkgs.config.allowUnfree = true;
 
   nix.settings = {
-    experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
+    experimental-features = [ "nix-command" "flakes" ];
     auto-optimise-store = true;
   };
 
@@ -19,6 +16,14 @@
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  swapDevices = [{
+    device = "/var/lib/swapfile";
+    size = 16384;
+  }];
+
+  boot.kernel.sysctl = { "vm.swappiness" = 10; };
 
   networking.networkmanager.enable = true;
 
@@ -54,13 +59,7 @@
   users.users.ac = {
     isNormalUser = true;
     description = "ac";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "docker"
-      "video"
-      "render"
-    ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "video" "render" ];
     shell = pkgs.zsh;
   };
 
@@ -77,11 +76,7 @@
     jack.enable = true;
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  environment.variables = {
-    NIXOS_OZONE_WL = "1";
-  };
+  environment.variables = { NIXOS_OZONE_WL = "1"; };
 
   environment.systemPackages = with pkgs; [
     vim

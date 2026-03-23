@@ -8,13 +8,6 @@ let
     rev = "v3.1.0";
     sha256 = "18i499hhxly1r2bnqp9wssh0p1v391cxf10aydxaa7mdmrd3vqh9";
   };
-  # Fetch the Catppuccin Tmux theme
-  catppuccin = pkgs.fetchFromGitHub {
-    owner = "catppuccin";
-    repo = "tmux";
-    rev = "v2.1.0";
-    sha256 = "1wcabf7j404np9hrimky77yl4a3r3c9ivsl5z5ij29n25lcb2s4i";
-  };
 in
 
 {
@@ -76,11 +69,7 @@ in
       set -g @plugin 'xamut/tmux-weather'
 
       # Theme configuration
-      set -g @catppuccin_flavor 'latte'
       set -g @catppuccin_window_status_style "slanted"
-
-      # Source the Catppuccin theme from the Nix store
-      run-shell '${catppuccin}/catppuccin.tmux'
 
       set -g status-left ""
       set -g status-right ""

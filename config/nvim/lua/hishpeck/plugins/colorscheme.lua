@@ -2,11 +2,15 @@ return {
 	"catppuccin/nvim", -- colorscheme
 	priority = 1000,
 	config = function()
+		local flavor = _G.catppuccin_flavor or "latte"
+
 		require("catppuccin").setup({
 			background = {
 				light = "latte",
 				dark = "frappe",
 			},
+			-- Use the flavor from nix if available
+			flavour = flavor,
 			dim_inactive = {
 				-- enabled = true,
 			},
@@ -57,8 +61,11 @@ return {
 			},
 		})
 
-		vim.cmd([[colorscheme catppuccin-nvim]])
-		vim.opt.background = "dark"
-		vim.opt.background = "light"
+		vim.cmd([[colorscheme catppuccin]])
+		if flavor == "latte" then
+			vim.opt.background = "light"
+		else
+			vim.opt.background = "dark"
+		end
 	end,
 }

@@ -13,6 +13,7 @@
     vimAlias = true;
 
     initLua = ''
+      _G.catppuccin_flavor = "${config.catppuccin.flavor}"
       require("hishpeck.core.keymaps")
       require("hishpeck.core.options")
       require("hishpeck.plugins-setup")

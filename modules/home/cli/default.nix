@@ -47,17 +47,24 @@
     XDG_CACHE_HOME = "$HOME/.cache";
   };
 
+  programs.btop = {
+    enable = true;
+    package = pkgs.btop.override { rocmSupport = true; };
+    settings = {
+      theme_background = false;
+    };
+  };
+  programs.lazygit.enable = true;
+  programs.fzf.enable = true;
+
   home.packages = with pkgs; [
     gemini-cli
     gh
 
     unzip
-    bat
-    lazygit
     lazydocker
     zoxide
-    fzf
-    (btop.override { rocmSupport = true; })
+    # btop, lazygit, fzf moved to programs.*
 
     (php84.withExtensions ({ enabled, all }:
       enabled ++ [
@@ -91,9 +98,9 @@
   home.file = { };
 
   programs.zoxide.enable = true;
+  programs.bat.enable = true;
 
   xdg.configFile = {
     "mcphub".source = ../../../config/mcphub;
-    "bat".source = ../../../config/bat;
   };
 }

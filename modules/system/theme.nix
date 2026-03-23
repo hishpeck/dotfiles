@@ -1,13 +1,22 @@
-{ pkgs, ... }: {
+{ pkgs, ... }: 
+let
+  flavor = "latte";
+in
+{
   stylix = {
     enable = true;
     image = ../../wallpaper.png;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-latte.yaml";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-${flavor}.yaml";
     targets = {
       neovim.enable = false;
       gtk.enable = false;
       yazi.enable = false;
       swaync.enable = false;
+      bat.enable = false;
+      kitty.enable = false;
+      tmux.enable = false;
+      fzf.enable = false;
+      btop.enable = false;
     };
 
     cursor = {
@@ -30,12 +39,15 @@
 
   catppuccin = {
     enable = true;
-    flavor = "latte";
+    inherit flavor;
 
     chromium.enable = true;
     lazygit.enable = true;
     btop.enable = true;
     kitty.enable = true;
     tmux.enable = true;
+    bat.enable = true;
+    fzf.enable = true;
+    yazi.enable = true;
   };
 }

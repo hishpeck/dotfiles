@@ -1,7 +1,7 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
-  imports = [ ./zsh.nix ./nvim.nix ./tmux.nix ];
+  imports = [ ./zsh.nix ./nvim.nix ./tmux.nix ./yazi.nix ];
 
   nixpkgs.config.allowUnfree = true;
 
@@ -20,25 +20,6 @@
     };
   };
 
-  programs.yazi = {
-    enable = true;
-    shellWrapperName = "y";
-    settings = {
-      plugin = {
-        prepend_previewers = [
-          {
-            mime = "model/stl";
-            run = "fstl";
-          }
-          {
-            name = "*.stl";
-            run = "fstl";
-          }
-        ];
-      };
-    };
-  };
-
   home.stateVersion = "24.05";
 
   home.sessionVariables = {
@@ -50,21 +31,20 @@
   programs.btop = {
     enable = true;
     package = pkgs.btop.override { rocmSupport = true; };
-    settings = {
-      theme_background = false;
-    };
+    settings = { theme_background = false; };
   };
   programs.lazygit.enable = true;
   programs.fzf.enable = true;
 
   home.packages = with pkgs; [
+    opencode
     gemini-cli
     gh
+    inputs.weave.packages.${pkgs.system}.default
 
     unzip
     lazydocker
     zoxide
-    # btop, lazygit, fzf moved to programs.*
 
     (php84.withExtensions ({ enabled, all }:
       enabled ++ [
@@ -100,7 +80,5 @@
   programs.zoxide.enable = true;
   programs.bat.enable = true;
 
-  xdg.configFile = {
-    "mcphub".source = ../../../config/mcphub;
-  };
+  xdg.configFile = { "mcphub".source = ../../../config/mcphub; };
 }

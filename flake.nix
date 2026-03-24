@@ -21,10 +21,11 @@
     };
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
+    weave.url = "github:Ataraxy-Labs/weave";
   };
 
   outputs = { self, nixpkgs, home-manager, stylix, catppuccin, walker
-    , nix-index-database, ... }@inputs:
+    , nix-index-database, weave, ... }@inputs:
     let
       user = "ac";
 

@@ -1,5 +1,8 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, self, ... }:
 
+let
+  weave = pkgs.callPackage (self + /custom-apps/weave) { };
+in
 {
   imports = [ ./zsh.nix ./nvim.nix ./tmux.nix ./yazi.nix ];
 
@@ -40,7 +43,7 @@
     opencode
     gemini-cli
     gh
-    inputs.weave.packages.${pkgs.system}.default
+    weave
 
     unzip
     lazydocker

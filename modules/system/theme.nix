@@ -17,6 +17,8 @@ in
       tmux.enable = false;
       fzf.enable = false;
       btop.enable = false;
+      kde.enable = false;
+      qt.enable = false;
     };
 
     cursor = {

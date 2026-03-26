@@ -16,6 +16,7 @@
     exiftool
     f3d
     shared-mime-info
+    desktop-file-utils
   ];
 
   xdg.desktopEntries.fstl = {
@@ -114,6 +115,12 @@
         <icon name="lycheeslicer"/>
       </mime-type>
     </mime-info>
+  '';
+
+  # Force MIME database update on activation
+  home.activation.updateMimeDatabase = config.lib.dag.entryAfter ["writeBoundary"] ''
+    run ${pkgs.shared-mime-info}/bin/update-mime-database $HOME/.local/share/mime
+    run ${pkgs.desktop-file-utils}/bin/update-desktop-database $HOME/.local/share/applications
   '';
 }
 

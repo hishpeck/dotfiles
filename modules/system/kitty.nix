@@ -23,6 +23,10 @@
       open_url_with = "default";
       copy_on_select = "yes";
 
+      # Reduce escape key delay for better responsiveness
+      repaint_delay = 2;
+      input_delay = 2;
+
       mouse_map = "left click ungrabbed mouse_handle_click selection link prompt";
     };
 

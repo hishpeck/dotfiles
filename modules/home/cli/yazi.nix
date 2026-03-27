@@ -149,44 +149,56 @@
 
         # yamb (Yet another bookmarks) plugin
         {
-          on = [ "u" "a" ];
+          on = [ "b" "a" ];
           run = "plugin yamb -- save";
           desc = "Add bookmark";
         }
         {
-          on = [ "u" "g" ];
+          on = [ "b" "g" ];
           run = "plugin yamb -- jump_by_key";
           desc = "Jump to bookmark by key";
         }
         {
-          on = [ "u" "G" ];
+          on = [ "b" "G" ];
           run = "plugin yamb -- jump_by_fzf";
           desc = "Jump to bookmark with fzf";
         }
         {
-          on = [ "u" "d" ];
+          on = [ "b" "d" ];
           run = "plugin yamb -- delete_by_key";
           desc = "Delete bookmark by key";
         }
         {
-          on = [ "u" "D" ];
+          on = [ "b" "D" ];
           run = "plugin yamb -- delete_by_fzf";
           desc = "Delete bookmark with fzf";
         }
         {
-          on = [ "u" "A" ];
+          on = [ "b" "A" ];
           run = "plugin yamb -- delete_all";
           desc = "Delete all bookmarks";
         }
         {
-          on = [ "u" "r" ];
+          on = [ "b" "r" ];
           run = "plugin yamb -- rename_by_key";
           desc = "Rename bookmark by key";
         }
         {
-          on = [ "u" "R" ];
+          on = [ "b" "R" ];
           run = "plugin yamb -- rename_by_fzf";
           desc = "Rename bookmark with fzf";
+        }
+
+        # Tab navigation
+        {
+          on = [ "<C-PageUp>" ];
+          run = "tab_switch -1 --relative";
+          desc = "Switch to previous tab";
+        }
+        {
+          on = [ "<C-PageDown>" ];
+          run = "tab_switch 1 --relative";
+          desc = "Switch to next tab";
         }
       ];
     };

@@ -4,7 +4,7 @@ return {
 		event = "VeryLazy",
 		version = false, -- Never set this value to "*"! Never!
 		opts = {
-			provider = "openrouter",
+			provider = "opencode",
 			-- Disabled due to MCP Hub integration
 			disabled_tools = {
 				"list_files", -- Built-in file operations

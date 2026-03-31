@@ -33,7 +33,7 @@ mount /dev/disk/by-label/BOOT /mnt/boot
 ```bash
 mkdir -p /mnt/etc
 cd /mnt/etc
-git clone https://github.com/hishpeck/dotfiles.git nixos
+git clone git@github.com:hishpeck/dotfiles.git nixos
 cd nixos
 ```
 

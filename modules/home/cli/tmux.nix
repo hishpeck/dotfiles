@@ -24,6 +24,9 @@ in
       set-option -sa terminal-overrides ",xterm*:Tc"
       set -g mouse on
 
+      # Remove escape key delay
+      set -s escape-time 0
+
       # --- KEYMAPS
       ## --- WITHOUT PREFIX
       ### --- Shift arrows to switch windows

@@ -19,6 +19,14 @@
         rev = "main";
         sha256 = "sha256-3Cp3+v0laSVsDdTyG26EOh2xt18ER8P9Nla9vtRuj9k=";
       };
+
+      # sudo - Call sudo in yazi
+      sudo = pkgs.fetchFromGitHub {
+        owner = "TD-Sky";
+        repo = "sudo.yazi";
+        rev = "main";
+        sha256 = "sha256-mpQLij+Sg88RarCC+0u7JfZ2EqcX4gB7jvy8bfBt90w=";
+      };
     };
 
     # Initialize plugins
@@ -189,6 +197,58 @@
           desc = "Rename bookmark with fzf";
         }
 
+        # sudo.yazi plugin - Call sudo in yazi
+        {
+          on = [ "s" "p" ];
+          run = "plugin sudo -- paste";
+          desc = "Sudo paste";
+        }
+        {
+          on = [ "s" "P" ];
+          run = "plugin sudo -- paste --force";
+          desc = "Sudo paste (force)";
+        }
+        {
+          on = [ "s" "r" ];
+          run = "plugin sudo -- rename";
+          desc = "Sudo rename";
+        }
+        {
+          on = [ "s" "l" ];
+          run = "plugin sudo -- link";
+          desc = "Sudo link (absolute path)";
+        }
+        {
+          on = [ "s" "L" ];
+          run = "plugin sudo -- link --relative";
+          desc = "Sudo link (relative path)";
+        }
+        {
+          on = [ "s" "h" ];
+          run = "plugin sudo -- hardlink";
+          desc = "Sudo hardlink";
+        }
+        {
+          on = [ "s" "a" ];
+          run = "plugin sudo -- create";
+          desc = "Sudo create (touch/mkdir)";
+        }
+        {
+          on = [ "s" "d" ];
+          run = "plugin sudo -- remove";
+          desc = "Sudo trash";
+        }
+        {
+          on = [ "s" "D" ];
+          run = "plugin sudo -- remove --permanently";
+          desc = "Sudo delete permanently";
+        }
+        {
+          on = [ "s" "m" ];
+          run = "plugin sudo -- chmod";
+          desc = "Sudo chmod";
+        }
+
         # Tab navigation
         {
           on = [ "<C-PageUp>" ];
@@ -211,5 +271,6 @@
     zoxide # For zoxide plugin
     fzf # For fzf plugin
     ripgrep # For ripgrep plugin
+    nushell # Required for sudo.yazi plugin
   ];
 }

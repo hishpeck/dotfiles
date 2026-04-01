@@ -291,5 +291,6 @@
     fzf # For fzf plugin
     ripgrep # For ripgrep plugin
     nushell # Required for sudo.yazi plugin
+    libnotify # For notifications (notify-send)
   ];
 }

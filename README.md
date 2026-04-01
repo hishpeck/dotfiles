@@ -9,8 +9,6 @@ It is a hybrid setup based on Nix:
 
 ## NixOS
 
-## Home Manager
-
 ### Installation
 
 0. Launch the NixOS installation USB
@@ -66,6 +64,17 @@ nixos-install --flake .#NEW_HOSTNAME
 nixos-enter --root '/mnt'
 passwd ac
 ```
+
+8. Move the dotfiles to home
+
+```bash
+cp -r /etc/nixos /home/ac/dotfiles
+chown ac:users -R /home/ac/dotfiles
+```
+
+## Home Manager
+
+TODO
 
 ---
 

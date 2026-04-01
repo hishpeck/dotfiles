@@ -29,9 +29,18 @@
       pavucontrol
 
       p7zip
+      udisks # CLI tool for managing disks
     ];
 
     fonts.fontconfig.enable = true;
+
+    # Auto-mount removable media
+    services.udiskie = {
+      enable = true;
+      automount = true;
+      notify = true;
+      tray = "never"; # Change to "auto" if you want a system tray icon
+    };
 
     # Autostart 1Password
     xdg.configFile."autostart/1password.desktop".text = ''

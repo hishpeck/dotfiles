@@ -48,6 +48,18 @@
         key = "d"
       })
 
+      table.insert(bookmarks, {
+        tag = "Pi5",
+        path = home_path .. path_sep .. "Pi5" .. path_sep,
+        key = "p"
+      })
+
+      table.insert(bookmarks, {
+        tag = "USB Media",
+        path = path_sep .. "run" .. path_sep .. "media" .. path_sep .. "ac" .. path_sep,
+        key = "u"
+      })
+
       require("yamb"):setup({
         bookmarks = bookmarks,
         jump_notify = true,
@@ -247,6 +259,13 @@
           on = [ "s" "m" ];
           run = "plugin sudo -- chmod";
           desc = "Sudo chmod";
+        }
+
+        # Unmount device (safe removal)
+        {
+          on = [ "u" "m" ];
+          run = ''shell 'udisksctl unmount -b "$(df -P "$1" | awk "NR==2 {print \$1}")" && notify-send "Yazi" "Device unmounted successfully"' --confirm'';
+          desc = "Unmount current device";
         }
 
         # Tab navigation

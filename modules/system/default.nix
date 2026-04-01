@@ -76,6 +76,9 @@
     jack.enable = true;
   };
 
+  # Auto-mount removable media
+  services.udisks2.enable = true;
+
   environment.variables = { NIXOS_OZONE_WL = "1"; };
 
   environment.systemPackages = with pkgs; [

@@ -83,6 +83,9 @@
       # Lychee Slicer files
       "application/x-lychee-slicer" = "lychee-slicer.desktop";
       
+      # UVTools files
+      "application/x-cxdlpv4" = "uvtools.desktop";
+      
       # PDF
       "application/pdf" = "google-chrome.desktop";
       "application/x-pdf" = "google-chrome.desktop";
@@ -113,6 +116,18 @@
         <comment>Lychee Slicer Project</comment>
         <glob pattern="*.lys"/>
         <icon name="lycheeslicer"/>
+      </mime-type>
+    </mime-info>
+  '';
+
+  # Register .cxdlpv4 file extension for UVTools (Creality/DLP format)
+  xdg.dataFile."mime/packages/uvtools-cxdlpv4.xml".text = ''
+    <?xml version="1.0" encoding="UTF-8"?>
+    <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+      <mime-type type="application/x-cxdlpv4">
+        <comment>Creality DLP File</comment>
+        <glob pattern="*.cxdlpv4"/>
+        <icon name="uvtools"/>
       </mime-type>
     </mime-info>
   '';

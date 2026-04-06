@@ -3,7 +3,7 @@
 , gdk-pixbuf, glib, gtk3, libdrm, libnotify, libxcb, libxkbcommon, mesa, nss
 , pango, systemd, ffmpeg, yt-dlp, libx11, libxscrnsaver, libxcomposite
 , libxcursor, libxdamage, libxext, libxfixes, libxi, libxrandr, libxrender
-, libxtst, libGL, bash, wrapGAppsHook3, nodePackages, nodejs, deno
+, libxtst, libGL, bash, wrapGAppsHook3, asar, nodejs, deno
 }: # <-- 1. Added deno here
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     autoPatchelfHook
     wrapGAppsHook3
-    nodePackages.asar
+    asar
     nodejs
   ];
 

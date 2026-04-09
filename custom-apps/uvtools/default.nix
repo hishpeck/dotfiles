@@ -1,12 +1,12 @@
 { pkgs, ... }:
 
 let
-  version = "5.2.1";
+  version = "6.0.1";
 
   src = pkgs.fetchzip {
     url =
       "https://github.com/sn4k3/UVtools/releases/download/v${version}/UVtools_linux-x64_v${version}.zip";
-    hash = "sha256-arGdYS18+SQ5y+68zLsrsEHXa6M2HKwbhvOyYinJceo=";
+    hash = "sha256-BfYEhFAeWup0yDeb41hKiq7MEJCwp9iUnXJjq+Aogl8=";
     stripRoot = false;
   };
 in pkgs.stdenv.mkDerivation {

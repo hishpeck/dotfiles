@@ -19,12 +19,16 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, home-manager, stylix, catppuccin, walker
-    , nix-index-database, ... }@inputs:
+    , nix-index-database, noctalia, ... }@inputs:
     let
       user = "ac";
 
@@ -52,6 +56,7 @@
                 ./modules/system/theme.nix
                 ./modules/system/kitty.nix
                 walker.homeManagerModules.default
+                noctalia.homeModules.default
                 ./modules/desktop/launcher/walker.nix
                 nix-index-database.homeModules.nix-index
               ];

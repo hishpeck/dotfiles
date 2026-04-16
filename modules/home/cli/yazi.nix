@@ -86,6 +86,26 @@
           run = "piper";
         }];
       };
+
+      opener = {
+        xdg_default = [{
+          run = "${pkgs.handlr-regex}/bin/handlr open %s";
+          orphan = true;
+          desc = "Handlr (Default)";
+        }];
+        xdg_interactive = [{
+          run = "${pkgs.perlPackages.FileMimeInfo}/bin/mimeopen -d %s";
+          block = true;
+          desc = "XDG Open With...";
+        }];
+      };
+
+      open = {
+        append_rules = [{
+          url = "*";
+          use = [ "xdg_default" "xdg_interactive" ];
+        }];
+      };
     };
 
     # Keybindings (Using the correct Yazi 0.3+ argument syntax)
@@ -264,7 +284,8 @@
         # Unmount device (safe removal)
         {
           on = [ "u" "m" ];
-          run = ''shell 'udisksctl unmount -b "$(df -P "$1" | awk "NR==2 {print \$1}")" && notify-send "Yazi" "Device unmounted successfully"' --confirm'';
+          run = ''
+            shell 'udisksctl unmount -b "$(df -P "$1" | awk "NR==2 {print \$1}")" && notify-send "Yazi" "Device unmounted successfully"' --confirm'';
           desc = "Unmount current device";
         }
 
@@ -279,6 +300,13 @@
           run = "tab_switch 1 --relative";
           desc = "Switch to next tab";
         }
+
+        # Open file with XDG interactive menu (mimeopen)
+        {
+          on = [ "O" ];
+          run = "open --interactive";
+          desc = "Open with XDG interactive menu";
+        }
       ];
     };
   };
@@ -292,5 +320,7 @@
     ripgrep # For ripgrep plugin
     nushell # Required for sudo.yazi plugin
     libnotify # For notifications (notify-send)
+    perlPackages.FileMimeInfo # Provides mimeopen for interactive file opening
+    handlr-regex # For default XDG file opening
   ];
 }

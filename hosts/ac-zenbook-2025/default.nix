@@ -23,10 +23,9 @@
     ];
   };
 
-  security.pki.certificateFiles = [
-    ./la.crt
-    ./cnc.crt
-  ];
+  environment.systemPackages = with pkgs; [ helm k3d kubectl ];
+
+  security.pki.certificateFiles = [ ./la.crt ./cnc.crt ];
 
   system.stateVersion = "24.05";
 }

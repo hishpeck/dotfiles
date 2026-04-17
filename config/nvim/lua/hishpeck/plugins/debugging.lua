@@ -54,11 +54,11 @@ return {
 			command = "cpptools",
 		}
 
-		dap.adapters.php = {
-			type = "executable",
-			command = "node",
-			args = { "phpDebug.js" },
-		}
+	dap.adapters.php = {
+		type = "executable",
+		command = "node",
+		args = { vim.fn.stdpath("data") .. "/mason/packages/php-debug-adapter/extension/out/phpDebug.js" },
+	}
 
 		dap.configurations.rust = {
 			{
@@ -85,13 +85,24 @@ return {
 			},
 		}
 
-		dap.configurations.php = {
-			{
-				type = "php",
-				request = "launch",
-				name = "Listen for Xdebug",
-				port = 9003,
+	dap.configurations.php = {
+		{
+			type = "php",
+			request = "launch",
+			name = "Listen for Xdebug (Port 9003)",
+			port = 9003,
+		},
+		{
+			type = "php",
+			request = "launch",
+			name = "Car & Classic (Port 9998)",
+			port = 9998,
+			pathMappings = {
+				["/app/laravel"] = "${workspaceFolder}/laravel",
+				["/app"] = "${workspaceFolder}",
 			},
-		}
+			log = true,
+		},
+	}
 	end,
 }

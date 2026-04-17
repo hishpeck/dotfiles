@@ -13,6 +13,11 @@
   services.cloudflare-warp.enable = true;
   services.resolved.enable = true;
 
+  # Open ports for development
+  networking.firewall.allowedTCPPorts = [
+    9998 # Xdebug
+  ];
+
   networking.hosts = {
     "127.0.0.10" = [
       "dev.carandclassic.com"
@@ -28,7 +33,7 @@
 
   programs.fuse.userAllowOther = true;
 
-  environment.systemPackages = with pkgs; [ sshfs ];
+  environment.systemPackages = with pkgs; [ sshfs helm k3d kubectl ];
 
   fileSystems."/home/ac/Pi5" = {
     device = "ac@rpi5.local:/";

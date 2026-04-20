@@ -83,5 +83,8 @@ in
   programs.zoxide.enable = true;
   programs.bat.enable = true;
 
-  xdg.configFile = { "mcphub".source = ../../../config/mcphub; };
+  xdg.configFile = {
+    "mcphub".source = ../../../config/mcphub;
+    "opencode/config.json".source = ../../../config/opencode/config.json;
+  };
 }

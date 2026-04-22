@@ -100,7 +100,7 @@
           desc = "fstl (STL Viewer)";
         }];
         lychee-slicer = [{
-          run = "lychee-slicer %s";
+          run = "setsid lychee-slicer %s";
           orphan = true;
           desc = "Lychee Slicer";
         }];

@@ -38,7 +38,7 @@
     name = "Lychee Slicer";
     genericName = "3D Slicer";
     comment = "Lychee Slicer for resin 3D printing";
-    exec = "lychee-slicer --no-sandbox %U";
+    exec = "lychee-slicer %U";
     terminal = false;
     icon = "lycheeslicer";
     categories = [ "Graphics" "3DGraphics" "Engineering" ];
@@ -74,11 +74,11 @@
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      # STL files - fstl is default for quick preview
-      "model/stl" = "fstl.desktop";
-      "application/vnd.ms-pki.stl" = "fstl.desktop";
-      "application/sla" = "fstl.desktop";
-      "application/x-navistyle" = "fstl.desktop";
+      # STL files - fstl is default, but all three listed so handlr selector works
+      "model/stl" = [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
+      "application/vnd.ms-pki.stl" = [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
+      "application/sla" = [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
+      "application/x-navistyle" = [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
       
       # Lychee Slicer files
       "application/x-lychee-slicer" = "lychee-slicer.desktop";

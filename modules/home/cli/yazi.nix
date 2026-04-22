@@ -1,6 +1,12 @@
 { config, pkgs, lib, ... }:
 
 {
+  # handlr-regex config: enable fzf selector for "open with" picker
+  xdg.configFile."handlr/handlr.toml".text = ''
+    enable_selector = true
+    selector = "${pkgs.fzf}/bin/fzf"
+  '';
+
   programs.yazi = {
     enable = true;
     shellWrapperName = "y";
@@ -88,23 +94,47 @@
       };
 
       opener = {
+        fstl = [{
+          run = "${pkgs.fstl}/bin/fstl %s";
+          orphan = true;
+          desc = "fstl (STL Viewer)";
+        }];
+        lychee-slicer = [{
+          run = "lychee-slicer %s";
+          orphan = true;
+          desc = "Lychee Slicer";
+        }];
+        bambu-studio = [{
+          run = "bambu-studio %s";
+          orphan = true;
+          desc = "Bambu Studio";
+        }];
         xdg_default = [{
           run = "${pkgs.handlr-regex}/bin/handlr open %s";
           orphan = true;
           desc = "Handlr (Default)";
         }];
-        xdg_interactive = [{
-          run = "${pkgs.perlPackages.FileMimeInfo}/bin/mimeopen -d %s";
-          block = true;
-          desc = "XDG Open With...";
-        }];
       };
 
       open = {
-        append_rules = [{
-          url = "*";
-          use = [ "xdg_default" "xdg_interactive" ];
-        }];
+        append_rules = [
+          {
+            url = "*.{stl,STL}";
+            use = [ "fstl" "lychee-slicer" "bambu-studio" ];
+          }
+          {
+            url = "*.{3mf,3MF}";
+            use = [ "bambu-studio" "lychee-slicer" ];
+          }
+          {
+            url = "*.{lys,LYS}";
+            use = [ "lychee-slicer" ];
+          }
+          {
+            url = "*";
+            use = [ "xdg_default" ];
+          }
+        ];
       };
     };
 
@@ -320,7 +350,6 @@
     ripgrep # For ripgrep plugin
     nushell # Required for sudo.yazi plugin
     libnotify # For notifications (notify-send)
-    perlPackages.FileMimeInfo # Provides mimeopen for interactive file opening
     handlr-regex # For default XDG file opening
   ];
 }

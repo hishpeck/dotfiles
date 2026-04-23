@@ -3,6 +3,7 @@ return {
 	priority = 1000,
 	config = function()
 		local flavor = _G.catppuccin_flavor or "latte"
+		local accent = _G.catppuccin_accent or "pink"
 
 		require("catppuccin").setup({
 			background = {
@@ -47,9 +48,9 @@ return {
 						background = true,
 					},
 				},
-				indent_blankline = {
-					enabled = true,
-					scope_color = "lavender",
+			indent_blankline = {
+				enabled = true,
+				scope_color = accent,
 					colored_indent_levels = false,
 				},
 				nvimtree = true,

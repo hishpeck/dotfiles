@@ -21,6 +21,7 @@ in
       user.name = "Adrian Castillo";
       user.email = "adr.cas97@gmail.com";
     };
+    signing.format = "openpgp";
   };
 
   home.stateVersion = "24.05";

@@ -1,14 +1,11 @@
 { pkgs, lib, config, ... }:
 
-let
-  flavor = "latte";  # Match flavor from theme.nix
-in
 {
   services.displayManager.sddm = {
     enable = true;
-    
+
     # Use Catppuccin theme
-    theme = "catppuccin-${flavor}";
+    theme = "catppuccin-${config.catppuccin.flavor}";
     package = pkgs.kdePackages.sddm;
     
     # Enable HiDPI support
@@ -29,7 +26,7 @@ in
       
       Theme = {
         # Current theme name
-        Current = "catppuccin-${flavor}";
+        Current = "catppuccin-${config.catppuccin.flavor}";
         
         # Cursor theme (match with theme.nix - using Bibata-Modern-Ice)
         CursorTheme = "Bibata-Modern-Ice";
@@ -88,7 +85,7 @@ in
   # Install the Catppuccin theme with default wallpaper
   environment.systemPackages = with pkgs; [
     (catppuccin-sddm.override {
-      flavor = flavor;
+      flavor = config.catppuccin.flavor;
       font = "Lato";  # Match with theme.nix
       fontSize = "9";
       # Using default Catppuccin SDDM wallpaper (no custom background override)

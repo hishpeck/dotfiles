@@ -76,8 +76,8 @@ in
 
       set -g status-left ""
       set -g status-right ""
-      set -ag status-right "#[fg=#{@thm_crust},bg=#{@thm_rosewater}] #{cpu_icon} #{cpu_percentage} "
-      set -ag status-right "#[fg=#{@thm_crust},bg=#{@thm_lavender}] #{ram_icon} #{ram_percentage} "
+      set -ag status-right "#[fg=#{@thm_fg},bg=#{@thm_surface_2}] #{cpu_icon} #{cpu_percentage} "
+      set -ag status-right "#[fg=#{@thm_fg},bg=#{@thm_surface_1}] #{ram_icon} #{ram_percentage} "
       set -ag status-right "#{E:@catppuccin_status_date_time}"
 
       # Set vi-mode

@@ -11,9 +11,12 @@
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
+    withRuby = false;
+    withPython3 = false;
 
     initLua = ''
       _G.catppuccin_flavor = "${config.catppuccin.flavor}"
+      _G.catppuccin_accent = "${config.catppuccin.accent}"
       require("hishpeck.core.keymaps")
       require("hishpeck.core.options")
       require("hishpeck.plugins-setup")

@@ -1,9 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   home.packages = with pkgs; [
     telegram-desktop
-    discord
+    vesktop
     steam
     blender
     freecad
@@ -18,6 +18,26 @@
     shared-mime-info
     desktop-file-utils
   ];
+
+  # Vesktop (Discord) — Catppuccin Latte theme
+  xdg.configFile."vesktop/themes/catppuccin-${config.catppuccin.flavor}.theme.css".text = ''
+    /**
+     * @name Catppuccin ${lib.strings.toUpper (builtins.substring 0 1 config.catppuccin.flavor) + builtins.substring 1 (-1) config.catppuccin.flavor}
+     * @author winston#0001
+     * @version 0.2.0
+     * @description Soothing pastel theme for Discord
+     **/
+    @import url("https://catppuccin.github.io/discord/dist/catppuccin-${config.catppuccin.flavor}.theme.css");
+  '';
+
+  # Seed vesktop settings only on first run — Vesktop manages this file at runtime
+  home.activation.seedVesktopSettings = config.lib.dag.entryAfter ["writeBoundary"] ''
+    settings="$HOME/.config/vesktop/settings/settings.json"
+    if [ ! -f "$settings" ]; then
+      mkdir -p "$(dirname "$settings")"
+      echo '{"enabledThemes":["catppuccin-${config.catppuccin.flavor}.theme.css"],"discordBranch":"stable"}' > "$settings"
+    fi
+  '';
 
   xdg.desktopEntries.fstl = {
     name = "fstl";

@@ -1,8 +1,9 @@
-{ pkgs, ... }: 
+{ pkgs, ... }:
 let
   flavor = "latte";
 in
 {
+  imports = [ ./desktop/cosmic-theme.nix ];
   stylix = {
     enable = true;
     image = ../../wallpaper.png;
@@ -42,6 +43,7 @@ in
   catppuccin = {
     enable = true;
     inherit flavor;
+    accent = "pink";
 
     chromium.enable = true;
     lazygit.enable = true;
@@ -51,5 +53,7 @@ in
     bat.enable = true;
     fzf.enable = true;
     yazi.enable = true;
+    zsh-syntax-highlighting.enable = true;
+    "gemini-cli".enable = true;
   };
 }

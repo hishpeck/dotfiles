@@ -3,12 +3,12 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/system/intel.nix
-    ../../modules/gui/default.nix
-    ../../modules/system/default.nix
-    ../../modules/system/laptop.nix
-    ../../modules/desktop/de/cosmic.nix
-    # ../../modules/desktop/hyprland.nix
+    ../../modules/nix/system/intel.nix
+    ../../modules/nix/gui/default.nix
+    ../../modules/nix/system/default.nix
+    ../../modules/nix/system/laptop.nix
+    ../../modules/nix/desktop/de/cosmic.nix
+    # ../../modules/nix/desktop/wm/hyprland.nix
   ];
 
   networking.hostName = "ac-zenbook-2025";

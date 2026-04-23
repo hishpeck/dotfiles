@@ -2,7 +2,8 @@
 {
   imports = [
     ../../modules/home/cli/default.nix
-    ../../modules/desktop/work.nix
+    ../../modules/home/gui/default.nix
+    ../../modules/home/work.nix
   ];
 
   programs.zsh.shellAliases = {

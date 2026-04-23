@@ -3,10 +3,10 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/system/amd.nix
-    ../../modules/gui/default.nix
-    ../../modules/system/default.nix
-    ../../modules/desktop/de/cosmic.nix
+    ../../modules/nix/system/amd.nix
+    ../../modules/nix/gui/default.nix
+    ../../modules/nix/system/default.nix
+    ../../modules/nix/desktop/de/cosmic.nix
   ];
 
   networking.hostName = "ac-main-pc";

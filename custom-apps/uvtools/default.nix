@@ -75,11 +75,12 @@ in pkgs.stdenv.mkDerivation {
     (pkgs.makeDesktopItem {
       name = "uvtools";
       desktopName = "UVTools";
-      exec = "uvtools";
+      exec = "uvtools %f";
       icon = "uvtools";
       comment =
         "MSLA/DLP, File analysis, calibration, repair, conversion and manipulation";
       categories = [ "Graphics" "Engineering" ];
+      mimeTypes = [ "application/x-cxdlpv4" ];
     })
   ];
 }

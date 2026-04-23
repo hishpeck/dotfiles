@@ -112,28 +112,59 @@
         xdg_default = [{
           run = "${pkgs.handlr-regex}/bin/handlr open %s";
           orphan = true;
-          desc = "Handlr (Default)";
+          desc = "Open (default)";
+        }];
+        xdg_open_with = [{
+          run = "${pkgs.writeShellScript "yazi-open-with" ''
+            file="$1"
+            mime=$(${pkgs.xdg-utils}/bin/xdg-mime query filetype "$file" 2>/dev/null)
+            [ -z "$mime" ] && exit 1
+            entries=""
+            IFS=: read -ra dirs <<< "$XDG_DATA_DIRS"
+            for dir in "''${dirs[@]}"; do
+              appdir="$dir/applications"
+              [ -d "$appdir" ] || continue
+              for desktop in "$appdir"/*.desktop; do
+                [ -f "$desktop" ] || continue
+                if grep -q "MimeType=.*$mime" "$desktop" 2>/dev/null; then
+                  name=$(grep "^Name=" "$desktop" | head -1 | cut -d= -f2-)
+                  exec_line=$(grep "^Exec=" "$desktop" | head -1 | cut -d= -f2-)
+                  entries="$entries$name\t$exec_line\n"
+                fi
+              done
+            done
+            entries=$(printf "%b" "$entries" | sort -u | sort -t$'\t' -k1,1 --stable | awk -F'\t' '!seen[$1]++')
+            [ -z "$entries" ] && exit 1
+            chosen=$(printf "%b" "$entries" | ${pkgs.fzf}/bin/fzf --with-nth=1 --delimiter=$'\t' --prompt="Open with: ")
+            [ -z "$chosen" ] && exit 0
+            exec_line=$(printf "%s" "$chosen" | cut -f2)
+            cmd=$(printf "%s" "$exec_line" | sed 's/ %[fFuUdDnNickvm]//g')
+            setsid $cmd "$file" > /dev/null 2>&1 &
+            # Clear terminal so Yazi redraws cleanly after block returns
+            clear
+          ''} %s";
+          block = true;
+          desc = "Open with...";
         }];
       };
 
       open = {
+        prepend_rules = [
+          { url = "*/";                                                                                                                                    use = [ "edit" "open" "reveal" "xdg_open_with" ]; }
+          { mime = "text/*";                                                                                                                               use = [ "edit" "reveal" "xdg_open_with" ]; }
+          { mime = "image/*";                                                                                                                              use = [ "open" "reveal" "xdg_open_with" ]; }
+          { mime = "{audio,video}/*";                                                                                                                      use = [ "play" "reveal" "xdg_open_with" ]; }
+          { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}";                                        use = [ "extract" "reveal" "xdg_open_with" ]; }
+          { mime = "application/{json,ndjson}";                                                                                                            use = [ "edit" "reveal" "xdg_open_with" ]; }
+          { mime = "*/javascript";                                                                                                                          use = [ "edit" "reveal" "xdg_open_with" ]; }
+          { mime = "inode/empty";                                                                                                                           use = [ "edit" "reveal" "xdg_open_with" ]; }
+          { url = "*";                                                                                                                                      use = [ "open" "reveal" "xdg_open_with" ]; }
+        ];
         append_rules = [
-          {
-            url = "*.{stl,STL}";
-            use = [ "fstl" "lychee-slicer" "bambu-studio" ];
-          }
-          {
-            url = "*.{3mf,3MF}";
-            use = [ "bambu-studio" "lychee-slicer" ];
-          }
-          {
-            url = "*.{lys,LYS}";
-            use = [ "lychee-slicer" ];
-          }
-          {
-            url = "*";
-            use = [ "xdg_default" ];
-          }
+          { url = "*.{stl,STL}"; use = [ "fstl" "lychee-slicer" "bambu-studio" ]; }
+          { url = "*.{3mf,3MF}"; use = [ "bambu-studio" "lychee-slicer" ]; }
+          { url = "*.{lys,LYS}"; use = [ "lychee-slicer" ]; }
+          { url = "*";           use = [ "xdg_default" ]; }
         ];
       };
     };

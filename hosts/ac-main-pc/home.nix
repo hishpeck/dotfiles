@@ -6,10 +6,6 @@
     ../../modules/home/work.nix
   ];
 
-  programs.zsh.shellAliases = {
-    car = "~/projects/carandclassic/carandclassic/bin/car";
-  };
-
   xresources.properties = {
     "Xft.dpi" = 192;
   };

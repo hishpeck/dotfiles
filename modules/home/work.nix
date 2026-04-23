@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
 
 {
+  programs.zsh.shellAliases = {
+    car = "~/projects/carandclassic/carandclassic/bin/car";
+  };
+
   home.packages = with pkgs; [
     slack
     notion

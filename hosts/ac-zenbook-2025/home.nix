@@ -6,9 +6,5 @@
     ../../modules/home/work.nix
   ];
 
-  programs.zsh.shellAliases = {
-    car = "~/projects/carandclassic/bin/car";
-  };
-
   home.stateVersion = "24.05";
 }

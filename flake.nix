@@ -53,11 +53,10 @@
                 stylix.homeModules.stylix
                 catppuccin.homeModules.catppuccin
                 inputs.dms.homeModules.dank-material-shell
-                ./modules/system/theme.nix
-                ./modules/system/kitty.nix
+                ./modules/home/theme.nix
+                ./modules/home/desktop/launcher/walker.nix
                 walker.homeManagerModules.default
                 noctalia.homeModules.default
-                ./modules/desktop/launcher/walker.nix
                 nix-index-database.homeModules.nix-index
               ];
 
@@ -76,7 +75,7 @@
             stylix.homeModules.stylix
             catppuccin.homeModules.catppuccin
             nix-index-database.homeModules.nix-index
-            ./modules/system/theme.nix
+            ./modules/home/theme.nix
 
             {
               home.username = user;

@@ -78,6 +78,7 @@ in
     go
 
     uv
+    python3
   ];
 
   home.file = { };

@@ -21,3 +21,15 @@
 
 (assignment_expression
   right: (_) @assignment.inner)
+
+; Select the entire arrow function (e.g., `fn($x) => $x * 2`)
+(arrow_function) @function.outer
+
+; Select only the body/return expression of the arrow function (e.g., `$x * 2`)
+(arrow_function
+  body: (_) @function.inner)
+
+; (Optional) Treat the arrow function body as a right-hand side assignment 
+; so your `iv` or `av` keys work on it too!
+(arrow_function
+  body: (_) @assignment.rhs)

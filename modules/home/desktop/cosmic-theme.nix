@@ -1,15 +1,21 @@
-{ config, pkgs, inputs, lib, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  lib,
+  ...
+}:
 
 let
   # ── User-facing knobs ────────────────────────────────────────────────────────
-  gaps       = "(0, 8)";
+  gaps = "(0, 8)";
   activeHint = "3";
-  isFrosted  = "false";
+  isFrosted = "true";
 
   # ── Driven by global catppuccin options (set in theme.nix) ──────────────────
-  accent      = config.catppuccin.accent;
+  accent = config.catppuccin.accent;
   lightFlavor = config.catppuccin.flavor;
-  darkFlavor  = "mocha";
+  darkFlavor = "mocha";
 
   # ── Static COSMIC defaults (same as COSMIC ships) ───────────────────────────
   cornerRadii = ''
@@ -140,23 +146,26 @@ let
         accent_indigo: (red: 0.79607843, green: 0.65098039, blue: 0.96862745, alpha: 1.0),
     ))'';
 
-  palettes = { latte = lattePalette; mocha = mochaPalette; };
+  palettes = {
+    latte = lattePalette;
+    mocha = mochaPalette;
+  };
 
   # ── Semantic colors per flavor ───────────────────────────────────────────────
   # bg_color uses mkColor (with alpha); the rest use mkColor3 (no alpha)
   semantic = {
     latte = {
-      bg          = mkColor  "0.93725490" "0.94509804" "0.96078431"; # Base
-      text        = mkColor3 "0.29803922" "0.30980392" "0.41176471"; # Text
-      success     = mkColor3 "0.25098039" "0.62745098" "0.16862745"; # Green
-      warning     = mkColor3 "0.87450980" "0.55686275" "0.11372549"; # Yellow
+      bg = mkColor "0.93725490" "0.94509804" "0.96078431"; # Base
+      text = mkColor3 "0.29803922" "0.30980392" "0.41176471"; # Text
+      success = mkColor3 "0.25098039" "0.62745098" "0.16862745"; # Green
+      warning = mkColor3 "0.87450980" "0.55686275" "0.11372549"; # Yellow
       destructive = mkColor3 "0.82352941" "0.05882353" "0.22352941"; # Red
     };
     mocha = {
-      bg          = mkColor  "0.11764706" "0.11764706" "0.18039216"; # Base
-      text        = mkColor3 "0.80392157" "0.83921569" "0.95686275"; # Text
-      success     = mkColor3 "0.65098039" "0.89019608" "0.63137255"; # Green
-      warning     = mkColor3 "0.97647059" "0.88627451" "0.68627451"; # Yellow
+      bg = mkColor "0.11764706" "0.11764706" "0.18039216"; # Base
+      text = mkColor3 "0.80392157" "0.83921569" "0.95686275"; # Text
+      success = mkColor3 "0.65098039" "0.89019608" "0.63137255"; # Green
+      warning = mkColor3 "0.97647059" "0.88627451" "0.68627451"; # Yellow
       destructive = mkColor3 "0.95294118" "0.54509804" "0.65882353"; # Red
     };
   };
@@ -164,69 +173,73 @@ let
   # ── Accent color lookup — Catppuccin Latte ───────────────────────────────────
   latteAccents = {
     rosewater = mkColor3 "0.86274510" "0.54509804" "0.54117647";
-    flamingo  = mkColor3 "0.91764706" "0.46274510" "0.52156863";
-    pink      = mkColor3 "0.91764706" "0.46274510" "0.79607843";
-    mauve     = mkColor3 "0.53333333" "0.22352941" "0.93725490";
-    red       = mkColor3 "0.82352941" "0.05882353" "0.22352941";
-    maroon    = mkColor3 "0.90196078" "0.31764706" "0.39215686";
-    peach     = mkColor3 "0.99607843" "0.39215686" "0.04313725";
-    yellow    = mkColor3 "0.87450980" "0.55686275" "0.11372549";
-    green     = mkColor3 "0.25098039" "0.62745098" "0.16862745";
-    teal      = mkColor3 "0.09803922" "0.61960784" "0.61176471";
-    sky       = mkColor3 "0.02352941" "0.63529412" "0.91372549";
-    sapphire  = mkColor3 "0.12549020" "0.52156863" "0.82352941";
-    blue      = mkColor3 "0.11764706" "0.40000000" "0.96078431";
-    lavender  = mkColor3 "0.44705882" "0.52941176" "0.99215686";
+    flamingo = mkColor3 "0.91764706" "0.46274510" "0.52156863";
+    pink = mkColor3 "0.91764706" "0.46274510" "0.79607843";
+    mauve = mkColor3 "0.53333333" "0.22352941" "0.93725490";
+    red = mkColor3 "0.82352941" "0.05882353" "0.22352941";
+    maroon = mkColor3 "0.90196078" "0.31764706" "0.39215686";
+    peach = mkColor3 "0.99607843" "0.39215686" "0.04313725";
+    yellow = mkColor3 "0.87450980" "0.55686275" "0.11372549";
+    green = mkColor3 "0.25098039" "0.62745098" "0.16862745";
+    teal = mkColor3 "0.09803922" "0.61960784" "0.61176471";
+    sky = mkColor3 "0.02352941" "0.63529412" "0.91372549";
+    sapphire = mkColor3 "0.12549020" "0.52156863" "0.82352941";
+    blue = mkColor3 "0.11764706" "0.40000000" "0.96078431";
+    lavender = mkColor3 "0.44705882" "0.52941176" "0.99215686";
   };
 
   # ── Accent color lookup — Catppuccin Mocha ───────────────────────────────────
   mochaAccents = {
     rosewater = mkColor3 "0.94901961" "0.74901961" "0.72549020";
-    flamingo  = mkColor3 "0.95686275" "0.74117647" "0.76078431";
-    pink      = mkColor3 "0.96078431" "0.76078431" "0.90588235";
-    mauve     = mkColor3 "0.81176471" "0.62352941" "0.97254902";
-    red       = mkColor3 "0.95294118" "0.54509804" "0.65882353";
-    maroon    = mkColor3 "0.92156863" "0.60392157" "0.67843137";
-    peach     = mkColor3 "0.98039216" "0.70196078" "0.52941176";
-    yellow    = mkColor3 "0.97647059" "0.88627451" "0.68627451";
-    green     = mkColor3 "0.65098039" "0.89019608" "0.63137255";
-    teal      = mkColor3 "0.58823529" "0.92156863" "0.81960784";
-    sky       = mkColor3 "0.53333333" "0.90196078" "0.93725490";
-    sapphire  = mkColor3 "0.45490196" "0.79607843" "0.93725490";
-    blue      = mkColor3 "0.53725490" "0.70588235" "0.98039216";
-    lavender  = mkColor3 "0.70588235" "0.74509804" "0.99607843";
+    flamingo = mkColor3 "0.95686275" "0.74117647" "0.76078431";
+    pink = mkColor3 "0.96078431" "0.76078431" "0.90588235";
+    mauve = mkColor3 "0.81176471" "0.62352941" "0.97254902";
+    red = mkColor3 "0.95294118" "0.54509804" "0.65882353";
+    maroon = mkColor3 "0.92156863" "0.60392157" "0.67843137";
+    peach = mkColor3 "0.98039216" "0.70196078" "0.52941176";
+    yellow = mkColor3 "0.97647059" "0.88627451" "0.68627451";
+    green = mkColor3 "0.65098039" "0.89019608" "0.63137255";
+    teal = mkColor3 "0.58823529" "0.92156863" "0.81960784";
+    sky = mkColor3 "0.53333333" "0.90196078" "0.93725490";
+    sapphire = mkColor3 "0.45490196" "0.79607843" "0.93725490";
+    blue = mkColor3 "0.53725490" "0.70588235" "0.98039216";
+    lavender = mkColor3 "0.70588235" "0.74509804" "0.99607843";
   };
 
-  accentColors = { latte = latteAccents; mocha = mochaAccents; };
+  accentColors = {
+    latte = latteAccents;
+    mocha = mochaAccents;
+  };
 
   # ── Resolved values ──────────────────────────────────────────────────────────
   lightSemantic = semantic.${lightFlavor};
-  darkSemantic  = semantic.${darkFlavor};
-  lightAccent   = accentColors.${lightFlavor}.${accent};
-  darkAccent    = accentColors.${darkFlavor}.${accent};
+  darkSemantic = semantic.${darkFlavor};
+  lightAccent = accentColors.${lightFlavor}.${accent};
+  darkAccent = accentColors.${darkFlavor}.${accent};
 
   # ── Builder file helper ──────────────────────────────────────────────────────
   # Returns an attrset of home.file entries for one theme variant
   mkBuilder = variant: pal: sem: acc: {
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/palette".text               = pal;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/accent".text                = acc;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/window_hint".text           = acc;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/bg_color".text              = sem.bg;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/text_tint".text             = sem.text;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/success".text               = sem.success;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/warning".text               = sem.warning;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/destructive".text           = sem.destructive;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/palette".text = pal;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/accent".text = acc;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/window_hint".text = acc;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/bg_color".text = sem.bg;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/text_tint".text = sem.text;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/success".text = sem.success;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/warning".text = sem.warning;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/destructive".text = sem.destructive;
     # Keep as None — COSMIC derives sane values from the palette
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/neutral_tint".text          = "None";
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/primary_container_bg".text   = "None";
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/secondary_container_bg".text = "None";
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/neutral_tint".text = "None";
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/primary_container_bg".text = "None";
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/secondary_container_bg".text =
+      "None";
     # User-facing knobs (top of file)
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/gaps".text                  = gaps;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/active_hint".text           = activeHint;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/is_frosted".text            = isFrosted;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/gaps".text = gaps;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/active_hint".text = activeHint;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/is_frosted".text = isFrosted;
     # COSMIC defaults — no reason to change these outside COSMIC Settings
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/corner_radii".text          = cornerRadii;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/spacing".text               = spacing;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/corner_radii".text = cornerRadii;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/spacing".text = spacing;
   };
 
 in
@@ -245,7 +258,7 @@ in
     '';
 
     home.file =
-      (mkBuilder "Light" palettes.${lightFlavor} lightSemantic lightAccent) //
-      (mkBuilder "Dark"  palettes.${darkFlavor}  darkSemantic  darkAccent);
+      (mkBuilder "Light" palettes.${lightFlavor} lightSemantic lightAccent)
+      // (mkBuilder "Dark" palettes.${darkFlavor} darkSemantic darkAccent);
   };
 }

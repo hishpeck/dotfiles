@@ -34,6 +34,7 @@
       hms = "home-manager switch --flake ~/dotfiles#ac-$(uname -m)-linux";
       hms-update = "cd ~/dotfiles && nix flake update && hms && cd -";
       nix-update = "sudo nix flake update --flake ~/dotfiles && sudo nixos-rebuild switch --flake ~/dotfiles#$(hostname)";
+      docker-compose = "docker compose";
     };
 
     initContent = lib.mkMerge [

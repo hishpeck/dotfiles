@@ -47,6 +47,10 @@ in
     gh
     weave
 
+    # Clipboard utilities
+    wl-clipboard # Wayland clipboard (wl-copy, wl-paste)
+    xclip # X11 clipboard fallback
+
     unzip
     lazydocker
     zoxide
@@ -88,6 +92,6 @@ in
 
   xdg.configFile = {
     "mcphub".source = ../../../config/mcphub;
-    "opencode/config.json".source = ../../../config/opencode/config.json;
+    "opencode".source = ../../../config/opencode;
   };
 }

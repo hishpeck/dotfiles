@@ -54,6 +54,6 @@ in
     fzf.enable = true;
     yazi.enable = true;
     zsh-syntax-highlighting.enable = true;
-    "gemini-cli".enable = true;
+    opencode.enable = true;
   };
 }

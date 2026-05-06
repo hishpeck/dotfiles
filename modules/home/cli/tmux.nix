@@ -20,8 +20,10 @@ in
 
     # Tmux configuration
     extraConfig = ''
-      # Enable true color support and mouse mode
+      # Enable true color support
+      set -g default-terminal "tmux-256color"
       set-option -sa terminal-overrides ",xterm*:Tc"
+      set-option -sa terminal-overrides ",tmux-256color:Tc"
       set -g mouse on
 
       # Remove escape key delay

@@ -3,6 +3,13 @@
   programs.kitty = {
     enable = true;
 
+    extraConfig = ''
+      # Enhanced mouse selection with Shift key
+      mouse_map shift+left press ungrabbed mouse_selection normal
+      mouse_map shift+left doublepress ungrabbed mouse_selection word
+      mouse_map shift+left triplepress ungrabbed mouse_selection line
+    '';
+
     settings = {
       scrollback_lines = 10000;
       enable_audio_bell = false;
@@ -22,6 +29,9 @@
       detect_urls = "yes";
       open_url_with = "default";
       copy_on_select = "yes";
+
+      # Allow terminal programs to read/write clipboard
+      clipboard_control = "write-clipboard write-primary read-clipboard read-primary";
 
       # Reduce escape key delay for better responsiveness
       repaint_delay = 2;

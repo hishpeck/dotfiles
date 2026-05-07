@@ -19,24 +19,6 @@ return {
 				"bash", -- Built-in terminal access
 			},
 			providers = {
-				deepseek = {
-					__inherited_from = "openai",
-					api_key_name = "DEEPSEEK_API_KEY",
-					endpoint = "https://api.deepseek.com",
-					model = "deepseek-coder",
-				},
-				gemini = {
-					model = "gemini-3-flash-preview",
-				},
-				claude = {
-					endpoint = "https://api.anthropic.com",
-					model = "claude-sonnet-4-20250514",
-					timeout = 30000, -- Timeout in milliseconds
-					extra_request_body = {
-						temperature = 0.75,
-						max_tokens = 20480,
-					},
-				},
 				openrouter = {
 					__inherited_from = "openai",
 					endpoint = "https://openrouter.ai/api/v1",

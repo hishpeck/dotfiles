@@ -1,15 +1,28 @@
-{ config, pkgs, self, ... }:
+{
+  config,
+  pkgs,
+  self,
+  ...
+}:
 
 let
   weave = pkgs.callPackage (self + /custom-apps/weave) { };
 in
 {
-  imports = [ ./zsh.nix ./nvim.nix ./tmux.nix ./yazi.nix ];
+  imports = [
+    ./zsh.nix
+    ./nvim.nix
+    ./tmux.nix
+    ./yazi.nix
+  ];
 
   nixpkgs.config.allowUnfree = true;
 
   nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
     warn-dirty = false;
   };
 
@@ -36,14 +49,15 @@ in
   programs.btop = {
     enable = true;
     package = pkgs.btop.override { rocmSupport = true; };
-    settings = { theme_background = false; };
+    settings = {
+      theme_background = false;
+    };
   };
   programs.lazygit.enable = true;
   programs.fzf.enable = true;
 
   home.packages = with pkgs; [
     opencode
-    gemini-cli
     gh
     weave
 
@@ -55,8 +69,10 @@ in
     lazydocker
     zoxide
 
-    (php84.withExtensions ({ enabled, all }:
-      enabled ++ [
+    (php84.withExtensions (
+      { enabled, all }:
+      enabled
+      ++ [
         all.amqp
         all.xsl
         all.redis
@@ -64,7 +80,8 @@ in
         all.pdo_pgsql
         all.iconv
         all.memcached
-      ]))
+      ]
+    ))
     php84Packages.composer
     symfony-cli
 

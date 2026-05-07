@@ -1,5 +1,158 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
+let
+  cosmic-applet-music-player = pkgs.rustPlatform.buildRustPackage {
+    pname = "cosmic-ext-applet-music-player";
+    version = "0-unstable-2026-05-07";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "Ebbo";
+      repo = "cosmic-applet-music-player";
+      rev = "1fe94a89a85be34b867ee94268e46e7fd72e88b8";
+      hash = "sha256-GAIzV/BdU4SOV6P+qNGWmPzF5mvNym9D99/7Hg5/Amc=";
+    };
+
+    cargoHash = "sha256-Cs9g2w480jquSNyEG41WqOEMPQ/BJKcOgN8VnCfZBLQ=";
+
+    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
+    buildInputs = [ pkgs.openssl pkgs.dbus pkgs.libpulseaudio ];
+
+    dontUseJustBuild = true;
+    dontUseJustCheck = true;
+
+    justFlags = [
+      "--set"
+      "prefix"
+      (builtins.placeholder "out")
+      "--set"
+      "bin-src"
+      "target/${pkgs.stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-ext-applet-music-player"
+    ];
+
+    meta = {
+      description = "Music player applet for the COSMIC Desktop Environment";
+      homepage = "https://github.com/Ebbo/cosmic-applet-music-player";
+      license = lib.licenses.gpl3Only;
+      mainProgram = "cosmic-ext-applet-music-player";
+      platforms = lib.platforms.linux;
+    };
+  };
+
+  cosmic-ext-whether = pkgs.rustPlatform.buildRustPackage {
+    pname = "cosmic-ext-whether";
+    version = "0-unstable-2026-05-07";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "nwxnw";
+      repo = "cosmic-ext-whether";
+      rev = "92afacb3f77f5cb0c4e6bae05424a32401dcf5c3";
+      hash = "sha256-UaxdnZrpnjlR0/jdg0aRg4JAbcbD9BHC1af0tIETPGU=";
+    };
+
+    cargoHash = "sha256-7CSXz8QDmTvmnY/TjJMdYhM5ZyKBW8YdkYcKzKcAc18=";
+
+    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook ];
+
+    dontUseJustBuild = true;
+    dontUseJustCheck = true;
+
+    justFlags = [
+      "--set"
+      "prefix"
+      (builtins.placeholder "out")
+      "--set"
+      "bin-src"
+      "target/${pkgs.stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-ext-whether"
+    ];
+
+    meta = {
+      description = "Weather applet for the COSMIC Desktop Environment";
+      homepage = "https://github.com/nwxnw/cosmic-ext-whether";
+      license = lib.licenses.gpl3Only;
+      mainProgram = "cosmic-ext-whether";
+      platforms = lib.platforms.linux;
+    };
+  };
+
+  cosmic-ext-applet-clipboard-manager = pkgs.rustPlatform.buildRustPackage {
+    pname = "cosmic-ext-applet-clipboard-manager";
+    version = "0-unstable-2026-05-07";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "cosmic-utils";
+      repo = "clipboard-manager";
+      rev = "d473e8f09e8bc2289a76707898063a13714c79dc";
+      hash = "sha256-RNRSShrT7wS4GmQNd3tXtT8G/4qLM9zxntXgBQ6C7ps=";
+    };
+
+    cargoHash = "sha256-+yqFV8HdPjkVny+6FKkZFEQAq1rwe7JXmoTJ7zge8bg=";
+
+    env.CLIPBOARD_MANAGER_COMMIT = "unknown";
+
+    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
+    buildInputs = [ pkgs.sqlite pkgs.systemd ];
+
+    dontUseJustBuild = true;
+    dontUseJustCheck = true;
+
+    justFlags = [
+      "--set"
+      "prefix"
+      (builtins.placeholder "out")
+      "--set"
+      "cargo-target-dir"
+      "target/${pkgs.stdenv.hostPlatform.rust.cargoShortTarget}"
+      "--set"
+      "CLIPBOARD_MANAGER_COMMIT"
+      "unknown"
+    ];
+
+    meta = {
+      description = "Clipboard manager applet for the COSMIC Desktop Environment";
+      homepage = "https://github.com/cosmic-utils/clipboard-manager";
+      license = lib.licenses.gpl3Only;
+      mainProgram = "cosmic-ext-applet-clipboard-manager";
+      platforms = lib.platforms.linux;
+    };
+  };
+
+  noctua = pkgs.rustPlatform.buildRustPackage {
+    pname = "noctua";
+    version = "0-unstable-2026-05-07";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "cosmic-utils";
+      repo = "noctua";
+      rev = "fc6e8c80568011dc05eb4f4f1dab626772f69c73";
+      hash = "sha256-LL3ZHBVCTEPPN1VsiM6ubE/fGvBS5HcewtLISU+UeeE=";
+    };
+
+    cargoHash = "sha256-dgD16FVtb9/1UmYoL3dSfzuiEC558c0Bb1nucPMVoBs=";
+
+    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
+    buildInputs = [ pkgs.glib pkgs.cairo pkgs.poppler ];
+
+    dontUseJustBuild = true;
+    dontUseJustCheck = true;
+
+    justFlags = [
+      "--set"
+      "prefix"
+      (builtins.placeholder "out")
+      "--set"
+      "cargo-target-dir"
+      "target/${pkgs.stdenv.hostPlatform.rust.cargoShortTarget}"
+    ];
+
+    meta = {
+      description = "File manager for the COSMIC Desktop Environment";
+      homepage = "https://github.com/cosmic-utils/noctua";
+      license = lib.licenses.gpl3Only;
+      mainProgram = "noctua";
+      platforms = lib.platforms.linux;
+    };
+  };
+in
 {
   services.desktopManager.cosmic.enable = true;
   services.displayManager.cosmic-greeter.enable = true;
@@ -20,4 +173,13 @@
   };
 
   environment.pathsToLink = [ "/share/thumbnailers" ];
+
+  environment.systemPackages = [
+    pkgs.cosmic-ext-applet-minimon
+    pkgs.cosmic-ext-applet-privacy-indicator
+    cosmic-applet-music-player
+    cosmic-ext-whether
+    cosmic-ext-applet-clipboard-manager
+    noctua
+  ];
 }

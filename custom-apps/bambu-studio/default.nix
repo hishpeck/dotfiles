@@ -1,13 +1,13 @@
 { pkgs ? import <nixpkgs> { } }:
 
 let
-  version = "02.05.02.51";
+  version = "02.06.01.55";
   pname = "bambu-studio";
 
   src = pkgs.fetchurl {
     url =
-      "https://github.com/bambulab/BambuStudio/releases/download/v${version}/BambuStudio_ubuntu-24.04_v${version}-20260327222803.AppImage";
-    sha256 = "b5675af34337715e61ced12862465519a6d032083aa7273f3a788f25f8213744";
+      "https://github.com/bambulab/BambuStudio/releases/download/v${version}/BambuStudio_ubuntu24.04-v${version}-20260429100944.AppImage";
+    sha256 = "4c415078dd96cb72258730cceb5c36f7d0aeb2f24b629122169427748bc56c3c";
   };
 
   appimageContents = pkgs.appimageTools.extract { inherit pname version src; };

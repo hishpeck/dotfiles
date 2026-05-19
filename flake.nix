@@ -56,6 +56,7 @@
                 catppuccin.homeModules.catppuccin
                 inputs.dms.homeModules.dank-material-shell
                 ./modules/home/theme.nix
+                ./modules/home/desktop/cosmic-config.nix
                 ./modules/home/desktop/launcher/walker.nix
                 walker.homeManagerModules.default
                 noctalia.homeModules.default

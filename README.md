@@ -43,14 +43,16 @@ rm ./hosts/NEW_HOSTNAME/hardware-configuration.nix
 nixos-generate-config --root /mnt --show-hardware-config > ./hosts/NEW_HOSTNAME/hardware-configuration.nix
 ```
 
-5. Remember to add the hostname to flake.nix, together with the default.nix and home.nix configuration in the
+5. Remember to add the new host to the `nixosHosts` list in `flake.nix`:
 
 ```nix
-    in {
-      nixosConfigurations = {
-        NEW_HOSTNAME = mkNixOS "NEW_HOSTNAME" "x86_64-linux";
-      };
+      nixosHosts = [
+        ...
+        { name = "NEW_HOSTNAME"; system = "x86_64-linux"; }
+      ];
 ```
+
+This automatically adds it to both `nixosConfigurations` and `homeConfigurations`.
 
 6. Run the install, after which you'll be prompted to set a root password
 

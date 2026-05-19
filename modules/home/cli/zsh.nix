@@ -31,7 +31,7 @@
       config-nvim = "nvim ~/dotfiles/config/nvim";
       config-zsh = "nvim ~/dotfiles/modules/home/cli/zsh.nix";
       config-nix = "nvim ~/dotfiles";
-      hms = "home-manager switch --flake ~/dotfiles#ac-$(uname -m)-linux";
+      hms = "home-manager switch --flake ~/dotfiles#$(hostname)";
       hms-update = "cd ~/dotfiles && nix flake update && hms && cd -";
       nix-update = "sudo nix flake update --flake ~/dotfiles && sudo nixos-rebuild switch --flake ~/dotfiles#$(hostname)";
       docker-compose = "docker compose";
@@ -81,6 +81,9 @@
         fi
 
         eval "$(symfony self:completion zsh)"
+
+        bindkey "^W" backward-kill-word
+        bindkey "\e[3;5~" kill-word
       ''
     ];
   };

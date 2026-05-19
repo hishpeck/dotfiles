@@ -34,6 +34,24 @@
     let
       user = "ac";
 
+      nixosHosts = [
+        { name = "ac-zenbook-2022"; system = "x86_64-linux"; }
+        { name = "ac-zenbook-2025"; system = "x86_64-linux"; }
+        { name = "ac-main-pc";      system = "x86_64-linux"; }
+      ];
+
+      sharedHomeModules = [
+        stylix.homeModules.stylix
+        catppuccin.homeModules.catppuccin
+        inputs.dms.homeModules.dank-material-shell
+        ./modules/home/theme.nix
+        ./modules/home/desktop/cosmic-config.nix
+        ./modules/home/desktop/launcher/walker.nix
+        walker.homeManagerModules.default
+        noctalia.homeModules.default
+        nix-index-database.homeModules.nix-index
+      ];
+
       mkNixOS = host: system:
         nixpkgs.lib.nixosSystem {
           inherit system;
@@ -51,17 +69,7 @@
               home-manager.extraSpecialArgs = { inherit inputs user self; };
               home-manager.backupFileExtension = "backup";
 
-              home-manager.sharedModules = [
-                stylix.homeModules.stylix
-                catppuccin.homeModules.catppuccin
-                inputs.dms.homeModules.dank-material-shell
-                ./modules/home/theme.nix
-                ./modules/home/desktop/cosmic-config.nix
-                ./modules/home/desktop/launcher/walker.nix
-                walker.homeManagerModules.default
-                noctalia.homeModules.default
-                nix-index-database.homeModules.nix-index
-              ];
+              home-manager.sharedModules = sharedHomeModules;
 
               home-manager.users.${user} = import ./hosts/${host}/home.nix;
             }
@@ -89,16 +97,34 @@
             }
           ];
         };
-    in {
-      nixosConfigurations = {
-        ac-zenbook-2022 = mkNixOS "ac-zenbook-2022" "x86_64-linux";
-        ac-zenbook-2025 = mkNixOS "ac-zenbook-2025" "x86_64-linux";
-        ac-main-pc = mkNixOS "ac-main-pc" "x86_64-linux";
-      };
 
-      homeConfigurations = {
-        "${user}-x86_64-linux" = mkHome "" "x86_64-linux";
-        "${user}-aarch64-linux" = mkHome "rpi5" "aarch64-linux";
-      };
+      mkHomeNixOS = host: system:
+        home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.${system};
+          extraSpecialArgs = { inherit inputs user self; };
+          modules = sharedHomeModules ++ [
+            ./hosts/${host}/home.nix
+
+            {
+              home.username = user;
+              home.homeDirectory = "/home/${user}";
+            }
+          ];
+        };
+    in {
+      nixosConfigurations = builtins.listToAttrs (map (h: {
+        name  = h.name;
+        value = mkNixOS h.name h.system;
+      }) nixosHosts);
+
+      homeConfigurations =
+        builtins.listToAttrs (map (h: {
+          name  = h.name;
+          value = mkHomeNixOS h.name h.system;
+        }) nixosHosts)
+        // {
+          "${user}-x86_64-linux" = mkHome "x84_64"  "x86_64-linux";
+          "${user}-aarch64-linux" = mkHome "aarch64" "aarch64-linux";
+        };
     };
 }

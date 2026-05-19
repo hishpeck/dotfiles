@@ -53,6 +53,8 @@
       "ctrl+shift+v" = "paste_from_clipboard";
       "ctrl+shift+t" = "no_op";
       "ctrl+shift+enter" = "no_op";
+      "ctrl+backspace" = "send_text all \\x17";
+      "ctrl+delete" = "send_text all \\e[3;5~";
     };
 
     shellIntegration.enableZshIntegration = true;

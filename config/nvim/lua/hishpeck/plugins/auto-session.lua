@@ -23,7 +23,7 @@ return {
 		vim.api.nvim_create_autocmd("VimLeavePre", {
 			callback = function()
 				-- vim.notify("Saving session...")
-				auto_session.SaveSession()
+				auto_session.save_session()
 			end,
 		})
 	end,

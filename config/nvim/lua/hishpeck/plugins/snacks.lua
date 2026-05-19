@@ -89,7 +89,7 @@ return {
 				-- Restore session after a brief delay
 				vim.defer_fn(function()
 					local ok, err = pcall(function()
-						require("auto-session").RestoreSession()
+						require("auto-session").restore_session()
 					end)
 
 					if ok then

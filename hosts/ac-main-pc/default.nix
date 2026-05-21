@@ -12,6 +12,11 @@
   ];
 
   networking.hostName = "ac-main-pc";
+
+  # Enable crash dumps to capture kernel panics (suspected amdgpu/DCN 4.0.1 issue)
+  boot.crashDump.enable = true;
+  # Log GPU display/KMS/DP events to help diagnose the crash on next occurrence
+  boot.kernelParams = [ "drm.debug=0x106" ];
   services.resolved.enable = true;
 
   # Open ports for development

@@ -2,6 +2,8 @@
 let
   elephantPkg = inputs.elephant.packages.${pkgs.stdenv.hostPlatform.system}.default;
 
+  schemaDir = "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}/glib-2.0/schemas";
+
   depsPath = pkgs.lib.makeBinPath [
     elephantPkg
     pkgs.wl-clipboard
@@ -75,15 +77,34 @@ in {
     };
   };
 
+  # xdg-desktop-portal-gtk reads GtkSettings (gtk-3.0/settings.ini) and
+  # serves it to GTK4 apps via the Settings portal. Writing to gtk-4.0 too
+  # as a direct fallback if the portal path doesn't deliver it.
+  xdg.configFile."gtk-3.0/settings.ini".text = ''
+    [Settings]
+    gtk-icon-theme-name=Cosmic
+  '';
+  xdg.configFile."gtk-4.0/settings.ini".text = ''
+    [Settings]
+    gtk-icon-theme-name=Cosmic
+  '';
+  dconf.settings."org/gnome/desktop/interface".icon-theme = "Cosmic";
+
   systemd.user.services.walker.Service = {
     Environment = lib.mkForce [
       "PATH=${depsPath}:/etc/profiles/per-user/${config.home.username}/bin:/run/current-system/sw/bin"
       "XDG_DATA_DIRS=/etc/profiles/per-user/${config.home.username}/share:/run/current-system/sw/share"
+      "DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus"
+      "GSETTINGS_SCHEMA_DIR=${schemaDir}"
+      # COSMIC portal partially handles org.gnome.desktop.interface (only text-scaling-factor),
+      # so GTK4 skips settings.ini fallback. no-portals forces it to read settings.ini.
+      "GDK_DEBUG=no-portals"
     ];
   };
   systemd.user.services.elephant.Service = {
     Environment = lib.mkForce [
       "PATH=${depsPath}:/etc/profiles/per-user/${config.home.username}/bin:/run/current-system/sw/bin"
+      "DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus"
     ];
   };
 

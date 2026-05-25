@@ -51,8 +51,8 @@ modules/
 ## Key Design Decisions
 
 - **`modules/nix/` vs `modules/home/`**: Hard split between NixOS system modules and Home Manager modules. Never mix them. If a domain (e.g. `gui`, `work`) needs both, there are two separate files at the same path under each tree.
-- **`nixosHosts` list in `flake.nix`**: Single source of truth for NixOS machines. Both `nixosConfigurations` and `homeConfigurations` are derived from it via `builtins.listToAttrs`. Adding a new NixOS host means adding one entry here only. Non-NixOS generic profiles (`x84_64`, `aarch64`) are added to `homeConfigurations` separately.
-- **`hms` vs `nix-update`**: `hms` (`home-manager switch --flake ~/dotfiles#$(hostname)`) rebuilds only the Home Manager config for the current machine — fast, for any home config changes (CLI, GUI, desktop). `nix-update` rebuilds the full NixOS system — required for system-level changes or hardware config.
+- **`nixosHosts` list in `flake.nix`**: Single source of truth for NixOS machines. `nixosConfigurations` is derived from it via `builtins.listToAttrs`. Adding a new NixOS host means adding one entry here only. Non-NixOS generic profiles (`x84_64`, `aarch64`) are added to `homeConfigurations` separately.
+- **`nix-update`**: The only way to apply changes on NixOS machines — rebuilds the full NixOS system including the Home Manager module. `hms` (`home-manager switch`) is standalone-only and must not be run on NixOS hosts where HM is managed as a NixOS module.
 
 ## Hosts Summary
 

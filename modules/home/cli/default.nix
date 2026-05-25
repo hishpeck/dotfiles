@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  lib,
   self,
   ...
 }:
@@ -19,7 +18,6 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
-  nix.package = lib.mkDefault pkgs.nix;
   nix.settings = {
     experimental-features = [
       "nix-command"

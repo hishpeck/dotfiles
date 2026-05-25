@@ -98,33 +98,15 @@
           ];
         };
 
-      mkHomeNixOS = host: system:
-        home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.${system};
-          extraSpecialArgs = { inherit inputs user self; };
-          modules = sharedHomeModules ++ [
-            ./hosts/${host}/home.nix
-
-            {
-              home.username = user;
-              home.homeDirectory = "/home/${user}";
-            }
-          ];
-        };
     in {
       nixosConfigurations = builtins.listToAttrs (map (h: {
         name  = h.name;
         value = mkNixOS h.name h.system;
       }) nixosHosts);
 
-      homeConfigurations =
-        builtins.listToAttrs (map (h: {
-          name  = h.name;
-          value = mkHomeNixOS h.name h.system;
-        }) nixosHosts)
-        // {
-          "${user}-x86_64-linux" = mkHome "x84_64"  "x86_64-linux";
-          "${user}-aarch64-linux" = mkHome "aarch64" "aarch64-linux";
-        };
+      homeConfigurations = {
+        "${user}-x86_64-linux" = mkHome "" "x86_64-linux";
+        "${user}-aarch64-linux" = mkHome "rpi5" "aarch64-linux";
+      };
     };
 }

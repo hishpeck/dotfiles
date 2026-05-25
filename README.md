@@ -52,7 +52,7 @@ nixos-generate-config --root /mnt --show-hardware-config > ./hosts/NEW_HOSTNAME/
       ];
 ```
 
-This automatically adds it to both `nixosConfigurations` and `homeConfigurations`.
+This automatically adds it to `nixosConfigurations`.
 
 6. Run the install, after which you'll be prompted to set a root password
 
@@ -77,39 +77,3 @@ chown ac:users -R /home/ac/dotfiles
 ## Home Manager
 
 TODO
-
----
-
-# OLD
-
-1. To install the dotfiles you can use this shell script based on the awesome guide about [storing dotfiles by Atlassian](https://www.atlassian.com/git/tutorials/dotfiles). Of course make sure to review it's contents first 😁
-
-```bash
-curl -Lks https://raw.githubusercontent.com/hishpeck/dotfiles/refs/heads/master/install.sh | /bin/bash
-```
-
-2. Next, in order to install the commonly used binaries, use Nix with Home Manager
-
-Install Nix using this command
-
-```bash
-sh <(curl -L https://nixos.org/nix/install) --daemon
-```
-
-Install Home Manager
-
-```bash
-nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
-nix-channel --update
-nix-shell '<home-manager>' -A install
-```
-
-Run Home Manager with the command that fits your current operating system
-
-```bash
-home-manager switch --flake ~/.config/home-manager/flake.nix#ac-x86_64-linux
-```
-
-```bash
-home-manager switch --flake ~/.config/home-manager/flake.nix#ac-aarch64-linux
-```

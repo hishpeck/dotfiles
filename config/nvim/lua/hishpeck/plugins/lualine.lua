@@ -1,5 +1,6 @@
 return {
 	"nvim-lualine/lualine.nvim",
+	event = "VimEnter",
 	dependencies = { "nvim-tree/nvim-web-devicons", "f-person/git-blame.nvim" },
 	config = function()
 		local lualine = require("lualine")
@@ -9,6 +10,7 @@ return {
 		vim.g.gitblame_display_virtual_text = 0
 		vim.g.gitblame_date_format = "%x"
 		vim.g.gitblame_max_commit_summary_length = 25
+		vim.g.gitblame_delay = 1000
 
 		lualine.setup({
 			options = {

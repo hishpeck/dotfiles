@@ -20,7 +20,7 @@ return {
 			svelte = { "eslint_d" },
 			vue = { "eslint_d" },
 			glsl = { "glslc" },
-			-- php = { "phpstan" },
+			php = { "phpstan" },
 			go = { "golangcilint" },
 		}
 
@@ -34,7 +34,7 @@ return {
 
 		local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
 
-		vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePre" }, {
+		vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
 			group = lint_augroup,
 			callback = function(args)
 				local linter_args = {}

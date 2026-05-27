@@ -34,7 +34,6 @@ return {
 				"vue_ls",
 				"astro",
 				"intelephense",
-				"phpactor",
 				"gopls",
 			},
 		})

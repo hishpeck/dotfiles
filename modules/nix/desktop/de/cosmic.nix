@@ -12,7 +12,7 @@ let
       hash = "sha256-GAIzV/BdU4SOV6P+qNGWmPzF5mvNym9D99/7Hg5/Amc=";
     };
 
-    cargoHash = "sha256-Cs9g2w480jquSNyEG41WqOEMPQ/BJKcOgN8VnCfZBLQ=";
+    cargoHash = "sha256-gtFwZ6mgsUw37FL3HOoHgzCcTvhCfqwrpdk7LqEiF5g=";
 
     nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
     buildInputs = [ pkgs.openssl pkgs.dbus pkgs.libpulseaudio ];
@@ -127,7 +127,7 @@ let
       hash = "sha256-LL3ZHBVCTEPPN1VsiM6ubE/fGvBS5HcewtLISU+UeeE=";
     };
 
-    cargoHash = "sha256-dgD16FVtb9/1UmYoL3dSfzuiEC558c0Bb1nucPMVoBs=";
+    cargoHash = "sha256-H0AvWXo7ru3+Gn9JdWclkHWb4T/PBvIaXRkPI6X6lv0=";
 
     nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
     buildInputs = [ pkgs.glib pkgs.cairo pkgs.poppler ];

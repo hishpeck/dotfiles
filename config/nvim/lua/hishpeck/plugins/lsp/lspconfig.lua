@@ -79,7 +79,6 @@ return {
 			"emmet_ls",
 			"astro",
 			"intelephense",
-			"phpactor",
 			"pyright",
 			"glsl_analyzer",
 			"rust_analyzer",
@@ -123,6 +122,55 @@ return {
 					},
 				}
 				server_opts.filetypes = tsserver_filetypes
+			elseif server_name == "tailwindcss" then
+				server_opts.filetypes = {
+					"css", "scss", "sass", "postcss",
+					"html", "blade", "php",
+					"javascript", "javascriptreact", "typescript", "typescriptreact",
+					"vue", "svelte", "astro",
+				}
+				server_opts.root_dir = function(bufnr, cb)
+					-- v3: traditional JS config files
+					local v3_root = vim.fs.root(bufnr, {
+						"tailwind.config.js",
+						"tailwind.config.ts",
+						"tailwind.config.cjs",
+						"tailwind.config.mjs",
+						"postcss.config.js",
+						"postcss.config.ts",
+					})
+					if v3_root then
+						cb(v3_root)
+						return
+					end
+					-- v4: nearest package.json that has @tailwindcss/* dependencies
+					local fname = vim.api.nvim_buf_get_name(bufnr)
+					local pkg = vim.fs.find("package.json", {
+						path = vim.fs.dirname(fname),
+						upward = true,
+						stop = vim.env.HOME,
+					})[1]
+					if pkg then
+						local ok, lines = pcall(vim.fn.readfile, pkg)
+						if ok and table.concat(lines, ""):find('"@tailwindcss/') then
+							cb(vim.fs.dirname(pkg))
+						end
+					end
+				end
+				server_opts.settings = {
+					tailwindCSS = {
+						files = {
+							exclude = {
+								"**/.git/**",
+								"**/node_modules/**",
+								"**/vendor/**",
+								"**/storage/**",
+								"**/bootstrap/cache/**",
+								"**/public/build/**",
+							},
+						},
+					},
+				}
 			elseif server_name == "svelte" then
 				server_opts.on_attach = function(client, bufnr)
 					on_attach(client, bufnr)
@@ -148,26 +196,22 @@ return {
 					"vue",
 					"blade.php",
 				}
-			elseif server_name == "phpactor" then
-				server_opts.cmd = { "phpactor", "language-server" }
-				server_opts.root_markers = { "composer.json" }
-				server_opts.workspace_required = true
-				server_opts.init_options = {
-					["language_server_phpstan.enabled"] = true,
-
-					["language_server_worse_reflection.diagnostics.enable"] = false,
-				}
-				server_opts.on_attach = function(client, bufnr)
-					on_attach(client, bufnr)
-
-					client.server_capabilities.completionProvider = false
-					client.server_capabilities.hoverProvider = false
-					client.server_capabilities.definitionProvider = false
-					client.server_capabilities.referenceProvider = false
-				end
 			elseif server_name == "intelephense" then
 				server_opts.settings = {
-					intelephense = { compatibility = { preferPsalmPhpstanPrefixedAnnotations = true } },
+					intelephense = {
+						files = {
+							exclude = {
+								"**/.git/**",
+								"**/node_modules/**",
+								"**/storage/framework/**",
+								"**/storage/logs/**",
+								"**/bootstrap/cache/**",
+								"**/public/build/**",
+								"**/public/hot",
+							},
+						},
+						compatibility = { preferPsalmPhpstanPrefixedAnnotations = true },
+					},
 				}
 			elseif server_name == "lua_ls" then
 				server_opts.settings = {

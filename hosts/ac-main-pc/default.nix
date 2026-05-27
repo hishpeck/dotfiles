@@ -26,5 +26,7 @@
 
   security.pki.certificateFiles = [ ./la.crt ./cnc.crt ];
 
+  programs.droidcam.enable = true;
+
   system.stateVersion = "24.05";
 }

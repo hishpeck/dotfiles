@@ -5,7 +5,6 @@ return {
 	opts = {
 		bigfile = { enabled = true },
 		bufdelete = { enabled = true },
-		image = { enabled = true },
 		indent = { enabled = true },
 		input = { enabled = true },
 		lazygit = {
@@ -17,7 +16,6 @@ return {
 		scope = { enabled = true },
 		scratch = { enabled = true },
 		scroll = { enabled = true },
-		words = { enabled = true },
 		picker = {
 			ui_select = true,
 		},

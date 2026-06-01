@@ -1,13 +1,13 @@
 { pkgs, ... }:
 
 let
-  version = "7.6.4";
+  version = "7.6.5";
   pname = "lychee-slicer";
 
   src = pkgs.fetchurl {
     url =
       "https://mango-lychee.nyc3.cdn.digitaloceanspaces.com/LycheeSlicer-${version}.AppImage";
-    hash = "sha256-lLE40ByNdfK7GkLjfbEEX0nmhL0+E51qPDe+whIJqEM=";
+    hash = "sha256-HVCAvukGeF4hRJ/l41iBV1MZD5i9qzIYGSgMrncNfDg=";
   };
 
   appimageContents = pkgs.appimageTools.extract { inherit pname version src; };

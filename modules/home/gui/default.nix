@@ -10,6 +10,7 @@
 
     google-chrome
     pavucontrol
+    (pkgs.callPackage ../../../custom-apps/upnote/default.nix { })
 
     p7zip
     udisks # CLI tool for managing disks

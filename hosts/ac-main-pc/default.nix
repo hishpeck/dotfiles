@@ -24,8 +24,12 @@
     9998 # Xdebug
   ];
 
-  security.pki.certificateFiles = [ ./la.crt ./cnc.crt ];
+  security.pki.certificateFiles = [
+    ./la.crt
+    ./cnc.crt
+  ];
 
+  # DroidCam virtual camera for using phone as webcam
   programs.droidcam.enable = true;
 
   system.stateVersion = "24.05";

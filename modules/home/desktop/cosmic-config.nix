@@ -164,6 +164,12 @@ in
           Terminal: "kitty",
       }'';
 
+    # ── Window rules ────────────────────────────────────────────────────────────
+    ".config/cosmic/com.system76.CosmicSettings.WindowRules/v1/tiling_exception_custom".text = ''
+      [
+          (appid: "google-chrome", titles: ["Picture in Picture"]),
+      ]'';
+
     # ── Compositor ──────────────────────────────────────────────────────────────
     ".config/cosmic/com.system76.CosmicComp/v1/autotile".text = "true";
     ".config/cosmic/com.system76.CosmicComp/v1/autotile_behavior".text = "PerWorkspace";

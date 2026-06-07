@@ -12,7 +12,7 @@ let
       hash = "sha256-GAIzV/BdU4SOV6P+qNGWmPzF5mvNym9D99/7Hg5/Amc=";
     };
 
-    cargoHash = "sha256-gtFwZ6mgsUw37FL3HOoHgzCcTvhCfqwrpdk7LqEiF5g=";
+    cargoHash = "sha256-rNMJUFtoY9gkf210CuiuIvhXI5yP2ycTQONJ11hDVHQ=";
 
     nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
     buildInputs = [ pkgs.openssl pkgs.dbus pkgs.libpulseaudio ];
@@ -108,7 +108,8 @@ let
     ];
 
     meta = {
-      description = "Clipboard manager applet for the COSMIC Desktop Environment";
+      description =
+        "Clipboard manager applet for the COSMIC Desktop Environment";
       homepage = "https://github.com/cosmic-utils/clipboard-manager";
       license = lib.licenses.gpl3Only;
       mainProgram = "cosmic-ext-applet-clipboard-manager";
@@ -127,7 +128,7 @@ let
       hash = "sha256-LL3ZHBVCTEPPN1VsiM6ubE/fGvBS5HcewtLISU+UeeE=";
     };
 
-    cargoHash = "sha256-H0AvWXo7ru3+Gn9JdWclkHWb4T/PBvIaXRkPI6X6lv0=";
+    cargoHash = "sha256-DtRummtqqcJJgStJCHKHzl6N5lmcw8UCwExtjl7wKCM=";
 
     nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
     buildInputs = [ pkgs.glib pkgs.cairo pkgs.poppler ];
@@ -152,14 +153,12 @@ let
       platforms = lib.platforms.linux;
     };
   };
-in
-{
+in {
   services.desktopManager.cosmic.enable = true;
   services.displayManager.cosmic-greeter.enable = true;
 
   services.gnome.gnome-keyring.enable = true;
   services.system76-scheduler.enable = true;
-  hardware.system76.power-daemon.enable = true;
 
   services.dbus.enable = true;
 

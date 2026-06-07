@@ -42,6 +42,7 @@ in
 
   catppuccin = {
     enable = true;
+    autoEnable = true;
     inherit flavor;
     accent = "pink";
 

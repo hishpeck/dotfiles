@@ -46,6 +46,7 @@ return {
 				-- "pint",
 				"phpstan",
 				"php-cs-fixer",
+				"phpcs",
 				"php-debug-adapter",
 				"golangci-lint",
 				"goimports",

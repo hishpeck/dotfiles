@@ -16,6 +16,7 @@ return {
 		scope = { enabled = true },
 		scratch = { enabled = true },
 		scroll = { enabled = true },
+		words = { enabled = true },
 		picker = {
 			ui_select = true,
 		},

@@ -108,7 +108,7 @@ in
   programs.bat.enable = true;
 
   xdg.configFile = {
-    "mcphub".source = ../../../config/mcphub;
-    "opencode".source = ../../../config/opencode;
+    "mcphub".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/mcphub";
+    "opencode".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/opencode";
   };
 }

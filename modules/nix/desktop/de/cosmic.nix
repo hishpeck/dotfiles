@@ -12,10 +12,18 @@ let
       hash = "sha256-GAIzV/BdU4SOV6P+qNGWmPzF5mvNym9D99/7Hg5/Amc=";
     };
 
-    cargoHash = "sha256-rNMJUFtoY9gkf210CuiuIvhXI5yP2ycTQONJ11hDVHQ=";
+    cargoHash = "sha256-Cs9g2w480jquSNyEG41WqOEMPQ/BJKcOgN8VnCfZBLQ=";
 
-    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
-    buildInputs = [ pkgs.openssl pkgs.dbus pkgs.libpulseaudio ];
+    nativeBuildInputs = [
+      pkgs.just
+      pkgs.libcosmicAppHook
+      pkgs.pkg-config
+    ];
+    buildInputs = [
+      pkgs.openssl
+      pkgs.dbus
+      pkgs.libpulseaudio
+    ];
 
     dontUseJustBuild = true;
     dontUseJustCheck = true;
@@ -51,7 +59,10 @@ let
 
     cargoHash = "sha256-7CSXz8QDmTvmnY/TjJMdYhM5ZyKBW8YdkYcKzKcAc18=";
 
-    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook ];
+    nativeBuildInputs = [
+      pkgs.just
+      pkgs.libcosmicAppHook
+    ];
 
     dontUseJustBuild = true;
     dontUseJustCheck = true;
@@ -89,8 +100,15 @@ let
 
     env.CLIPBOARD_MANAGER_COMMIT = "unknown";
 
-    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
-    buildInputs = [ pkgs.sqlite pkgs.systemd ];
+    nativeBuildInputs = [
+      pkgs.just
+      pkgs.libcosmicAppHook
+      pkgs.pkg-config
+    ];
+    buildInputs = [
+      pkgs.sqlite
+      pkgs.systemd
+    ];
 
     dontUseJustBuild = true;
     dontUseJustCheck = true;
@@ -108,8 +126,7 @@ let
     ];
 
     meta = {
-      description =
-        "Clipboard manager applet for the COSMIC Desktop Environment";
+      description = "Clipboard manager applet for the COSMIC Desktop Environment";
       homepage = "https://github.com/cosmic-utils/clipboard-manager";
       license = lib.licenses.gpl3Only;
       mainProgram = "cosmic-ext-applet-clipboard-manager";
@@ -128,10 +145,18 @@ let
       hash = "sha256-LL3ZHBVCTEPPN1VsiM6ubE/fGvBS5HcewtLISU+UeeE=";
     };
 
-    cargoHash = "sha256-DtRummtqqcJJgStJCHKHzl6N5lmcw8UCwExtjl7wKCM=";
+    cargoHash = "sha256-dgD16FVtb9/1UmYoL3dSfzuiEC558c0Bb1nucPMVoBs=";
 
-    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
-    buildInputs = [ pkgs.glib pkgs.cairo pkgs.poppler ];
+    nativeBuildInputs = [
+      pkgs.just
+      pkgs.libcosmicAppHook
+      pkgs.pkg-config
+    ];
+    buildInputs = [
+      pkgs.glib
+      pkgs.cairo
+      pkgs.poppler
+    ];
 
     dontUseJustBuild = true;
     dontUseJustCheck = true;
@@ -153,7 +178,8 @@ let
       platforms = lib.platforms.linux;
     };
   };
-in {
+in
+{
   services.desktopManager.cosmic.enable = true;
   services.displayManager.cosmic-greeter.enable = true;
 
@@ -165,8 +191,10 @@ in {
   xdg.portal = {
     enable = true;
 
-    extraPortals =
-      [ pkgs.xdg-desktop-portal-cosmic pkgs.xdg-desktop-portal-gtk ];
+    extraPortals = [
+      pkgs.xdg-desktop-portal-cosmic
+      pkgs.xdg-desktop-portal-gtk
+    ];
 
     config.common.default = [ "cosmic" ];
   };

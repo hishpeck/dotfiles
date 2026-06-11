@@ -84,11 +84,12 @@
       plugin = {
         prepend_fetchers = [{
           id = "git";
-          name = "*";
+          url = "*";
           run = "git";
+          group = "git";
         }];
         prepend_previewers = [{
-          name = "*.md";
+          url = "*.md";
           run = "piper";
         }];
       };

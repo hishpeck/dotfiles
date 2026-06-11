@@ -19,6 +19,9 @@ return {
 		local nvimtree = require("nvim-tree")
 
 		nvimtree.setup({
+			filesystem_watchers = {
+				ignore_dirs = { ".git", "node_modules", "vendor" },
+			},
 			renderer = {
 				icons = {
 					git_placement = "signcolumn",

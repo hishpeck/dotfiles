@@ -12,10 +12,12 @@
     substituters = [
       "https://cache.nixos.org/"
       "https://cosmic.cachix.org/"
+      "https://hishpeck.cachix.org"
     ];
     trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "cosmic.cachix.org-1:D7qyvniWny9W6jnP799Aunmdfn35p0qT3Y6E3n5M9f4="
+      "hishpeck.cachix.org-1:mZfdMDcOQs9JIpXeT0T/F0DgAXaaTVYblSXFnIr9y7E="
     ];
   };
 
@@ -108,6 +110,7 @@
     git
     home-manager
     nps
+    cachix
   ];
 
   boot.loader.systemd-boot.enable = false;

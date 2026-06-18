@@ -141,6 +141,18 @@ in
               key: "Return",
           ): Disable,
           (
+              modifiers: [
+                  Super,
+              ],
+              key: "Tab",
+          ): System(WorkspaceOverview),
+          (
+              modifiers: [
+                  Super,
+              ],
+              key: "n",
+          ): Minimize,
+          (
               modifiers: [],
               key: "Print",
           ): System(Screenshot),
@@ -200,6 +212,473 @@ in
     # ── Idle ────────────────────────────────────────────────────────────────────
     ".config/cosmic/com.system76.CosmicIdle/v1/screen_off_time".text = "None";
     ".config/cosmic/com.system76.CosmicIdle/v1/suspend_on_ac_time".text = "None";
+
+    # ── Minimon applet ──────────────────────────────────────────────────────────
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/content_order".text = ''
+      (
+          order: [
+              CpuUsage,
+              CpuTemp,
+              MemoryUsage,
+              NetworkUsage,
+              DiskUsage,
+              GpuInfo,
+          ],
+      )'';
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/cpu".text = ''
+      (
+          chart_visible: true,
+          value_visible: false,
+          label_visible: false,
+          icon_visible: true,
+          chart: Line,
+          colors: (
+              ring: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 6, blue: 0, alpha: 255),
+                  graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              line: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 6, blue: 0, alpha: 85),
+                  graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              heat: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 6, blue: 0, alpha: 255),
+                  graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              stackedbars: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 80, green: 80, blue: 255, alpha: 255),
+                  graph2: (red: 255, green: 0, blue: 0, alpha: 255),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+          ),
+          no_decimals: false,
+          bar_width: 4,
+          bar_spacing: 1,
+      )'';
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/cputemp".text = ''
+      (
+          chart_visible: true,
+          value_visible: false,
+          label_visible: false,
+          icon_visible: true,
+          chart: Heat,
+          colors: (
+              ring: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 6, blue: 0, alpha: 255),
+                  graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              line: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 90, blue: 0, alpha: 85),
+                  graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              heat: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 6, blue: 0, alpha: 255),
+                  graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              stackedbars: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 6, blue: 0, alpha: 255),
+                  graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+          ),
+          unit: Celsius,
+          min_temp: 20.0,
+      )'';
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/disks1".text = ''
+      (
+          chart_visible: false,
+          value_visible: false,
+          label_visible: false,
+          icon_visible: true,
+          chart: Line,
+          colors: (
+              ring: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 102, blue: 0, alpha: 85),
+                  graph2: (red: 255, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              line: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 102, blue: 0, alpha: 85),
+                  graph2: (red: 255, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              heat: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 102, blue: 0, alpha: 85),
+                  graph2: (red: 255, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              stackedbars: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 102, blue: 0, alpha: 85),
+                  graph2: (red: 255, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+          ),
+          variant: Combined,
+      )'';
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/disks2".text = ''
+      (
+          chart_visible: false,
+          value_visible: false,
+          label_visible: false,
+          icon_visible: true,
+          chart: Line,
+          colors: (
+              ring: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 102, blue: 0, alpha: 85),
+                  graph2: (red: 255, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              line: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 102, blue: 0, alpha: 85),
+                  graph2: (red: 255, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              heat: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 102, blue: 0, alpha: 85),
+                  graph2: (red: 255, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              stackedbars: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 102, blue: 0, alpha: 85),
+                  graph2: (red: 255, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+          ),
+          variant: Read,
+      )'';
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/gpus".text = ''
+      {
+          "1714face7ad6366e6ee445aa74bc8cba9af94422fa2668f2f0b1b0024ca28af5": (
+              usage: (
+                  chart_visible: false,
+                  value_visible: false,
+                  label_visible: false,
+                  icon_visible: true,
+                  chart: Ring,
+                  colors: (
+                      ring: (
+                          background: (red: 43, green: 43, blue: 43, alpha: 255),
+                          frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                          text: (red: 255, green: 255, blue: 255, alpha: 255),
+                          graph1: (red: 0, green: 255, blue: 0, alpha: 255),
+                          graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                          graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+                      ),
+                      line: (
+                          background: (red: 43, green: 43, blue: 43, alpha: 255),
+                          frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                          text: (red: 255, green: 255, blue: 255, alpha: 255),
+                          graph1: (red: 0, green: 255, blue: 0, alpha: 85),
+                          graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                          graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+                      ),
+                      heat: (
+                          background: (red: 43, green: 43, blue: 43, alpha: 255),
+                          frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                          text: (red: 255, green: 255, blue: 255, alpha: 255),
+                          graph1: (red: 255, green: 6, blue: 0, alpha: 255),
+                          graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                          graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+                      ),
+                      stackedbars: (
+                          background: (red: 43, green: 43, blue: 43, alpha: 255),
+                          frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                          text: (red: 255, green: 255, blue: 255, alpha: 255),
+                          graph1: (red: 255, green: 6, blue: 0, alpha: 255),
+                          graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                          graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+                      ),
+                  ),
+              ),
+              vram: (
+                  chart_visible: false,
+                  value_visible: false,
+                  label_visible: false,
+                  icon_visible: true,
+                  chart: Ring,
+                  colors: (
+                      ring: (
+                          background: (red: 43, green: 43, blue: 43, alpha: 255),
+                          frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                          text: (red: 255, green: 255, blue: 255, alpha: 255),
+                          graph1: (red: 0, green: 255, blue: 0, alpha: 255),
+                          graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                          graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+                      ),
+                      line: (
+                          background: (red: 43, green: 43, blue: 43, alpha: 255),
+                          frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                          text: (red: 255, green: 255, blue: 255, alpha: 255),
+                          graph1: (red: 0, green: 255, blue: 0, alpha: 85),
+                          graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                          graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+                      ),
+                      heat: (
+                          background: (red: 43, green: 43, blue: 43, alpha: 255),
+                          frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                          text: (red: 255, green: 255, blue: 255, alpha: 255),
+                          graph1: (red: 255, green: 6, blue: 0, alpha: 255),
+                          graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                          graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+                      ),
+                      stackedbars: (
+                          background: (red: 43, green: 43, blue: 43, alpha: 255),
+                          frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                          text: (red: 255, green: 255, blue: 255, alpha: 255),
+                          graph1: (red: 255, green: 6, blue: 0, alpha: 255),
+                          graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                          graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+                      ),
+                  ),
+              ),
+              temp: (
+                  chart_visible: false,
+                  value_visible: false,
+                  label_visible: false,
+                  icon_visible: true,
+                  chart: Ring,
+                  colors: (
+                      ring: (
+                          background: (red: 43, green: 43, blue: 43, alpha: 255),
+                          frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                          text: (red: 255, green: 255, blue: 255, alpha: 255),
+                          graph1: (red: 255, green: 6, blue: 0, alpha: 255),
+                          graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                          graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+                      ),
+                      line: (
+                          background: (red: 43, green: 43, blue: 43, alpha: 255),
+                          frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                          text: (red: 255, green: 255, blue: 255, alpha: 255),
+                          graph1: (red: 255, green: 6, blue: 0, alpha: 85),
+                          graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                          graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+                      ),
+                      heat: (
+                          background: (red: 43, green: 43, blue: 43, alpha: 255),
+                          frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                          text: (red: 255, green: 255, blue: 255, alpha: 255),
+                          graph1: (red: 255, green: 6, blue: 0, alpha: 255),
+                          graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                          graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+                      ),
+                      stackedbars: (
+                          background: (red: 43, green: 43, blue: 43, alpha: 255),
+                          frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                          text: (red: 255, green: 255, blue: 255, alpha: 255),
+                          graph1: (red: 255, green: 6, blue: 0, alpha: 255),
+                          graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                          graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+                      ),
+                  ),
+                  unit: Celsius,
+                  min_temp: 0.0,
+              ),
+              pause_on_battery: true,
+              stack_values: true,
+          ),
+      }'';
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/label_size_default".text = "11";
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/memory".text = ''
+      (
+          chart_visible: true,
+          value_visible: false,
+          label_visible: false,
+          icon_visible: true,
+          chart: Line,
+          colors: (
+              ring: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 29, green: 172, blue: 214, alpha: 255),
+                  graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                  graph3: (red: 44, green: 87, blue: 101, alpha: 255),
+              ),
+              line: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 29, green: 172, blue: 214, alpha: 140),
+                  graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                  graph3: (red: 44, green: 87, blue: 101, alpha: 140),
+              ),
+              heat: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 6, blue: 0, alpha: 255),
+                  graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              stackedbars: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 255, green: 6, blue: 0, alpha: 255),
+                  graph2: (red: 85, green: 85, blue: 85, alpha: 255),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+          ),
+          percentage: true,
+          show_allocated: false,
+          stack_values: false,
+      )'';
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/monospace_labels".text = "true";
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/monospace_values".text = "false";
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/network1".text = ''
+      (
+          chart_visible: false,
+          value_visible: false,
+          label_visible: false,
+          icon_visible: true,
+          chart: Line,
+          colors: (
+              ring: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 47, green: 141, blue: 255, alpha: 85),
+                  graph2: (red: 0, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              line: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 47, green: 141, blue: 255, alpha: 85),
+                  graph2: (red: 0, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              heat: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 47, green: 141, blue: 255, alpha: 85),
+                  graph2: (red: 0, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              stackedbars: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 47, green: 141, blue: 255, alpha: 85),
+                  graph2: (red: 0, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+          ),
+          adaptive: true,
+          bandwidth: 62500000,
+          unit: Some(0),
+          variant: Combined,
+          show_bytes: false,
+      )'';
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/network2".text = ''
+      (
+          chart_visible: true,
+          value_visible: false,
+          label_visible: false,
+          icon_visible: true,
+          chart: Line,
+          colors: (
+              ring: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 47, green: 141, blue: 255, alpha: 85),
+                  graph2: (red: 0, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              line: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 47, green: 141, blue: 255, alpha: 85),
+                  graph2: (red: 0, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              heat: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 47, green: 141, blue: 255, alpha: 85),
+                  graph2: (red: 0, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+              stackedbars: (
+                  background: (red: 43, green: 43, blue: 43, alpha: 255),
+                  frame: (red: 255, green: 255, blue: 255, alpha: 255),
+                  text: (red: 255, green: 255, blue: 255, alpha: 255),
+                  graph1: (red: 47, green: 141, blue: 255, alpha: 85),
+                  graph2: (red: 0, green: 255, blue: 0, alpha: 85),
+                  graph3: (red: 255, green: 165, blue: 0, alpha: 255),
+              ),
+          ),
+          adaptive: true,
+          bandwidth: 62500000,
+          unit: Some(0),
+          variant: Upload,
+          show_bytes: false,
+      )'';
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/panel_spacing".text = "4";
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/refresh_rate".text = "5000";
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/symbols".text = "true";
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/sysmon".text = "None";
+    ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/value_size_default".text = "11";
 
     # ── Whether (weather) applet ────────────────────────────────────────────────
     ".config/cosmic/com.github.nwxnw.cosmic-ext-whether/v4/use_fahrenheit".text = "false";

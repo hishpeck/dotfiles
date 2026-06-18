@@ -30,11 +30,14 @@
       config-tmux = "nvim ~/dotfiles/modules/home/cli/tmux.nix";
       config-nvim = "nvim ~/dotfiles/config/nvim";
       config-zsh = "nvim ~/dotfiles/modules/home/cli/zsh.nix";
-      config-nix = "nvim ~/dotfiles";
+      nico = "nvim ~/dotfiles";
       hms = "home-manager switch --flake ~/dotfiles#$(hostname)";
       hms-update = "cd ~/dotfiles && nix flake update && hms && cd -";
-      nix-update = "sudo nix flake update --flake ~/dotfiles && sudo nixos-rebuild switch --flake ~/dotfiles#$(hostname)";
+      niup = "sudo nix flake update --flake ~/dotfiles && sudo nixos-rebuild switch --flake ~/dotfiles#$(hostname)";
+      nipu = "nix path-info --recursive /run/current-system | cachix push hishpeck";
       docker-compose = "docker compose";
+      lagi = "lazygit";
+      lado = "lazydocker";
     };
 
     initContent = lib.mkMerge [

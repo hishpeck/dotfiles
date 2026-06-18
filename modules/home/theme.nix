@@ -49,7 +49,7 @@ in
     chromium.enable = true;
     lazygit.enable = true;
     btop.enable = true;
-    kitty.enable = true;
+    kitty.enable = false;
     tmux.enable = true;
     bat.enable = true;
     fzf.enable = true;

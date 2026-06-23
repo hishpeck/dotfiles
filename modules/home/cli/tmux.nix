@@ -1,15 +1,5 @@
 { config, pkgs, ... }:
 
-let
-  # Fetch TPM from GitHub
-  tpm = pkgs.fetchFromGitHub {
-    owner = "tmux-plugins";
-    repo = "tpm";
-    rev = "v3.1.0";
-    sha256 = "18i499hhxly1r2bnqp9wssh0p1v391cxf10aydxaa7mdmrd3vqh9";
-  };
-in
-
 {
   home.packages = with pkgs; [
     tmux
@@ -17,6 +7,26 @@ in
 
   programs.tmux = {
     enable = true;
+
+    plugins = with pkgs.tmuxPlugins; [
+      sensible
+      vim-tmux-navigator
+      yank
+      resurrect
+      # status-right must be set before cpu.tmux loads — it does a find-replace on
+      # #{cpu_percentage}/#{ram_percentage} at load time, so the strings must exist first.
+      {
+        plugin = battery;
+        extraConfig = ''
+          set -g status-left ""
+          set -g status-right ""
+          set -ag status-right "#[fg=#{@thm_fg},bg=#{@thm_surface_2}] #{cpu_icon} #{cpu_percentage} "
+          set -ag status-right "#[fg=#{@thm_fg},bg=#{@thm_surface_1}] #{ram_icon} #{ram_percentage} "
+          set -ag status-right "#{E:@catppuccin_status_date_time}"
+        '';
+      }
+      cpu
+    ];
 
     # Tmux configuration
     extraConfig = ''
@@ -62,25 +72,8 @@ in
       set-window-option -g pane-base-index 1
       set-option -g renumber-windows on
 
-      # TPM plugin list
-      set -g @plugin 'tmux-plugins/tpm'
-      set -g @plugin 'tmux-plugins/tmux-sensible'
-      set -g @plugin 'christoomey/vim-tmux-navigator'
-      set -g @plugin 'tmux-plugins/tmux-yank'
-      set -g @plugin 'tmux-plugins/tmux-resurrect'
-      set -g @plugin 'tmux-plugins/tmux-battery'
-      set -g @plugin 'tmux-plugins/tmux-cpu'
-      set -g @plugin 'pwittchen/tmux-plugin-ram'
-      set -g @plugin 'xamut/tmux-weather'
-
       # Theme configuration
       set -g @catppuccin_window_status_style "slanted"
-
-      set -g status-left ""
-      set -g status-right ""
-      set -ag status-right "#[fg=#{@thm_fg},bg=#{@thm_surface_2}] #{cpu_icon} #{cpu_percentage} "
-      set -ag status-right "#[fg=#{@thm_fg},bg=#{@thm_surface_1}] #{ram_icon} #{ram_percentage} "
-      set -ag status-right "#{E:@catppuccin_status_date_time}"
 
       # Set vi-mode
       set-window-option -g mode-keys vi
@@ -92,9 +85,6 @@ in
       # Split window with current path
       bind '"' split-window -v -c "#{pane_current_path}"
       bind % split-window -h -c "#{pane_current_path}"
-
-      # Initialize TPM (from Nix store)
-      run -b '${tpm}/tpm'
     '';
   };
 }

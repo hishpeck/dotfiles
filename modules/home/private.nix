@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   home.packages = with pkgs; [
@@ -17,12 +22,16 @@
     f3d
     shared-mime-info
     desktop-file-utils
+    ncdu
   ];
 
   # Vesktop (Discord) — Catppuccin Latte theme
   xdg.configFile."vesktop/themes/catppuccin-${config.catppuccin.flavor}.theme.css".text = ''
     /**
-     * @name Catppuccin ${lib.strings.toUpper (builtins.substring 0 1 config.catppuccin.flavor) + builtins.substring 1 (-1) config.catppuccin.flavor}
+     * @name Catppuccin ${
+       lib.strings.toUpper (builtins.substring 0 1 config.catppuccin.flavor)
+       + builtins.substring 1 (-1) config.catppuccin.flavor
+     }
      * @author winston#0001
      * @version 0.2.0
      * @description Soothing pastel theme for Discord
@@ -31,7 +40,7 @@
   '';
 
   # Seed vesktop settings only on first run — Vesktop manages this file at runtime
-  home.activation.seedVesktopSettings = config.lib.dag.entryAfter ["writeBoundary"] ''
+  home.activation.seedVesktopSettings = config.lib.dag.entryAfter [ "writeBoundary" ] ''
     settings="$HOME/.config/vesktop/settings/settings.json"
     if [ ! -f "$settings" ]; then
       mkdir -p "$(dirname "$settings")"
@@ -39,13 +48,45 @@
     fi
   '';
 
+  xdg.desktopEntries.nvim-kitty = {
+    name = "Neovim";
+    genericName = "Text Editor";
+    exec = "kitty -e nvim %F";
+    terminal = false;
+    categories = [
+      "Utility"
+      "TextEditor"
+      "Development"
+    ];
+    mimeType = [
+      "text/plain"
+      "text/english"
+      "text/x-makefile"
+      "text/x-c++hdr"
+      "text/x-c++src"
+      "text/x-chdr"
+      "text/x-csrc"
+      "text/x-java"
+      "text/x-pascal"
+      "text/x-tcl"
+      "text/x-tex"
+      "application/x-shellscript"
+      "text/x-c"
+      "text/x-c++"
+    ];
+  };
+
   xdg.desktopEntries.fstl = {
     name = "fstl";
     genericName = "Fast STL Viewer";
     comment = "Ultra-fast viewer for 3D STL files";
     exec = "fstl %f"; # The %f tells the file manager to pass the file path
     terminal = false;
-    categories = [ "Graphics" "3DGraphics" "Viewer" ];
+    categories = [
+      "Graphics"
+      "3DGraphics"
+      "Viewer"
+    ];
     mimeType = [
       "model/stl"
       "application/vnd.ms-pki.stl"
@@ -61,9 +102,13 @@
     exec = "lychee-slicer %U";
     terminal = false;
     icon = "lycheeslicer";
-    categories = [ "Graphics" "3DGraphics" "Engineering" ];
+    categories = [
+      "Graphics"
+      "3DGraphics"
+      "Engineering"
+    ];
     mimeType = [
-      "application/x-lychee-slicer"  # .lys files
+      "application/x-lychee-slicer" # .lys files
       "model/stl"
       "application/vnd.ms-pki.stl"
       "application/sla"
@@ -78,7 +123,11 @@
     exec = "bambu-studio %U";
     terminal = false;
     icon = "bambu-studio";
-    categories = [ "Graphics" "3DGraphics" "Engineering" ];
+    categories = [
+      "Graphics"
+      "3DGraphics"
+      "Engineering"
+    ];
     mimeType = [
       "model/stl"
       "model/3mf"
@@ -95,28 +144,114 @@
     enable = true;
     defaultApplications = {
       # STL files - fstl is default, but all three listed so handlr selector works
-      "model/stl" = [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
-      "application/vnd.ms-pki.stl" = [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
-      "application/sla" = [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
-      "application/x-navistyle" = [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
-      
+      "model/stl" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
+      "application/vnd.ms-pki.stl" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
+      "application/sla" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
+      "application/x-navistyle" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
+
       # Lychee Slicer files
       "application/x-lychee-slicer" = "lychee-slicer.desktop";
-      
+
       # UVTools files
       "application/x-cxdlpv4" = "uvtools.desktop";
-      
+
+      # Web browser
+      "x-scheme-handler/http" = "google-chrome.desktop";
+      "x-scheme-handler/https" = "google-chrome.desktop";
+      "text/html" = "google-chrome.desktop";
+      "application/xhtml+xml" = "google-chrome.desktop";
+
       # PDF
       "application/pdf" = "google-chrome.desktop";
       "application/x-pdf" = "google-chrome.desktop";
+
+      # File manager
+      "inode/directory" = "yazi.desktop";
+
+      # Text editor
+      "text/plain" = "nvim-kitty.desktop";
+
+      # Music — COSMIC Media Player
+      "audio/mpeg" = "com.system76.CosmicPlayer.desktop";
+      "audio/ogg" = "com.system76.CosmicPlayer.desktop";
+      "audio/flac" = "com.system76.CosmicPlayer.desktop";
+      "audio/x-flac" = "com.system76.CosmicPlayer.desktop";
+      "audio/wav" = "com.system76.CosmicPlayer.desktop";
+      "audio/x-wav" = "com.system76.CosmicPlayer.desktop";
+      "audio/aac" = "com.system76.CosmicPlayer.desktop";
+      "audio/mp4" = "com.system76.CosmicPlayer.desktop";
+      "audio/x-m4a" = "com.system76.CosmicPlayer.desktop";
+      "audio/opus" = "com.system76.CosmicPlayer.desktop";
+      "audio/x-vorbis+ogg" = "com.system76.CosmicPlayer.desktop";
+      "audio/x-opus+ogg" = "com.system76.CosmicPlayer.desktop";
+      "audio/webm" = "com.system76.CosmicPlayer.desktop";
+      "audio/x-pn-realaudio" = "com.system76.CosmicPlayer.desktop";
+
+      # Video — COSMIC Media Player
+      "video/mp4" = "com.system76.CosmicPlayer.desktop";
+      "video/x-matroska" = "com.system76.CosmicPlayer.desktop";
+      "video/mpeg" = "com.system76.CosmicPlayer.desktop";
+      "video/webm" = "com.system76.CosmicPlayer.desktop";
+      "video/quicktime" = "com.system76.CosmicPlayer.desktop";
+      "video/x-msvideo" = "com.system76.CosmicPlayer.desktop";
+      "video/ogg" = "com.system76.CosmicPlayer.desktop";
+      "video/x-flv" = "com.system76.CosmicPlayer.desktop";
+      "video/x-ms-wmv" = "com.system76.CosmicPlayer.desktop";
+      "video/mp2t" = "com.system76.CosmicPlayer.desktop";
+      "video/3gpp" = "com.system76.CosmicPlayer.desktop";
+      "video/3gpp2" = "com.system76.CosmicPlayer.desktop";
+      "video/x-ogm+ogg" = "com.system76.CosmicPlayer.desktop";
+      "video/x-theora+ogg" = "com.system76.CosmicPlayer.desktop";
+      "video/divx" = "com.system76.CosmicPlayer.desktop";
+
+      # Photos — Noctua
+      "image/png" = "org.codeberg.wfx.Noctua.desktop";
+      "image/jpeg" = "org.codeberg.wfx.Noctua.desktop";
+      "image/gif" = "org.codeberg.wfx.Noctua.desktop";
+      "image/webp" = "org.codeberg.wfx.Noctua.desktop";
+      "image/bmp" = "org.codeberg.wfx.Noctua.desktop";
+      "image/tiff" = "org.codeberg.wfx.Noctua.desktop";
+      "image/svg+xml" = "org.codeberg.wfx.Noctua.desktop";
     };
-    
+
     # Additional associations allow multiple handlers for same file type
     associations.added = {
-      "model/stl" = [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
-      "application/vnd.ms-pki.stl" = [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
-      "application/sla" = [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
-      "application/x-navistyle" = [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
+      "model/stl" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
+      "application/vnd.ms-pki.stl" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
+      "application/sla" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
+      "application/x-navistyle" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
     };
   };
 
@@ -153,9 +288,8 @@
   '';
 
   # Force MIME database update on activation
-  home.activation.updateMimeDatabase = config.lib.dag.entryAfter ["writeBoundary"] ''
+  home.activation.updateMimeDatabase = config.lib.dag.entryAfter [ "writeBoundary" ] ''
     run ${pkgs.shared-mime-info}/bin/update-mime-database $HOME/.local/share/mime
     run ${pkgs.desktop-file-utils}/bin/update-desktop-database $HOME/.local/share/applications
   '';
 }
-

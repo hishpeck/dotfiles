@@ -37,8 +37,10 @@
 
     # Initialize plugins
     initLua = ''
+      require("git"):setup()
+
       -- Setup relative-motions plugin
-      require("relative-motions"):setup({ 
+      require("relative-motions"):setup({
         show_numbers = "relative_absolute",
         show_motion = true 
       })
@@ -79,6 +81,10 @@
       manager = {
         show_hidden = true;
         ratio = [ 1 4 3 ];
+      };
+
+      preview = {
+        cache_dir = "";  # "" = $XDG_CACHE_HOME/yazi; set an absolute path to pin it
       };
 
       plugin = {

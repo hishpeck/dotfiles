@@ -201,6 +201,19 @@ in
 
   environment.pathsToLink = [ "/share/thumbnailers" ];
 
+  # cosmic-player's nixpkgs wrapper fails to capture GST_PLUGIN_SYSTEM_PATH_1_0
+  # at build time (only dev outputs are in buildInputs, so the setup hooks don't run).
+  # Set it explicitly so playbin and other elements are discoverable at runtime.
+  environment.sessionVariables.GST_PLUGIN_SYSTEM_PATH_1_0 = pkgs.lib.makeSearchPath "lib/gstreamer-1.0" (
+    with pkgs.gst_all_1;
+    [
+      gstreamer.out
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+    ]
+  );
+
   environment.systemPackages = [
     pkgs.cosmic-ext-applet-minimon
     pkgs.cosmic-ext-applet-privacy-indicator

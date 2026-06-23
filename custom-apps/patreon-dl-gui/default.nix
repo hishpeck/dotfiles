@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation rec {
   pname = "patreon-dl-gui";
-  version = "2.7.1";
+  version = "2.10.0";
 
   src = fetchurl {
     url =
       "https://github.com/patrickkfkan/patreon-dl-gui/releases/download/v${version}/${pname}_${version}_amd64.deb";
-    hash = "sha256-LtzrahP6HwfgeJWUj5XXsPcpIo2Oi3VzQur7nyLfrqk=";
+    hash = "sha256-Z08iZGwUb5KNbNdQFMF3MSUN9bgOchafvY26MNYrsjk=";
   };
 
   nativeBuildInputs = [

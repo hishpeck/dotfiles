@@ -4,10 +4,9 @@
   nixpkgs.config.allowUnfree = true;
 
   nix.settings = {
-    experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
+    max-substitution-jobs = 128; # Default is 16
+    http-connections = 128; # Default is 25
+    experimental-features = [ "nix-command" "flakes" ];
     auto-optimise-store = true;
     substituters = [
       "https://cache.nixos.org/"
@@ -30,16 +29,12 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  swapDevices = [
-    {
-      device = "/var/lib/swapfile";
-      size = 16384;
-    }
-  ];
+  swapDevices = [{
+    device = "/var/lib/swapfile";
+    size = 16384;
+  }];
 
-  boot.kernel.sysctl = {
-    "vm.swappiness" = 10;
-  };
+  boot.kernel.sysctl = { "vm.swappiness" = 10; };
 
   networking.networkmanager.enable = true;
 
@@ -75,13 +70,7 @@
   users.users.ac = {
     isNormalUser = true;
     description = "ac";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "docker"
-      "video"
-      "render"
-    ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "video" "render" ];
     shell = pkgs.zsh;
   };
 
@@ -101,7 +90,10 @@
   # Auto-mount removable media
   services.udisks2.enable = true;
 
-  environment.variables = { NIXOS_OZONE_WL = "1"; };
+  environment.variables = {
+    NIXOS_OZONE_WL = "1";
+    FLAKE = "$HOME/dotfiles";
+  };
 
   environment.systemPackages = with pkgs; [
     vim
@@ -111,6 +103,9 @@
     home-manager
     nps
     cachix
+    nh
+    nix-output-monitor
+    nvd
   ];
 
   boot.loader.systemd-boot.enable = false;

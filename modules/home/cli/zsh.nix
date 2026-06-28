@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ config, pkgs, lib, ... }:
 
 {
   programs.zsh = {
@@ -14,12 +9,7 @@
 
     oh-my-zsh = {
       enable = true;
-      plugins = [
-        "git"
-        "web-search"
-        "docker"
-        "fzf"
-      ];
+      plugins = [ "git" "web-search" "docker" "fzf" ];
     };
 
     shellAliases = {
@@ -31,10 +21,11 @@
       config-nvim = "nvim ~/dotfiles/config/nvim";
       config-zsh = "nvim ~/dotfiles/modules/home/cli/zsh.nix";
       nico = "nvim ~/dotfiles";
-      hms = "home-manager switch --flake ~/dotfiles#$(hostname)";
-      hms-update = "cd ~/dotfiles && nix flake update && hms && cd -";
-      niup = "sudo nix flake update --flake ~/dotfiles && sudo nixos-rebuild switch --flake ~/dotfiles#$(hostname)";
-      nipu = "nix path-info --recursive /run/current-system | cachix push hishpeck";
+      hms = "nh home switch ~/dotfiles";
+      hms-update = "nh home switch --update ~/dotfiles";
+      niup = "nh os switch --update ~/dotfiles";
+      nipu =
+        "nix path-info --recursive /run/current-system | cachix push hishpeck";
       docker-compose = "docker compose";
       lagi = "lazygit";
       lado = "lazydocker";

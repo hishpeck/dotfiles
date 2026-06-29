@@ -45,7 +45,7 @@ modules/
     desktop/
       cosmic-theme.nix        COSMIC DE appearance — Catppuccin Builder config files (light + dark)
     private.nix               Personal apps: telegram, discord, steam, blender, 3D printing tools
-    work.nix                  Work apps: slack, notion, zoom
+    work.nix                  Work apps: slack, notion
 ```
 
 ## Key Design Decisions

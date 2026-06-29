@@ -8,7 +8,6 @@
   home.packages = with pkgs; [
     slack
     notion
-    zoom-us
     claude-code
 
     font-adobe-100dpi

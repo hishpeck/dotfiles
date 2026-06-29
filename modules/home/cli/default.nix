@@ -69,7 +69,7 @@ in
     lazydocker
     zoxide
 
-    (php84.withExtensions (
+    (php85.withExtensions (
       { enabled, all }:
       enabled
       ++ [
@@ -82,7 +82,7 @@ in
         all.memcached
       ]
     ))
-    php84Packages.composer
+    php85Packages.composer
     symfony-cli
 
     mariadb

@@ -105,7 +105,7 @@
 
   environment.variables = {
     NIXOS_OZONE_WL = "1";
-    FLAKE = "$HOME/dotfiles";
+    NH_FLAKE = "$HOME/dotfiles";
     NIXPKGS_ALLOW_UNFREE = "1";
   };
 

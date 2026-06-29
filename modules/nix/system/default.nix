@@ -6,7 +6,10 @@
   nix.settings = {
     max-substitution-jobs = 128; # Default is 16
     http-connections = 128; # Default is 25
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
     auto-optimise-store = true;
     substituters = [
       "https://cache.nixos.org/"
@@ -29,12 +32,16 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  swapDevices = [{
-    device = "/var/lib/swapfile";
-    size = 16384;
-  }];
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 16384;
+    }
+  ];
 
-  boot.kernel.sysctl = { "vm.swappiness" = 10; };
+  boot.kernel.sysctl = {
+    "vm.swappiness" = 10;
+  };
 
   networking.networkmanager.enable = true;
 
@@ -70,7 +77,13 @@
   users.users.ac = {
     isNormalUser = true;
     description = "ac";
-    extraGroups = [ "networkmanager" "wheel" "docker" "video" "render" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+      "video"
+      "render"
+    ];
     shell = pkgs.zsh;
   };
 
@@ -93,6 +106,7 @@
   environment.variables = {
     NIXOS_OZONE_WL = "1";
     FLAKE = "$HOME/dotfiles";
+    NIXPKGS_ALLOW_UNFREE = "1";
   };
 
   environment.systemPackages = with pkgs; [

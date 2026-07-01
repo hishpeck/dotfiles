@@ -27,6 +27,6 @@ in pkgs.appimageTools.wrapType2 {
     done
 
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname} --no-sandbox %U'
+      --replace 'Exec=AppRun --no-sandbox %U' "Exec=$out/bin/${pname} --no-sandbox %U"
   '';
 }

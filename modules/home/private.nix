@@ -6,6 +6,9 @@
 }:
 
 {
+  # vesktop's build depends on pnpm_10_29_2 which is marked insecure (CVEs in the build tool, not vesktop itself)
+  nixpkgs.config.permittedInsecurePackages = [ "pnpm-10.29.2" ];
+
   home.packages = with pkgs; [
     telegram-desktop
     vesktop

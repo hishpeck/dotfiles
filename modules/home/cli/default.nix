@@ -57,7 +57,6 @@ in
   programs.fzf.enable = true;
 
   home.packages = with pkgs; [
-    opencode
     gh
     weave
 
@@ -109,6 +108,5 @@ in
 
   xdg.configFile = {
     "mcphub".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/mcphub";
-    "opencode".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/opencode";
   };
 }

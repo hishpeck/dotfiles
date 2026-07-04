@@ -23,6 +23,10 @@
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    antigravity-nix = {
+      url = "github:jacopone/antigravity-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     cosmic-ctl.url = "github:cosmic-utils/cosmic-ctl";
@@ -35,9 +39,18 @@
       user = "ac";
 
       nixosHosts = [
-        { name = "ac-zenbook-2022"; system = "x86_64-linux"; }
-        { name = "ac-zenbook-2025"; system = "x86_64-linux"; }
-        { name = "ac-main-pc";      system = "x86_64-linux"; }
+        {
+          name = "ac-zenbook-2022";
+          system = "x86_64-linux";
+        }
+        {
+          name = "ac-zenbook-2025";
+          system = "x86_64-linux";
+        }
+        {
+          name = "ac-main-pc";
+          system = "x86_64-linux";
+        }
       ];
 
       sharedHomeModules = [
@@ -100,7 +113,7 @@
 
     in {
       nixosConfigurations = builtins.listToAttrs (map (h: {
-        name  = h.name;
+        name = h.name;
         value = mkNixOS h.name h.system;
       }) nixosHosts);
 

@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   # vesktop's build depends on pnpm_10_29_2 which is marked insecure (CVEs in the build tool, not vesktop itself)
@@ -26,41 +21,40 @@
     shared-mime-info
     desktop-file-utils
     ncdu
+    inputs.antigravity-nix.packages.${pkgs.system}.google-antigravity-cli
   ];
 
   # Vesktop (Discord) — Catppuccin Latte theme
-  xdg.configFile."vesktop/themes/catppuccin-${config.catppuccin.flavor}.theme.css".text = ''
-    /**
-     * @name Catppuccin ${
-       lib.strings.toUpper (builtins.substring 0 1 config.catppuccin.flavor)
-       + builtins.substring 1 (-1) config.catppuccin.flavor
-     }
-     * @author winston#0001
-     * @version 0.2.0
-     * @description Soothing pastel theme for Discord
-     **/
-    @import url("https://catppuccin.github.io/discord/dist/catppuccin-${config.catppuccin.flavor}.theme.css");
-  '';
+  xdg.configFile."vesktop/themes/catppuccin-${config.catppuccin.flavor}.theme.css".text =
+    ''
+      /**
+       * @name Catppuccin ${
+         lib.strings.toUpper (builtins.substring 0 1 config.catppuccin.flavor)
+         + builtins.substring 1 (-1) config.catppuccin.flavor
+       }
+       * @author winston#0001
+       * @version 0.2.0
+       * @description Soothing pastel theme for Discord
+       **/
+      @import url("https://catppuccin.github.io/discord/dist/catppuccin-${config.catppuccin.flavor}.theme.css");
+    '';
 
   # Seed vesktop settings only on first run — Vesktop manages this file at runtime
-  home.activation.seedVesktopSettings = config.lib.dag.entryAfter [ "writeBoundary" ] ''
-    settings="$HOME/.config/vesktop/settings/settings.json"
-    if [ ! -f "$settings" ]; then
-      mkdir -p "$(dirname "$settings")"
-      echo '{"enabledThemes":["catppuccin-${config.catppuccin.flavor}.theme.css"],"discordBranch":"stable"}' > "$settings"
-    fi
-  '';
+  home.activation.seedVesktopSettings =
+    config.lib.dag.entryAfter [ "writeBoundary" ] ''
+      settings="$HOME/.config/vesktop/settings/settings.json"
+      if [ ! -f "$settings" ]; then
+        mkdir -p "$(dirname "$settings")"
+        echo '{"enabledThemes":["catppuccin-${config.catppuccin.flavor}.theme.css"],"discordBranch":"stable"}' > "$settings"
+      fi
+    '';
 
   xdg.desktopEntries.nvim-kitty = {
     name = "Neovim";
     genericName = "Text Editor";
     exec = "kitty -e nvim %F";
     terminal = false;
-    categories = [
-      "Utility"
-      "TextEditor"
-      "Development"
-    ];
+    categories = [ "Utility" "TextEditor" "Development" ];
     mimeType = [
       "text/plain"
       "text/english"
@@ -85,11 +79,7 @@
     comment = "Ultra-fast viewer for 3D STL files";
     exec = "fstl %f"; # The %f tells the file manager to pass the file path
     terminal = false;
-    categories = [
-      "Graphics"
-      "3DGraphics"
-      "Viewer"
-    ];
+    categories = [ "Graphics" "3DGraphics" "Viewer" ];
     mimeType = [
       "model/stl"
       "application/vnd.ms-pki.stl"
@@ -105,11 +95,7 @@
     exec = "lychee-slicer %U";
     terminal = false;
     icon = "lycheeslicer";
-    categories = [
-      "Graphics"
-      "3DGraphics"
-      "Engineering"
-    ];
+    categories = [ "Graphics" "3DGraphics" "Engineering" ];
     mimeType = [
       "application/x-lychee-slicer" # .lys files
       "model/stl"
@@ -126,11 +112,7 @@
     exec = "bambu-studio %U";
     terminal = false;
     icon = "bambu-studio";
-    categories = [
-      "Graphics"
-      "3DGraphics"
-      "Engineering"
-    ];
+    categories = [ "Graphics" "3DGraphics" "Engineering" ];
     mimeType = [
       "model/stl"
       "model/3mf"
@@ -147,26 +129,14 @@
     enable = true;
     defaultApplications = {
       # STL files - fstl is default, but all three listed so handlr selector works
-      "model/stl" = [
-        "fstl.desktop"
-        "lychee-slicer.desktop"
-        "bambu-studio.desktop"
-      ];
-      "application/vnd.ms-pki.stl" = [
-        "fstl.desktop"
-        "lychee-slicer.desktop"
-        "bambu-studio.desktop"
-      ];
-      "application/sla" = [
-        "fstl.desktop"
-        "lychee-slicer.desktop"
-        "bambu-studio.desktop"
-      ];
-      "application/x-navistyle" = [
-        "fstl.desktop"
-        "lychee-slicer.desktop"
-        "bambu-studio.desktop"
-      ];
+      "model/stl" =
+        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
+      "application/vnd.ms-pki.stl" =
+        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
+      "application/sla" =
+        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
+      "application/x-navistyle" =
+        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
 
       # Lychee Slicer files
       "application/x-lychee-slicer" = "lychee-slicer.desktop";
@@ -235,26 +205,14 @@
 
     # Additional associations allow multiple handlers for same file type
     associations.added = {
-      "model/stl" = [
-        "fstl.desktop"
-        "lychee-slicer.desktop"
-        "bambu-studio.desktop"
-      ];
-      "application/vnd.ms-pki.stl" = [
-        "fstl.desktop"
-        "lychee-slicer.desktop"
-        "bambu-studio.desktop"
-      ];
-      "application/sla" = [
-        "fstl.desktop"
-        "lychee-slicer.desktop"
-        "bambu-studio.desktop"
-      ];
-      "application/x-navistyle" = [
-        "fstl.desktop"
-        "lychee-slicer.desktop"
-        "bambu-studio.desktop"
-      ];
+      "model/stl" =
+        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
+      "application/vnd.ms-pki.stl" =
+        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
+      "application/sla" =
+        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
+      "application/x-navistyle" =
+        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
     };
   };
 
@@ -291,8 +249,9 @@
   '';
 
   # Force MIME database update on activation
-  home.activation.updateMimeDatabase = config.lib.dag.entryAfter [ "writeBoundary" ] ''
-    run ${pkgs.shared-mime-info}/bin/update-mime-database $HOME/.local/share/mime
-    run ${pkgs.desktop-file-utils}/bin/update-desktop-database $HOME/.local/share/applications
-  '';
+  home.activation.updateMimeDatabase =
+    config.lib.dag.entryAfter [ "writeBoundary" ] ''
+      run ${pkgs.shared-mime-info}/bin/update-mime-database $HOME/.local/share/mime
+      run ${pkgs.desktop-file-utils}/bin/update-desktop-database $HOME/.local/share/applications
+    '';
 }

@@ -66,7 +66,7 @@ modules/
 
 ## Theme
 
-- Catppuccin **Latte** (light) throughout — `flavor` and `accent` are set once in `theme.nix` as `catppuccin.flavor` / `catppuccin.accent` and propagate automatically to all programs via `catppuccin/nix` Home Manager module or manual imports
+- Catppuccin **Latte** (light) throughout — `flavor` and `accent` are set once in `modules/theme-values.nix` as plain Nix values and imported by both `modules/home/theme.nix` (HM) and `modules/nix/system/default.nix` (NixOS). They propagate automatically to all programs via `catppuccin/nix` modules.
 - Current accent: **pink**
 - Font: **Lato** (sans), **FiraCode Nerd Font** (mono)
 - Cursor: **Bibata-Modern-Ice**
@@ -74,7 +74,8 @@ modules/
 
 ### Theming architecture
 
-- `modules/home/theme.nix` — single source of truth: sets `catppuccin.flavor`, `catppuccin.accent`, Stylix base16 scheme, fonts, cursor. Imports `cosmic-theme.nix`.
+- `modules/theme-values.nix` — single source of truth for `flavor` and `accent` (plain Nix attrset, not a module). Imported by both `theme.nix` and `system/default.nix`.
+- `modules/home/theme.nix` — HM theming: reads flavor/accent from `theme-values.nix`, sets Stylix base16 scheme, fonts, cursor. Imports `cosmic-theme.nix`.
 - `catppuccin/nix` HM module propagates flavor+accent to: bat, btop, fzf, kitty, tmux, yazi, lazygit, chromium automatically.
 - Programs that need special handling:
   - **nvim** — flavor+accent injected as `_G.catppuccin_flavor` / `_G.catppuccin_accent` Lua globals in `nvim.nix`; read in `config/nvim/lua/hishpeck/plugins/colorscheme.lua`

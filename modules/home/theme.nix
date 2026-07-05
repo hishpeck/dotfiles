@@ -1,6 +1,6 @@
 { pkgs, ... }:
 let
-  flavor = "latte";
+  inherit (import ../theme-values.nix) flavor accent;
 in
 {
   imports = [ ./desktop/cosmic-theme.nix ];
@@ -43,8 +43,7 @@ in
   catppuccin = {
     enable = true;
     autoEnable = true;
-    inherit flavor;
-    accent = "pink";
+    inherit flavor accent;
 
     chromium.enable = true;
     lazygit.enable = true;

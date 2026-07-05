@@ -1,5 +1,39 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
+let
+  inherit (import ../../theme-values.nix) flavor accent;
 
+  nixosCatppuccinPlymouth = pkgs.runCommand "nixos-catppuccin-plymouth" {} ''
+    mkdir -p $out/share/plymouth/themes/nixos-catppuccin
+    cat > $out/share/plymouth/themes/nixos-catppuccin/nixos-catppuccin.plymouth << EOF
+[Plymouth Theme]
+Name=NixOS Catppuccin
+Description=Spinning NixOS logo on Catppuccin Mocha background
+ModuleName=two-step
+
+[two-step]
+Font=Cantarell 20
+ImageDir=${pkgs.nixos-bgrt-plymouth}/share/plymouth/themes/nixos-bgrt/images
+HorizontalAlignment=.5
+VerticalAlignment=.5
+Transition=none
+TransitionDuration=0.0
+BackgroundStartColor=0x1e1e2e
+BackgroundEndColor=0x1e1e2e
+ProgressBarBackgroundColor=0x45475a
+ProgressBarForegroundColor=0xf5c2e7
+MessageBelowAnimation=true
+
+[boot-up]
+UseEndAnimation=false
+
+[shutdown]
+UseEndAnimation=false
+
+[reboot]
+UseEndAnimation=false
+EOF
+  '';
+in
 {
   nixpkgs.config.allowUnfree = true;
 
@@ -101,7 +135,7 @@
   };
 
   # Auto-mount removable media
-  services.udisks2.enable = true;
+  # services.udisks2.enable = true;
 
   environment.variables = {
     NIXOS_OZONE_WL = "1";
@@ -122,13 +156,21 @@
     nvd
   ];
 
-  boot.loader.systemd-boot.enable = false;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.timeout = 0;
 
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "nodev";
-  boot.loader.grub.efiSupport = true;
+  boot.kernelParams = [ "quiet" "splash" ];
+  boot.initrd.systemd.enable = true;
+  boot.plymouth = {
+    enable = true;
+    theme = "nixos-catppuccin";
+    themePackages = [ nixosCatppuccinPlymouth ];
+  };
 
-  boot.loader.grub.theme = pkgs.catppuccin-grub;
-
-  boot.loader.grub.useOSProber = true;
+  catppuccin = {
+    enable = true;
+    autoEnable = false;
+    inherit flavor accent;
+    limine.enable = true;
+  };
 }

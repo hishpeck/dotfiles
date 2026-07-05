@@ -52,15 +52,16 @@ modules/
 
 - **`modules/nix/` vs `modules/home/`**: Hard split between NixOS system modules and Home Manager modules. Never mix them. If a domain (e.g. `gui`, `work`) needs both, there are two separate files at the same path under each tree.
 - **`nixosHosts` list in `flake.nix`**: Single source of truth for NixOS machines. `nixosConfigurations` is derived from it via `builtins.listToAttrs`. Adding a new NixOS host means adding one entry here only. Non-NixOS generic profiles (`x84_64`, `aarch64`) are added to `homeConfigurations` separately.
-- **`nix-update`**: The only way to apply changes on NixOS machines — rebuilds the full NixOS system including the Home Manager module. `hms` (`home-manager switch`) is standalone-only and must not be run on NixOS hosts where HM is managed as a NixOS module.
+- **`niup`** (`nh os switch --update ~/dotfiles`): The only way to apply changes on NixOS machines — rebuilds the full NixOS system including the Home Manager module, and updates all flake inputs. Use `niup` in instructions, never `nix-update`.
+- **`hms`** (`nh home switch ~/dotfiles`): standalone Home Manager switch — must not be run on NixOS hosts where HM is managed as a NixOS module. `hms-update` also updates flake inputs before switching.
 
 ## Hosts Summary
 
 | Host            | Arch    | GPU   | Form factor   | Notes                                          |
 | --------------- | ------- | ----- | ------------- | ---------------------------------------------- |
-| ac-main-pc      | x86_64  | AMD   | Desktop       | cloudflare-warp, sshfs Pi5 mount, work+private |
-| ac-zenbook-2025 | x86_64  | Intel | Laptop        | cloudflare-warp, work only                     |
-| ac-zenbook-2022 | x86_64  | AMD   | Laptop        | private only                                   |
+| ac-main-pc      | x86_64  | AMD   | Desktop       | cloudflare-warp, sshfs Pi5 mount, zerotierone, work+private |
+| ac-zenbook-2025 | x86_64  | Intel | Laptop        | cloudflare-warp, work only                                  |
+| ac-zenbook-2022 | x86_64  | AMD   | Laptop        | zerotierone, private only                                   |
 | aarch64         | aarch64 | —     | Generic Linux | HM-only, genericLinux target                   |
 | x84_64          | x86_64  | —     | Generic Linux | HM-only, genericLinux target                   |
 

@@ -66,6 +66,9 @@
       unbind C-Space
       bind C-Space send-prefix
 
+      # Show project directory name in window title when running nvim
+      set -g automatic-rename-format '#{?#{==:#{pane_current_command},nvim},#{b:pane_current_path},#{pane_current_command}}'
+
       # Set base index for windows and panes
       set -g base-index 1
       set -g pane-base-index 1

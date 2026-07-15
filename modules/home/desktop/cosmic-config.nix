@@ -138,6 +138,12 @@ in
               modifiers: [
                   Super,
               ],
+              key: "v",
+          ): Spawn("walker -m clipboard"),
+          (
+              modifiers: [
+                  Super,
+              ],
               key: "Return",
           ): Disable,
           (
@@ -179,7 +185,16 @@ in
     # ── Window rules ────────────────────────────────────────────────────────────
     ".config/cosmic/com.system76.CosmicSettings.WindowRules/v1/tiling_exception_custom".text = ''
       [
-          (appid: "google-chrome", titles: ["Picture in Picture"]),
+          (
+              appid: "google-chrome",
+              title: "Picture in Picture",
+              enabled: true,
+          ),
+          (
+              appid: "google-chrome",
+              title: "^Meet – [^-]*$",
+              enabled: true,
+          ),
       ]'';
 
     # ── Compositor ──────────────────────────────────────────────────────────────

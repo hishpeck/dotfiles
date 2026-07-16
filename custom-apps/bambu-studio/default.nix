@@ -1,12 +1,13 @@
-{ pkgs ? import <nixpkgs> { } }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 let
-  version = "02.06.01.55";
+  version = "02.07.01.62";
   pname = "bambu-studio";
 
   src = pkgs.fetchurl {
-    url =
-      "https://github.com/bambulab/BambuStudio/releases/download/v${version}/BambuStudio_ubuntu24.04-v${version}-20260429100944.AppImage";
+    url = "https://github.com/bambulab/BambuStudio/releases/download/v${version}/BambuStudio_ubuntu24.04-v${version}-20260429100944.AppImage";
     sha256 = "4c415078dd96cb72258730cceb5c36f7d0aeb2f24b629122169427748bc56c3c";
   };
 
@@ -15,8 +16,8 @@ let
   unwrapped = pkgs.appimageTools.wrapType2 {
     inherit pname version src;
 
-    extraPkgs = pkgs:
-      with pkgs; [
+    extraPkgs =
+      pkgs: with pkgs; [
         openssl_3
         tzdata
         cacert
@@ -83,7 +84,8 @@ let
     '';
   };
 
-in pkgs.symlinkJoin {
+in
+pkgs.symlinkJoin {
   name = pname;
   paths = [ unwrapped ];
   nativeBuildInputs = [ pkgs.makeWrapper ];

@@ -2,7 +2,7 @@
 
 pkgs.rustPlatform.buildRustPackage rec {
   pname = "weave";
-  version = "0.2.6";
+  version = "0.3.6";
 
   src = pkgs.fetchFromGitHub {
     owner = "Ataraxy-Labs";

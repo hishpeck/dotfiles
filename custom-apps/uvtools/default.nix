@@ -1,15 +1,15 @@
 { pkgs, ... }:
 
 let
-  version = "6.0.1";
+  version = "6.1.0";
 
   src = pkgs.fetchzip {
-    url =
-      "https://github.com/sn4k3/UVtools/releases/download/v${version}/UVtools_linux-x64_v${version}.zip";
+    url = "https://github.com/sn4k3/UVtools/releases/download/v${version}/UVtools_linux-x64_v${version}.zip";
     hash = "sha256-BfYEhFAeWup0yDeb41hKiq7MEJCwp9iUnXJjq+Aogl8=";
     stripRoot = false;
   };
-in pkgs.stdenv.mkDerivation {
+in
+pkgs.stdenv.mkDerivation {
   pname = "uvtools";
   inherit version src;
 
@@ -77,9 +77,11 @@ in pkgs.stdenv.mkDerivation {
       desktopName = "UVTools";
       exec = "uvtools %f";
       icon = "uvtools";
-      comment =
-        "MSLA/DLP, File analysis, calibration, repair, conversion and manipulation";
-      categories = [ "Graphics" "Engineering" ];
+      comment = "MSLA/DLP, File analysis, calibration, repair, conversion and manipulation";
+      categories = [
+        "Graphics"
+        "Engineering"
+      ];
       mimeTypes = [ "application/x-cxdlpv4" ];
     })
   ];

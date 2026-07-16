@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 
 let
   wallpaper = ../../../wallpapers/takashi-miyazaki.jpg;
@@ -42,7 +42,7 @@ let
 
 in
 {
-  home.file = {
+  home.file = lib.mapAttrs (name: value: value // { force = true; }) {
     # ── Wallpaper ───────────────────────────────────────────────────────────────
     ".config/cosmic/com.system76.CosmicBackground/v1/all".text = ''
       (

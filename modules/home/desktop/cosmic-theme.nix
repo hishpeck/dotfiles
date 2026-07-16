@@ -257,8 +257,9 @@ in
       fi
     '';
 
-    home.file =
+    home.file = lib.mapAttrs (name: value: value // { force = true; }) (
       (mkBuilder "Light" palettes.${lightFlavor} lightSemantic lightAccent)
-      // (mkBuilder "Dark" palettes.${darkFlavor} darkSemantic darkAccent);
+      // (mkBuilder "Dark" palettes.${darkFlavor} darkSemantic darkAccent)
+    );
   };
 }

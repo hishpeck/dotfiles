@@ -8,10 +8,10 @@ pkgs.rustPlatform.buildRustPackage rec {
     owner = "Ataraxy-Labs";
     repo = "weave";
     rev = "v${version}";
-    hash = "sha256-XlSjdyKG/EQMFX3Ac/8yf7mHlD3Hb19MNMvRqmefg0A=";
+    hash = "sha256-VlJUXAXlWpFGlJgAEhhdeX35AZV/G/IJlXEjU/7SfJg=";
   };
 
-  cargoHash = "sha256-NtoRGvF8FWcQkrmNbeut1cU66ob8iNVpl3WJ35avDBk=";
+  cargoHash = "sha256-ZPe9l3S88idwYrayT5mmagW/VdA0VlUHTDXVyHoOF1w=";
 
   nativeBuildInputs = with pkgs; [
     pkg-config

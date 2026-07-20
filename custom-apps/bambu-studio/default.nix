@@ -1,13 +1,12 @@
-{
-  pkgs ? import <nixpkgs> { },
-}:
+{ pkgs ? import <nixpkgs> { }, }:
 
 let
   version = "02.07.01.62";
   pname = "bambu-studio";
 
   src = pkgs.fetchurl {
-    url = "https://github.com/bambulab/BambuStudio/releases/download/v${version}/BambuStudio_ubuntu24.04-v${version}-20260429100944.AppImage";
+    url =
+      "https://github.com/bambulab/BambuStudio/releases/download/v${version}/BambuStudio_ubuntu24.04-v${version}-20260616195227.AppImage";
     sha256 = "4c415078dd96cb72258730cceb5c36f7d0aeb2f24b629122169427748bc56c3c";
   };
 
@@ -16,8 +15,8 @@ let
   unwrapped = pkgs.appimageTools.wrapType2 {
     inherit pname version src;
 
-    extraPkgs =
-      pkgs: with pkgs; [
+    extraPkgs = pkgs:
+      with pkgs; [
         openssl_3
         tzdata
         cacert
@@ -84,37 +83,38 @@ let
     '';
   };
 
-in
-pkgs.symlinkJoin {
+in pkgs.symlinkJoin {
   name = pname;
   paths = [ unwrapped ];
   nativeBuildInputs = [ pkgs.makeWrapper ];
   postBuild = ''
     mv $out/bin/${pname} $out/bin/${pname}-unwrapped
-    ln -s ${pkgs.writeShellScript pname ''
-      # Workaround for BambuStudio single-instance D-Bus case mismatch bug:
-      # The second invocation sends to com.bambulab... (lowercase) but the running
-      # instance registers as com.BambuLab... (camelCase). We detect the running
-      # instance via D-Bus and send directly to the correct name.
-      DBUS_NAME=$(${pkgs.dbus}/bin/dbus-send --session \
-        --dest=org.freedesktop.DBus --type=method_call --print-reply \
-        /org/freedesktop/DBus org.freedesktop.DBus.ListNames 2>/dev/null \
-        | grep -o 'com.BambuLab.BambuStudio.InstanceCheck.Object[0-9]*')
+    ln -s ${
+      pkgs.writeShellScript pname ''
+        # Workaround for BambuStudio single-instance D-Bus case mismatch bug:
+        # The second invocation sends to com.bambulab... (lowercase) but the running
+        # instance registers as com.BambuLab... (camelCase). We detect the running
+        # instance via D-Bus and send directly to the correct name.
+        DBUS_NAME=$(${pkgs.dbus}/bin/dbus-send --session \
+          --dest=org.freedesktop.DBus --type=method_call --print-reply \
+          /org/freedesktop/DBus org.freedesktop.DBus.ListNames 2>/dev/null \
+          | grep -o 'com.BambuLab.BambuStudio.InstanceCheck.Object[0-9]*')
 
-      if [ -n "$DBUS_NAME" ] && [ $# -gt 0 ]; then
-        HASH=$(echo "$DBUS_NAME" | grep -o '[0-9]*$')
-        MSG="${unwrapped}/bin/${pname}"
-        for f in "$@"; do
-          MSG="$MSG;\"$f\""
-        done
-        exec ${pkgs.dbus}/bin/dbus-send --session \
-          --dest="com.BambuLab.BambuStudio.InstanceCheck.Object$HASH" \
-          "/com/BambuLab/BambuStudio/InstanceCheck/Object$HASH" \
-          "com.BambuLab.BambuStudio.InstanceCheck.Object$HASH.AnotherInstance" \
-          "string:$MSG"
-      else
-        exec ${unwrapped}/bin/${pname} "$@"
-      fi
-    ''} $out/bin/${pname}
+        if [ -n "$DBUS_NAME" ] && [ $# -gt 0 ]; then
+          HASH=$(echo "$DBUS_NAME" | grep -o '[0-9]*$')
+          MSG="${unwrapped}/bin/${pname}"
+          for f in "$@"; do
+            MSG="$MSG;\"$f\""
+          done
+          exec ${pkgs.dbus}/bin/dbus-send --session \
+            --dest="com.BambuLab.BambuStudio.InstanceCheck.Object$HASH" \
+            "/com/BambuLab/BambuStudio/InstanceCheck/Object$HASH" \
+            "com.BambuLab.BambuStudio.InstanceCheck.Object$HASH.AnotherInstance" \
+            "string:$MSG"
+        else
+          exec ${unwrapped}/bin/${pname} "$@"
+        fi
+      ''
+    } $out/bin/${pname}
   '';
 }

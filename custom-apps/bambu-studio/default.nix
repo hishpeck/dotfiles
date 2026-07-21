@@ -7,7 +7,7 @@ let
   src = pkgs.fetchurl {
     url =
       "https://github.com/bambulab/BambuStudio/releases/download/v${version}/BambuStudio_ubuntu24.04-v${version}-20260616195227.AppImage";
-    sha256 = "4c415078dd96cb72258730cceb5c36f7d0aeb2f24b629122169427748bc56c3c";
+    sha256 = "sha256-+pi2CFMt+7uysJMUg6rEHlf7GcF1osx719Uo1eD7soc=";
   };
 
   appimageContents = pkgs.appimageTools.extract { inherit pname version src; };

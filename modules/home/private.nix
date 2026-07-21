@@ -1,6 +1,22 @@
 { config, pkgs, lib, inputs, ... }:
 
-{
+let
+  # vtk 9.5.2 fails to build against gdal >=3.13 (CSLConstList/char** mismatch).
+  # Fixed upstream (NixOS/nixpkgs#537721) but not yet in nixos-unstable;
+  # drop this override once the channel picks up that commit.
+  f3d = pkgs.f3d.override {
+    vtk = pkgs.vtk.overrideAttrs (old: {
+      patches = (old.patches or [ ]) ++ [
+        (pkgs.fetchpatch {
+          name = "fix-gdal-3.13-const-conversion.patch";
+          url =
+            "https://github.com/Kitware/VTK/commit/2395603fdddc40c29efc64c632ae98225ca2a58e.patch";
+          hash = "sha256-Gcnt1JXWPkhfNLhtk9SXYqx/0cLkjO4xiRfR8YiaY8I=";
+        })
+      ];
+    });
+  };
+in {
   home.packages = with pkgs; [
     telegram-desktop
     discord
@@ -190,9 +206,9 @@
 
   xdg.dataFile."thumbnailers/f3d.thumbnailer".text = ''
     [Thumbnailer Entry]
-    TryExec=${pkgs.f3d}/bin/f3d
+    TryExec=${f3d}/bin/f3d
     # Added azimuth (left/right) and elevation (up/down) angles for a 45-degree isometric view
-    Exec=sh -c '${pkgs.f3d}/bin/f3d --rendering-backend=egl --camera-azimuth-angle=45 --camera-elevation-angle=45 --verbose=quiet --output="$1" --resolution="$2" "$3"' _ %o %s %i
+    Exec=sh -c '${f3d}/bin/f3d --rendering-backend=egl --camera-azimuth-angle=45 --camera-elevation-angle=45 --verbose=quiet --output="$1" --resolution="$2" "$3"' _ %o %s %i
     MimeType=model/stl;application/sla;model/x.stl-binary;model/x.stl-ascii;
   '';
 

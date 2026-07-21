@@ -5,7 +5,7 @@ let
 
   src = pkgs.fetchzip {
     url = "https://github.com/sn4k3/UVtools/releases/download/v${version}/UVtools_linux-x64_v${version}.zip";
-    hash = "sha256-BfYEhFAeWup0yDeb41hKiq7MEJCwp9iUnXJjq+Aogl8=";
+    hash = "sha256-Z7srxrTJjGiQ6OEKOy873P3bCx++NUKsVZp0HOgjmBM=";
     stripRoot = false;
   };
 in

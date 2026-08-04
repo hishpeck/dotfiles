@@ -13,6 +13,7 @@ in
     ./zsh.nix
     ./nvim.nix
     ./tmux.nix
+    ./herdr.nix
     ./yazi.nix
   ];
 

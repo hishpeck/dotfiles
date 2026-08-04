@@ -20,7 +20,22 @@ keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make split windows equal width
 keymap.set("n", "<leader>sx", ":close<CR>", { desc = "Close current split window" })
 
 keymap.set("n", "<leader>to", ":tabnew<CR>", { desc = "Open new tab" })
-keymap.set("n", "<leader>tx", ":tabclose<CR>", { desc = "Close current tab" })
+keymap.set("n", "<leader>tx", function()
+  local bufs = {}
+  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    table.insert(bufs, vim.api.nvim_win_get_buf(win))
+  end
+
+  vim.cmd("tabclose")
+
+  for _, buf in ipairs(bufs) do
+    -- only wipe out unnamed (no file attached) buffers, and only if
+    -- they aren't still visible in another window/tab
+    if vim.api.nvim_buf_is_valid(buf) and vim.fn.bufname(buf) == "" and vim.fn.bufwinnr(buf) == -1 then
+      vim.api.nvim_buf_delete(buf, { force = true })
+    end
+  end
+end, { desc = "Close current tab and discard its unnamed buffers" })
 keymap.set("n", "<leader>tn", ":tabn<CR>", { desc = "Go to next tab" })
 keymap.set("n", "<leader>tp", ":tabp<CR>", { desc = "Go to previous tab" })
 keymap.set("n", "<leader>td", ":tabnew %<CR>", { desc = "Open current buffer in new tab" })

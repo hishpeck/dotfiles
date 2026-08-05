@@ -257,6 +257,32 @@ in
       fi
     '';
 
+    # niup (nh os switch --update) frequently rebuilds pipewire/wireplumber, which
+    # restarts those user services mid-session. cosmic-panel (volume applet) and
+    # cosmic-settings-daemon (hardware volume keys) hold stale connections to the
+    # old pipewire instance and never reconnect on their own — breaking audio
+    # control until they're restarted. Only do this when pipewire actually just
+    # restarted, to avoid flickering the panel on every unrelated switch.
+    home.activation.restartCosmicAudioClients = lib.hm.dag.entryAfter [ "reloadSystemd" ] ''
+      pwStart="$(${pkgs.systemd}/bin/systemctl --user show pipewire.service --property=ActiveEnterTimestamp --value 2>/dev/null || true)"
+      if [[ -n "$pwStart" ]]; then
+        pwEpoch="$(date -d "$pwStart" +%s 2>/dev/null || echo 0)"
+        nowEpoch="$(date +%s)"
+        if (( nowEpoch - pwEpoch < 30 )); then
+          panelPid="$(${pkgs.procps}/bin/pgrep -x cosmic-panel || true)"
+          if [[ -n "$panelPid" ]]; then
+            $DRY_RUN_CMD kill $panelPid
+          fi
+
+          daemonPid="$(${pkgs.procps}/bin/pgrep -f 'cosmic-settings-daemon$' || true)"
+          if [[ -n "$daemonPid" ]]; then
+            $DRY_RUN_CMD kill $daemonPid
+            $DRY_RUN_CMD setsid -f /run/current-system/sw/bin/cosmic-settings-daemon >/dev/null 2>&1 </dev/null
+          fi
+        fi
+      fi
+    '';
+
     home.file = lib.mapAttrs (name: value: value // { force = true; }) (
       (mkBuilder "Light" palettes.${lightFlavor} lightSemantic lightAccent)
       // (mkBuilder "Dark" palettes.${darkFlavor} darkSemantic darkAccent)

@@ -2,48 +2,44 @@
 let
   inherit (import ../../theme-values.nix) flavor accent;
 
-  nixosCatppuccinPlymouth = pkgs.runCommand "nixos-catppuccin-plymouth" {} ''
-    mkdir -p $out/share/plymouth/themes/nixos-catppuccin
-    cat > $out/share/plymouth/themes/nixos-catppuccin/nixos-catppuccin.plymouth << EOF
-[Plymouth Theme]
-Name=NixOS Catppuccin
-Description=Spinning NixOS logo on Catppuccin Mocha background
-ModuleName=two-step
+  nixosCatppuccinPlymouth = pkgs.runCommand "nixos-catppuccin-plymouth" { } ''
+        mkdir -p $out/share/plymouth/themes/nixos-catppuccin
+        cat > $out/share/plymouth/themes/nixos-catppuccin/nixos-catppuccin.plymouth << EOF
+    [Plymouth Theme]
+    Name=NixOS Catppuccin
+    Description=Spinning NixOS logo on Catppuccin Mocha background
+    ModuleName=two-step
 
-[two-step]
-Font=Cantarell 20
-ImageDir=${pkgs.nixos-bgrt-plymouth}/share/plymouth/themes/nixos-bgrt/images
-HorizontalAlignment=.5
-VerticalAlignment=.5
-Transition=none
-TransitionDuration=0.0
-BackgroundStartColor=0x1e1e2e
-BackgroundEndColor=0x1e1e2e
-ProgressBarBackgroundColor=0x45475a
-ProgressBarForegroundColor=0xf5c2e7
-MessageBelowAnimation=true
+    [two-step]
+    Font=Cantarell 20
+    ImageDir=${pkgs.nixos-bgrt-plymouth}/share/plymouth/themes/nixos-bgrt/images
+    HorizontalAlignment=.5
+    VerticalAlignment=.5
+    Transition=none
+    TransitionDuration=0.0
+    BackgroundStartColor=0x1e1e2e
+    BackgroundEndColor=0x1e1e2e
+    ProgressBarBackgroundColor=0x45475a
+    ProgressBarForegroundColor=0xf5c2e7
+    MessageBelowAnimation=true
 
-[boot-up]
-UseEndAnimation=false
+    [boot-up]
+    UseEndAnimation=false
 
-[shutdown]
-UseEndAnimation=false
+    [shutdown]
+    UseEndAnimation=false
 
-[reboot]
-UseEndAnimation=false
-EOF
+    [reboot]
+    UseEndAnimation=false
+    EOF
   '';
-in
-{
+in {
   nixpkgs.config.allowUnfree = true;
 
   nix.settings = {
     max-substitution-jobs = 128; # Default is 16
     http-connections = 128; # Default is 25
-    experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
+    experimental-features = [ "nix-command" "flakes" ];
     auto-optimise-store = true;
     substituters = [
       "https://cache.nixos.org/"
@@ -66,16 +62,12 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  swapDevices = [
-    {
-      device = "/var/lib/swapfile";
-      size = 16384;
-    }
-  ];
+  swapDevices = [{
+    device = "/var/lib/swapfile";
+    size = 16384;
+  }];
 
-  boot.kernel.sysctl = {
-    "vm.swappiness" = 10;
-  };
+  boot.kernel.sysctl = { "vm.swappiness" = 10; };
 
   networking.networkmanager.enable = true;
 
@@ -111,13 +103,7 @@ in
   users.users.ac = {
     isNormalUser = true;
     description = "ac";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "docker"
-      "video"
-      "render"
-    ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "video" "render" ];
     shell = pkgs.zsh;
   };
 

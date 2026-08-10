@@ -19,6 +19,8 @@
     desktop-file-utils
     ncdu
     inputs.antigravity-nix.packages.${pkgs.system}.google-antigravity-cli
+    vlc
+    atlauncher
   ];
 
   xdg.desktopEntries.nvim-kitty = {

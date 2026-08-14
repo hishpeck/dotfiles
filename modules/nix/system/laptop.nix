@@ -6,7 +6,11 @@
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-    settings = { General = { Experimental = true; }; };
+    settings = {
+      General = {
+        Experimental = true;
+      };
+    };
   };
   services.blueman.enable = true;
 
@@ -16,8 +20,6 @@
   # and integrates better with the amd-pstate driver on ASUS hardware.
   services.power-profiles-daemon.enable = true;
 
-  # 1. Disable USB wake triggers to prevent "unplugging" from waking the laptop.
-  # We use a systemd service to ensure these are disabled on every boot.
   systemd.services.disable-usb-wakeup = {
     description = "Disable USB wake triggers in /proc/acpi/wakeup";
     wantedBy = [ "multi-user.target" ];
@@ -34,20 +36,7 @@
     };
   };
 
-  # 2. Suspend-then-hibernate strategy (1 hour delay)
-  # This ensures the laptop eventually enters a zero-power state.
-  systemd.sleep.settings.Sleep = {
-    HibernateDelaySec = "1h";
-    AllowSuspendThenHibernate = "yes";
-  };
-
-  # 3. Battery Health (Limit to 80%)
   boot.kernelParams = [ "asus_wmi.battery_charge_limit=80" ];
-
-  services.logind.settings.Login = {
-    HandleLidSwitch = "suspend-then-hibernate";
-    HandleLidSwitchExternalPower = "suspend";
-  };
 
   services.libinput = {
     enable = true;
@@ -74,7 +63,10 @@
     polkit-1.fprintAuth = true;
   };
 
-  environment.systemPackages = with pkgs; [ brightnessctl pamixer ];
+  environment.systemPackages = with pkgs; [
+    brightnessctl
+    pamixer
+  ];
 
   hardware.enableAllFirmware = true;
 }

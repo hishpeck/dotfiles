@@ -134,18 +134,18 @@ let
     };
   };
 
-  noctua = pkgs.rustPlatform.buildRustPackage {
-    pname = "noctua";
-    version = "0-unstable-2026-05-07";
+  cosmic-viewer = pkgs.rustPlatform.buildRustPackage {
+    pname = "cosmic-viewer";
+    version = "0-unstable-2026-07-29";
 
     src = pkgs.fetchFromGitHub {
-      owner = "cosmic-utils";
-      repo = "noctua";
-      rev = "fc6e8c80568011dc05eb4f4f1dab626772f69c73";
-      hash = "sha256-LL3ZHBVCTEPPN1VsiM6ubE/fGvBS5HcewtLISU+UeeE=";
+      owner = "pop-os";
+      repo = "cosmic-viewer";
+      rev = "6c999eb5100353260d481077f1820ef95ee68ea7";
+      hash = "sha256-KUfWA6ZZMSnzagFJNlHJoWJTcMP2jTd0j7BYTYKfBF4=";
     };
 
-    cargoHash = "sha256-dgD16FVtb9/1UmYoL3dSfzuiEC558c0Bb1nucPMVoBs=";
+    cargoHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 
     nativeBuildInputs = [
       pkgs.just
@@ -154,8 +154,6 @@ let
     ];
     buildInputs = [
       pkgs.glib
-      pkgs.cairo
-      pkgs.poppler
     ];
 
     dontUseJustBuild = true;
@@ -171,10 +169,10 @@ let
     ];
 
     meta = {
-      description = "File manager for the COSMIC Desktop Environment";
-      homepage = "https://github.com/cosmic-utils/noctua";
+      description = "Image viewer for the COSMIC Desktop Environment";
+      homepage = "https://github.com/pop-os/cosmic-viewer";
       license = lib.licenses.gpl3Only;
-      mainProgram = "noctua";
+      mainProgram = "cosmic-viewer";
       platforms = lib.platforms.linux;
     };
   };
@@ -222,6 +220,6 @@ in
     cosmic-applet-music-player
     cosmic-ext-whether
     cosmic-ext-applet-clipboard-manager
-    noctua
+    cosmic-viewer
   ];
 }

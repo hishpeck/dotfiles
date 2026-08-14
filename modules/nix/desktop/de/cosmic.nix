@@ -183,6 +183,8 @@ in
   services.desktopManager.cosmic.enable = true;
   services.displayManager.cosmic-greeter.enable = true;
 
+  environment.cosmic.excludePackages = [ pkgs.cosmic-term ];
+
   services.gnome.gnome-keyring.enable = true;
   services.system76-scheduler.enable = true;
 

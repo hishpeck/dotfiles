@@ -79,6 +79,43 @@
     "kernel.panic" = 10; # auto-reboot 10s after a captured panic, so pstore/systemd-pstore can surface it next boot
   };
 
+  # The cs35l56 speaker amps (4x, tweeter/woofer L+R) default to 0dB — their
+  # absolute max hardware gain — with all volume control left to PipeWire's
+  # digital attenuation. That leaves the amps' onboard excursion/thermal
+  # protection DSP no headroom, so it clamps audibly ("peaking") on call
+  # audio. Cirrus's own kernel maintainer confirms this class of bug
+  # upstream: cs35l56 and cs42l43 both default to at/above 0dB max gain,
+  # which "can cause distorted audio depending on... other signal-processing
+  # elements in the chain" (fixes merged to Mark Brown's sound tree in 6.10
+  # and refined again since — see ASoC cs35l56/cs42l43 volume-limit patches).
+  # No per-device UCM profile exists for this laptop to set a sane default,
+  # so pull all 4 amps down 12dB (400 -> 352, steps of 0.25dB) on boot;
+  # confirmed by ear 2026-08-14 to fix it while still being plenty loud.
+  # Retries until the controls exist since the SoundWire amps enumerate a
+  # few seconds into boot, well after this could otherwise run.
+  systemd.services.fix-speaker-amp-gain = {
+    description = "Pull cs35l56 speaker amp gain down from max for DSP limiter headroom";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = pkgs.writeShellScript "fix-speaker-amp-gain" ''
+        amixer="${pkgs.alsa-utils}/bin/amixer"
+        for i in $(seq 1 30); do
+          if "$amixer" -c0 cget numid=77 >/dev/null 2>&1; then
+            for n in 77 81 85 89; do
+              "$amixer" -c0 cset numid=$n 352 >/dev/null
+            done
+            exit 0
+          fi
+          sleep 1
+        done
+        echo "amp controls never appeared, giving up" >&2
+        exit 1
+      '';
+    };
+  };
+
   systemd.services.thermal-logger = {
     description = "Sample CPU temps/fan RPM to disk for freeze diagnostics";
     wantedBy = [ "multi-user.target" ];

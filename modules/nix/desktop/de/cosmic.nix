@@ -145,7 +145,25 @@ let
       hash = "sha256-KUfWA6ZZMSnzagFJNlHJoWJTcMP2jTd0j7BYTYKfBF4=";
     };
 
-    cargoHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    cargoHash = "sha256-Ws8ozNY3hwxdkb5g6RuSDyzt3IRk1svm3byXkIpknQE=";
+
+    # Upstream builds libheif-rs with the "embedded-libheif" feature, which
+    # vendor-builds libheif from source along with ~10 codec libraries (some
+    # of which, e.g. uvg266/vvdec, aren't packaged in nixpkgs at all). Link
+    # against nixpkgs' own libheif via pkg-config instead.
+    postPatch = ''
+      substituteInPlace Cargo.toml \
+        --replace-fail \
+          'libheif-rs = { version = "2.7.0", default-features = false, features = [
+  "embedded-libheif",
+  "v1_17",
+] }' \
+          'libheif-rs = { version = "2.7.0", features = ["v1_17"] }'
+    '';
+
+    # turbojpeg-sys also defaults to vendor-building libjpeg-turbo via cmake;
+    # point it at nixpkgs' libjpeg-turbo via pkg-config instead.
+    env.TURBOJPEG_SOURCE = "pkg-config";
 
     nativeBuildInputs = [
       pkgs.just
@@ -154,6 +172,8 @@ let
     ];
     buildInputs = [
       pkgs.glib
+      pkgs.libheif
+      pkgs.libjpeg_turbo
     ];
 
     dontUseJustBuild = true;
@@ -181,7 +201,12 @@ in
   services.desktopManager.cosmic.enable = true;
   services.displayManager.cosmic-greeter.enable = true;
 
-  environment.cosmic.excludePackages = [ pkgs.cosmic-term ];
+  environment.cosmic.excludePackages = [
+    pkgs.cosmic-term
+    pkgs.cosmic-player
+    pkgs.cosmic-edit
+    pkgs.cosmic-reader
+  ];
 
   services.gnome.gnome-keyring.enable = true;
   services.system76-scheduler.enable = true;
@@ -200,19 +225,6 @@ in
   };
 
   environment.pathsToLink = [ "/share/thumbnailers" ];
-
-  # cosmic-player's nixpkgs wrapper fails to capture GST_PLUGIN_SYSTEM_PATH_1_0
-  # at build time (only dev outputs are in buildInputs, so the setup hooks don't run).
-  # Set it explicitly so playbin and other elements are discoverable at runtime.
-  environment.sessionVariables.GST_PLUGIN_SYSTEM_PATH_1_0 = pkgs.lib.makeSearchPath "lib/gstreamer-1.0" (
-    with pkgs.gst_all_1;
-    [
-      gstreamer.out
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]
-  );
 
   environment.systemPackages = [
     pkgs.cosmic-ext-applet-minimon

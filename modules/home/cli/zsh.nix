@@ -23,6 +23,7 @@
       nico = "nvim ~/dotfiles";
       hms = "nh home switch ~/dotfiles";
       hms-update = "nh home switch --update ~/dotfiles";
+      nisw = "nh os switch ~/dotfiles";
       niup = "nh os switch --update ~/dotfiles";
       nipu =
         "nix path-info --recursive /run/current-system | cachix push hishpeck";

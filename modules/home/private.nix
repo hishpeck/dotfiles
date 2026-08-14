@@ -144,47 +144,47 @@
       # Text editor
       "text/plain" = "nvim-kitty.desktop";
 
-      # Music — COSMIC Media Player
-      "audio/mpeg" = "com.system76.CosmicPlayer.desktop";
-      "audio/ogg" = "com.system76.CosmicPlayer.desktop";
-      "audio/flac" = "com.system76.CosmicPlayer.desktop";
-      "audio/x-flac" = "com.system76.CosmicPlayer.desktop";
-      "audio/wav" = "com.system76.CosmicPlayer.desktop";
-      "audio/x-wav" = "com.system76.CosmicPlayer.desktop";
-      "audio/aac" = "com.system76.CosmicPlayer.desktop";
-      "audio/mp4" = "com.system76.CosmicPlayer.desktop";
-      "audio/x-m4a" = "com.system76.CosmicPlayer.desktop";
-      "audio/opus" = "com.system76.CosmicPlayer.desktop";
-      "audio/x-vorbis+ogg" = "com.system76.CosmicPlayer.desktop";
-      "audio/x-opus+ogg" = "com.system76.CosmicPlayer.desktop";
-      "audio/webm" = "com.system76.CosmicPlayer.desktop";
-      "audio/x-pn-realaudio" = "com.system76.CosmicPlayer.desktop";
+      # Music — VLC
+      "audio/mpeg" = "vlc.desktop";
+      "audio/ogg" = "vlc.desktop";
+      "audio/flac" = "vlc.desktop";
+      "audio/x-flac" = "vlc.desktop";
+      "audio/wav" = "vlc.desktop";
+      "audio/x-wav" = "vlc.desktop";
+      "audio/aac" = "vlc.desktop";
+      "audio/mp4" = "vlc.desktop";
+      "audio/x-m4a" = "vlc.desktop";
+      "audio/opus" = "vlc.desktop";
+      "audio/x-vorbis+ogg" = "vlc.desktop";
+      "audio/x-opus+ogg" = "vlc.desktop";
+      "audio/webm" = "vlc.desktop";
+      "audio/x-pn-realaudio" = "vlc.desktop";
 
-      # Video — COSMIC Media Player
-      "video/mp4" = "com.system76.CosmicPlayer.desktop";
-      "video/x-matroska" = "com.system76.CosmicPlayer.desktop";
-      "video/mpeg" = "com.system76.CosmicPlayer.desktop";
-      "video/webm" = "com.system76.CosmicPlayer.desktop";
-      "video/quicktime" = "com.system76.CosmicPlayer.desktop";
-      "video/x-msvideo" = "com.system76.CosmicPlayer.desktop";
-      "video/ogg" = "com.system76.CosmicPlayer.desktop";
-      "video/x-flv" = "com.system76.CosmicPlayer.desktop";
-      "video/x-ms-wmv" = "com.system76.CosmicPlayer.desktop";
-      "video/mp2t" = "com.system76.CosmicPlayer.desktop";
-      "video/3gpp" = "com.system76.CosmicPlayer.desktop";
-      "video/3gpp2" = "com.system76.CosmicPlayer.desktop";
-      "video/x-ogm+ogg" = "com.system76.CosmicPlayer.desktop";
-      "video/x-theora+ogg" = "com.system76.CosmicPlayer.desktop";
-      "video/divx" = "com.system76.CosmicPlayer.desktop";
+      # Video — VLC
+      "video/mp4" = "vlc.desktop";
+      "video/x-matroska" = "vlc.desktop";
+      "video/mpeg" = "vlc.desktop";
+      "video/webm" = "vlc.desktop";
+      "video/quicktime" = "vlc.desktop";
+      "video/x-msvideo" = "vlc.desktop";
+      "video/ogg" = "vlc.desktop";
+      "video/x-flv" = "vlc.desktop";
+      "video/x-ms-wmv" = "vlc.desktop";
+      "video/mp2t" = "vlc.desktop";
+      "video/3gpp" = "vlc.desktop";
+      "video/3gpp2" = "vlc.desktop";
+      "video/x-ogm+ogg" = "vlc.desktop";
+      "video/x-theora+ogg" = "vlc.desktop";
+      "video/divx" = "vlc.desktop";
 
-      # Photos — Noctua
-      "image/png" = "org.codeberg.wfx.Noctua.desktop";
-      "image/jpeg" = "org.codeberg.wfx.Noctua.desktop";
-      "image/gif" = "org.codeberg.wfx.Noctua.desktop";
-      "image/webp" = "org.codeberg.wfx.Noctua.desktop";
-      "image/bmp" = "org.codeberg.wfx.Noctua.desktop";
-      "image/tiff" = "org.codeberg.wfx.Noctua.desktop";
-      "image/svg+xml" = "org.codeberg.wfx.Noctua.desktop";
+      # Photos — COSMIC Viewer
+      "image/png" = "com.system76.CosmicViewer.desktop";
+      "image/jpeg" = "com.system76.CosmicViewer.desktop";
+      "image/gif" = "com.system76.CosmicViewer.desktop";
+      "image/webp" = "com.system76.CosmicViewer.desktop";
+      "image/bmp" = "com.system76.CosmicViewer.desktop";
+      "image/tiff" = "com.system76.CosmicViewer.desktop";
+      "image/svg+xml" = "com.system76.CosmicViewer.desktop";
     };
 
     # Additional associations allow multiple handlers for same file type

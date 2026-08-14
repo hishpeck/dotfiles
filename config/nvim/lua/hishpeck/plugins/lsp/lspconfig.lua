@@ -79,6 +79,7 @@ return {
 			"emmet_ls",
 			"astro",
 			"intelephense",
+			"laravel_lsp",
 			"pyright",
 			"glsl_analyzer",
 			"rust_analyzer",
@@ -213,6 +214,15 @@ return {
 						compatibility = { preferPsalmPhpstanPrefixedAnnotations = true },
 					},
 				}
+			elseif server_name == "laravel_lsp" then
+				server_opts.cmd = { "laravel-lsp" }
+				server_opts.filetypes = { "php", "blade" }
+				server_opts.root_dir = function(bufnr, on_dir)
+					local root = vim.fs.root(bufnr, "artisan")
+					if root then
+						on_dir(root)
+					end
+				end
 			elseif server_name == "lua_ls" then
 				server_opts.settings = {
 					Lua = {

@@ -47,6 +47,10 @@ in
 
   };
 
+  home.sessionPath = [
+    "$HOME/.config/composer/vendor/bin"
+  ];
+
   programs.btop = {
     enable = true;
     package = pkgs.btop.override { rocmSupport = true; };

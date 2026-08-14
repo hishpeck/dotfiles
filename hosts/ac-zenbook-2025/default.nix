@@ -52,19 +52,20 @@
   # (patched kernel can't use the binary cache) — build on a stronger
   # machine and copy the result over, or substitute via the Nix store.
   #
-  # NOTE: the patch was written against a newer xe_fb_pin.c than this
-  # kernel may have; if it fails to apply cleanly, it needs a manual
-  # rebase (one other Lunar Lake user hit exactly this going from the
-  # original patch to their pinned kernel version).
+  # The upstream patch didn't apply cleanly against nixpkgs' linux-7.1.8:
+  # __xe_pin_fb_vma_dpt() was refactored to take
+  # `const struct intel_framebuffer *fb` instead of `struct drm_gem_object
+  # *obj`, dropping the `pin_params` struct (plain `alignment` param now).
+  # Hand-rebased below (only the parameter name differs; allocation logic
+  # is otherwise identical) and verified it applies cleanly and produces
+  # the intended result against the actual linux-7.1.8 source before
+  # committing it — see the NOTE in the patch file itself. Will need
+  # re-rebasing again if nixpkgs' kernel moves further before this lands
+  # upstream for real.
   boot.kernelPatches = [
     {
       name = "xe-fix-dpt-allocation-lunarlake";
-      patch = pkgs.fetchpatch {
-        url = "https://gitlab.com/freedesktop-mirror/drm-tip/-/commit/a196406a3831291598fe8e73245914f7acffdfe0.patch";
-        # Placeholder — first build will fail with a hash mismatch error
-        # reporting the correct value; paste it in here.
-        hash = lib.fakeHash;
-      };
+      patch = ./patches/xe-fix-dpt-allocation-lunarlake.patch;
     }
   ];
 

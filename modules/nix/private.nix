@@ -3,6 +3,12 @@
 {
   services.zerotierone.enable = true;
 
+  # ZeroTier defaults to MTU 2800, which causes packet fragmentation blackholes
+  # on standard WAN/Wi-Fi networks (MTU ~1400-1500) and hangs SSH/SSHFS handshakes.
+  services.udev.extraRules = ''
+    ACTION=="add|change", SUBSYSTEM=="net", KERNEL=="zt*", ATTR{mtu}="1280"
+  '';
+
   programs.fuse.userAllowOther = true;
 
   environment.systemPackages = with pkgs; [ sshfs ];
@@ -23,8 +29,9 @@
       "ServerAliveCountMax=3"
       "StrictHostKeyChecking=accept-new"
 
-      "ConnectTimeout=5"
+      "ConnectTimeout=3"
       "IdentityFile=/home/ac/.ssh/id_zenbook"
+      "KexAlgorithms=curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256"
     ];
   };
 }

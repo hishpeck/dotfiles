@@ -20,7 +20,7 @@
     ncdu
     inputs.antigravity-nix.packages.${pkgs.system}.google-antigravity-cli
     vlc
-    atlauncher
+    prismlauncher
   ];
 
   xdg.desktopEntries.nvim-kitty = {

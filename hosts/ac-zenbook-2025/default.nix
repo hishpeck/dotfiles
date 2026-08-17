@@ -90,8 +90,10 @@
   # elements in the chain" (fixes merged to Mark Brown's sound tree in 6.10
   # and refined again since — see ASoC cs35l56/cs42l43 volume-limit patches).
   # No per-device UCM profile exists for this laptop to set a sane default,
-  # so pull all 4 amps down 12dB (400 -> 352, steps of 0.25dB) on boot;
-  # confirmed by ear 2026-08-14 to fix it while still being plenty loud.
+  # so pull all 4 amps down on boot. -12dB (352) killed the peaking but was
+  # too quiet overall (needed +150% elsewhere to compensate); -6dB (376,
+  # 2026-08-14) is the better tradeoff — still gives the limiter headroom
+  # without gutting the volume.
   # Retries until the controls exist since the SoundWire amps enumerate a
   # few seconds into boot, well after this could otherwise run.
   systemd.services.fix-speaker-amp-gain = {
@@ -105,7 +107,7 @@
         for i in $(seq 1 30); do
           if "$amixer" -c0 cget numid=77 >/dev/null 2>&1; then
             for n in 77 81 85 89; do
-              "$amixer" -c0 cset numid=$n 352 >/dev/null
+              "$amixer" -c0 cset numid=$n 376 >/dev/null
             done
             exit 0
           fi

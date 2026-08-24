@@ -225,8 +225,13 @@ in
     ".config/cosmic/com.system76.CosmicAppletTime/v1/first_day_of_week".text = "0";
 
     # ── Idle ────────────────────────────────────────────────────────────────────
-    ".config/cosmic/com.system76.CosmicIdle/v1/screen_off_time".text = "None";
+    # Idle-triggered suspend disabled entirely, 2026-08 — it hits the same
+    # unresolved xe/GuC resume freeze as lid-close suspend used to (still no
+    # upstream fix as of this date). Lid-close hibernate (confirmed working)
+    # is now the only automatic sleep-state transition on this host.
+    ".config/cosmic/com.system76.CosmicIdle/v1/screen_off_time".text = "Some(300000)";
     ".config/cosmic/com.system76.CosmicIdle/v1/suspend_on_ac_time".text = "None";
+    ".config/cosmic/com.system76.CosmicIdle/v1/suspend_on_battery_time".text = "None";
 
     # ── Minimon applet ──────────────────────────────────────────────────────────
     ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/content_order".text = ''

@@ -36,7 +36,48 @@
   # at the cost of higher idle power draw. 2026-08-14 experiment — see if
   # this eliminates the freezes; loosen back to C3 once confirmed one way
   # or the other.
-  boot.kernelParams = [ "mem_sleep_default=deep" "intel_idle.max_cstate=2" ];
+  boot.kernelParams = [
+    "mem_sleep_default=deep"
+    "intel_idle.max_cstate=2"
+    # Where to find the hibernation image on resume — see the hibernate
+    # block below. Offset is only valid for the current swapfile; recompute
+    # with `sudo filefrag -v /var/lib/swapfile` if it's ever moved/resized.
+    "resume_offset=205115392" # from `filefrag -v`, 2026-08-19; recompute if the swapfile ever moves/resizes
+  ];
+
+  # Switching lid-close from suspend to hibernate, 2026-08. Untested
+  # reasoning for why this might actually be more reliable than suspend
+  # here: suspend/resume keeps the same kernel instance running and tries
+  # to reinit the GPU from a suspended state — exactly where the
+  # still-unresolved Lunar Lake xe/GuC resume freeze lives (see the
+  # ThinkPad X1 Carbon Gen 13 thread investigated 2026-08). Hibernate does
+  # a full fresh boot and cold GPU probe on resume instead, which may
+  # sidestep that code path entirely — or may not; unconfirmed.
+  #
+  # Hibernate previously failed outright here: the swapfile (16GiB) was
+  # smaller than installed RAM (~30.8GiB), so the hibernation image write
+  # ran out of space mid-write (root-caused 2026-08-05). Bumped to 34GiB.
+  # NixOS only creates a missing swapfile, it won't resize an existing one
+  # in place — the actual on-disk resize has to happen manually first:
+  #   sudo swapoff /var/lib/swapfile
+  #   sudo fallocate -l 34816M /var/lib/swapfile
+  #   sudo mkswap /var/lib/swapfile
+  #   sudo swapon /var/lib/swapfile
+  #   sudo filefrag -v /var/lib/swapfile | head -n4   # get resume_offset
+  swapDevices = lib.mkForce [{
+    device = "/var/lib/swapfile";
+    size = 34816; # ~34GiB, comfortably above the 31558MiB installed RAM
+  }];
+
+  # Root is ext4, not btrfs — resuming from a hibernation image on a swap
+  # *file* needs the kernel told which device the filesystem lives on
+  # (this) plus the file's physical offset on it (resume_offset above).
+  boot.resumeDevice = "/dev/disk/by-uuid/bde83dae-eb2d-4e2a-80d8-77ee274e2bd5";
+
+  services.logind.settings.Login = {
+    HandleLidSwitch = "hibernate";
+    HandleLidSwitchExternalPower = "hibernate";
+  };
 
   # Root cause of the recurring silent hard freezes, found 2026-08-14:
   # xe's __xe_pin_fb_vma_dpt() allocates the display page table from GPU

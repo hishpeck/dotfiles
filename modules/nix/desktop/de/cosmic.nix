@@ -14,16 +14,8 @@ let
 
     cargoHash = "sha256-Cs9g2w480jquSNyEG41WqOEMPQ/BJKcOgN8VnCfZBLQ=";
 
-    nativeBuildInputs = [
-      pkgs.just
-      pkgs.libcosmicAppHook
-      pkgs.pkg-config
-    ];
-    buildInputs = [
-      pkgs.openssl
-      pkgs.dbus
-      pkgs.libpulseaudio
-    ];
+    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
+    buildInputs = [ pkgs.openssl pkgs.dbus pkgs.libpulseaudio ];
 
     dontUseJustBuild = true;
     dontUseJustCheck = true;
@@ -59,10 +51,7 @@ let
 
     cargoHash = "sha256-7CSXz8QDmTvmnY/TjJMdYhM5ZyKBW8YdkYcKzKcAc18=";
 
-    nativeBuildInputs = [
-      pkgs.just
-      pkgs.libcosmicAppHook
-    ];
+    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook ];
 
     dontUseJustBuild = true;
     dontUseJustCheck = true;
@@ -100,15 +89,8 @@ let
 
     env.CLIPBOARD_MANAGER_COMMIT = "unknown";
 
-    nativeBuildInputs = [
-      pkgs.just
-      pkgs.libcosmicAppHook
-      pkgs.pkg-config
-    ];
-    buildInputs = [
-      pkgs.sqlite
-      pkgs.systemd
-    ];
+    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
+    buildInputs = [ pkgs.sqlite pkgs.systemd ];
 
     dontUseJustBuild = true;
     dontUseJustCheck = true;
@@ -126,7 +108,8 @@ let
     ];
 
     meta = {
-      description = "Clipboard manager applet for the COSMIC Desktop Environment";
+      description =
+        "Clipboard manager applet for the COSMIC Desktop Environment";
       homepage = "https://github.com/cosmic-utils/clipboard-manager";
       license = lib.licenses.gpl3Only;
       mainProgram = "cosmic-ext-applet-clipboard-manager";
@@ -152,29 +135,21 @@ let
     # of which, e.g. uvg266/vvdec, aren't packaged in nixpkgs at all). Link
     # against nixpkgs' own libheif via pkg-config instead.
     postPatch = ''
-      substituteInPlace Cargo.toml \
-        --replace-fail \
-          'libheif-rs = { version = "2.7.0", default-features = false, features = [
-  "embedded-libheif",
-  "v1_17",
-] }' \
-          'libheif-rs = { version = "2.7.0", features = ["v1_17"] }'
+            substituteInPlace Cargo.toml \
+              --replace-fail \
+                'libheif-rs = { version = "2.7.0", default-features = false, features = [
+        "embedded-libheif",
+        "v1_17",
+      ] }' \
+                'libheif-rs = { version = "2.7.0", features = ["v1_17"] }'
     '';
 
     # turbojpeg-sys also defaults to vendor-building libjpeg-turbo via cmake;
     # point it at nixpkgs' libjpeg-turbo via pkg-config instead.
     env.TURBOJPEG_SOURCE = "pkg-config";
 
-    nativeBuildInputs = [
-      pkgs.just
-      pkgs.libcosmicAppHook
-      pkgs.pkg-config
-    ];
-    buildInputs = [
-      pkgs.glib
-      pkgs.libheif
-      pkgs.libjpeg_turbo
-    ];
+    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
+    buildInputs = [ pkgs.glib pkgs.libheif pkgs.libjpeg_turbo ];
 
     dontUseJustBuild = true;
     dontUseJustCheck = true;
@@ -196,17 +171,12 @@ let
       platforms = lib.platforms.linux;
     };
   };
-in
-{
+in {
   services.desktopManager.cosmic.enable = true;
   services.displayManager.cosmic-greeter.enable = true;
 
-  environment.cosmic.excludePackages = [
-    pkgs.cosmic-term
-    pkgs.cosmic-player
-    pkgs.cosmic-edit
-    pkgs.cosmic-reader
-  ];
+  environment.cosmic.excludePackages =
+    [ pkgs.cosmic-term pkgs.cosmic-player pkgs.cosmic-edit pkgs.cosmic-reader ];
 
   services.gnome.gnome-keyring.enable = true;
   services.system76-scheduler.enable = true;
@@ -216,10 +186,8 @@ in
   xdg.portal = {
     enable = true;
 
-    extraPortals = [
-      pkgs.xdg-desktop-portal-cosmic
-      pkgs.xdg-desktop-portal-gtk
-    ];
+    extraPortals =
+      [ pkgs.xdg-desktop-portal-cosmic pkgs.xdg-desktop-portal-gtk ];
 
     config.common.default = [ "cosmic" ];
   };
@@ -227,6 +195,7 @@ in
   environment.pathsToLink = [ "/share/thumbnailers" ];
 
   environment.systemPackages = [
+    pkgs.cutecosmic
     pkgs.cosmic-ext-applet-minimon
     pkgs.cosmic-ext-applet-privacy-indicator
     cosmic-applet-music-player

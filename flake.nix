@@ -5,12 +5,6 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     stylix.url = "github:danth/stylix";
     catppuccin.url = "github:catppuccin/nix";
-    elephant.url = "github:abenz1267/elephant";
-    walker = {
-      url = "github:abenz1267/walker";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.elephant.follows = "elephant";
-    };
     dms = {
       url = "github:AvengeMedia/DankMaterialShell/stable";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -35,7 +29,7 @@
     herdr.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, home-manager, stylix, catppuccin, walker
+  outputs = { self, nixpkgs, home-manager, stylix, catppuccin
     , nix-index-database, noctalia, cosmic-ctl, ... }@inputs:
     let
       user = "ac";
@@ -61,8 +55,7 @@
         inputs.dms.homeModules.dank-material-shell
         ./modules/home/theme.nix
         ./modules/home/desktop/cosmic-config.nix
-        ./modules/home/desktop/launcher/walker.nix
-        walker.homeManagerModules.default
+        ./modules/home/desktop/launcher/vicinae.nix
         noctalia.homeModules.default
         nix-index-database.homeModules.nix-index
       ];

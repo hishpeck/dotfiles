@@ -133,13 +133,19 @@ in
                   Super,
               ],
               key: "space",
-          ): Spawn("walker"),
+          ): Spawn("vicinae toggle"),
           (
               modifiers: [
                   Super,
               ],
               key: "v",
-          ): Spawn("walker -m clipboard"),
+          ): Spawn("vicinae vicinae://launch/clipboard/history"),
+          (
+              modifiers: [
+                  Super,
+              ],
+              key: "semicolon",
+          ): Spawn("vicinae vicinae://launch/core/search-emojis"),
           (
               modifiers: [
                   Super,

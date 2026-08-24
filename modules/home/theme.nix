@@ -20,6 +20,7 @@ in
       btop.enable = false;
       kde.enable = false;
       qt.enable = false;
+      vicinae.enable = false;
     };
 
     cursor = {

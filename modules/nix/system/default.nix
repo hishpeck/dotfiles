@@ -103,9 +103,15 @@ in {
   users.users.ac = {
     isNormalUser = true;
     description = "ac";
-    extraGroups = [ "networkmanager" "wheel" "docker" "video" "render" ];
+    extraGroups =
+      [ "networkmanager" "wheel" "docker" "video" "render" "uinput" ];
     shell = pkgs.zsh;
   };
+
+  # Lets vicinae's input-server helper inject keystrokes (paste emoji/clipboard
+  # entries directly instead of just copying) via /dev/uinput — grants the
+  # `uinput` group access to it, no setcap/capabilities needed.
+  hardware.uinput.enable = true;
 
   programs.zsh.enable = true;
 

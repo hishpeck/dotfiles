@@ -6,8 +6,8 @@
     discord
     steam
     blender
-    (pkgs.callPackage ../../custom-apps/freecad/default.nix { })
-    (pkgs.callPackage ../../custom-apps/lychee-slicer/default.nix { })
+    freecad
+    lycheeslicer
     (pkgs.callPackage ../../custom-apps/uvtools/default.nix { })
     (pkgs.callPackage ../../custom-apps/bambu-studio/default.nix { })
     (pkgs.callPackage ../../custom-apps/patreon-dl-gui/default.nix { })
@@ -66,7 +66,7 @@
     name = "Lychee Slicer";
     genericName = "3D Slicer";
     comment = "Lychee Slicer for resin 3D printing";
-    exec = "lychee-slicer %U";
+    exec = "lycheeslicer %U";
     terminal = false;
     icon = "lycheeslicer";
     categories = [ "Graphics" "3DGraphics" "Engineering" ];

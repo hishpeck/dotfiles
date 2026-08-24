@@ -1,13 +1,9 @@
 {
   config,
   pkgs,
-  self,
   ...
 }:
 
-let
-  weave = pkgs.callPackage (self + /custom-apps/weave) { };
-in
 {
   imports = [
     ./zsh.nix

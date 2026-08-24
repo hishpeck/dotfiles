@@ -56,6 +56,14 @@ modules/
 - **`nisw`** (`nh os switch ~/dotfiles`): Same as `niup` but without `--update` — keeps `flake.lock` pinned. Use this instead of `niup` when iterating on a broken build, since bumping `nixpkgs` changes the derivation hash of every locally-built package (custom `fetchFromGitHub`-sourced apps in particular) and forces them to rebuild from scratch even if unrelated to the fix.
 - **`hms`** (`nh home switch ~/dotfiles`): standalone Home Manager switch — must not be run on NixOS hosts where HM is managed as a NixOS module. `hms-update` also updates flake inputs before switching.
 
+## Package sourcing priority
+
+When adding or updating any app, prefer in this order:
+
+1. **nixpkgs**, if the package is actually substitutable (cached prebuilt binary). Presence in nixpkgs is not enough — unfree-licensed packages (e.g. `bambu-studio`) generally aren't built by Hydra and would compile from source locally despite being "in nixpkgs". Verify before switching: `nix build --dry-run` should show it being fetched, not built; or check `https://cache.nixos.org/<store-path-hash>.narinfo` returns 200, not 404.
+2. **A prebuilt binary from the project's own releases** (GitHub Releases, AppImage, vendor download) — see `custom-apps/` for the wrapping pattern (`appimageTools.wrapType2`, `fetchurl` + `dpkg`/`fetchzip`, etc.).
+3. **Building from source** (`fetchFromGitHub` + `buildRustPackage`/`stdenv.mkDerivation`/etc.) — last resort, only when no prebuilt option exists anywhere.
+
 ## Hosts Summary
 
 | Host            | Arch    | GPU   | Form factor   | Notes                                          |

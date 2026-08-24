@@ -31,7 +31,6 @@
 
       "ConnectTimeout=3"
       "IdentityFile=/home/ac/.ssh/id_zenbook"
-      "KexAlgorithms=curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256"
     ];
   };
 }

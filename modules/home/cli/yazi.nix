@@ -349,12 +349,35 @@
           desc = "Sudo chmod";
         }
 
-        # Unmount device (safe removal)
+        # Unmount device (safe removal) - pick from a list of mounted removable devices
         {
           on = [ "u" "m" ];
-          run = ''
-            shell 'udisksctl unmount -b "$(df -P "$1" | awk "NR==2 {print \$1}")" && notify-send "Yazi" "Device unmounted successfully"' --confirm'';
-          desc = "Unmount current device";
+          run = "shell '${pkgs.writeShellScript "yazi-unmount" ''
+            entries=""
+            while IFS= read -r line; do
+              eval "$line"
+              case "$TARGET" in
+                /run/media/*|/media/*) ;;
+                *) continue ;;
+              esac
+              label=$(${pkgs.util-linux}/bin/lsblk -no LABEL "$SOURCE" 2>/dev/null)
+              name="''${label:-$(basename "$TARGET")}"
+              entries="$entries$name ($TARGET)\t$SOURCE\n"
+            done < <(${pkgs.util-linux}/bin/findmnt -P -no SOURCE,TARGET)
+
+            if [ -z "$entries" ]; then
+              ${pkgs.libnotify}/bin/notify-send "Yazi" "No removable devices mounted"
+              exit 0
+            fi
+
+            chosen=$(printf "%b" "$entries" | ${pkgs.fzf}/bin/fzf --with-nth=1 --delimiter=$'\t' --prompt="Unmount: ")
+            [ -z "$chosen" ] && exit 0
+
+            device=$(printf "%s" "$chosen" | cut -f2)
+            udisksctl unmount -b "$device" && ${pkgs.libnotify}/bin/notify-send "Yazi" "Device unmounted successfully"
+            clear
+          ''}' --block";
+          desc = "Unmount a device (pick from list)";
         }
 
         # Tab navigation

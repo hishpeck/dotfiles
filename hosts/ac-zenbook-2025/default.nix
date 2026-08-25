@@ -84,31 +84,10 @@
   # "stolen" memory, which can hang the GT while it's in MC6 (FORCEWAKE
   # stuck, MCA fatal reset, BERT record on next boot, zero kernel trace —
   # matches every crash we've captured). Confirmed by many other Lunar Lake
-  # (258V/268V) laptop owners, including another 258V ASUS unit. Fixed
-  # upstream but not yet in any released kernel:
-  # https://gitlab.freedesktop.org/drm/xe/kernel/-/commit/a196406a3831291598fe8e73245914f7acffdfe0
-  # ("drm/xe: Fix DPT allocation paths.", Maarten Lankhorst, marked for
-  # stable v6.12+). Backported here directly since it'll be a while before
-  # nixpkgs' kernel picks it up. This forces a from-source kernel build
-  # (patched kernel can't use the binary cache) — build on a stronger
-  # machine and copy the result over, or substitute via the Nix store.
-  #
-  # The upstream patch didn't apply cleanly against nixpkgs' linux-7.1.8:
-  # __xe_pin_fb_vma_dpt() was refactored to take
-  # `const struct intel_framebuffer *fb` instead of `struct drm_gem_object
-  # *obj`, dropping the `pin_params` struct (plain `alignment` param now).
-  # Hand-rebased below (only the parameter name differs; allocation logic
-  # is otherwise identical) and verified it applies cleanly and produces
-  # the intended result against the actual linux-7.1.8 source before
-  # committing it — see the NOTE in the patch file itself. Will need
-  # re-rebasing again if nixpkgs' kernel moves further before this lands
-  # upstream for real.
-  boot.kernelPatches = [
-    {
-      name = "xe-fix-dpt-allocation-lunarlake";
-      patch = ./patches/xe-fix-dpt-allocation-lunarlake.patch;
-    }
-  ];
+  # (258V/268V) laptop owners, including another 258V ASUS unit. Was
+  # backported via boot.kernelPatches (see git history) until nixpkgs'
+  # kernel picked it up; landed upstream in linux-7.2, so the patch is now
+  # a no-op (fails to apply) and was removed 2026-08-25.
 
   # Temporary diagnostics for the recurring hard freezes seen since May 2026
   # (silent, no kernel trace — see 2026-08-05 investigation). No hardware

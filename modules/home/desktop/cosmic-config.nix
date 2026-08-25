@@ -234,7 +234,8 @@ in
     # unresolved xe/GuC resume freeze as lid-close suspend used to (still no
     # upstream fix as of this date). Lid-close hibernate (confirmed working)
     # is now the only automatic sleep-state transition on this host.
-    ".config/cosmic/com.system76.CosmicIdle/v1/screen_off_time".text = "Some(300000)";
+    # (Screen-off/lock timeout lives in modules/home/laptop.nix — desktops
+    # like ac-main-pc should never lock on idle.)
     ".config/cosmic/com.system76.CosmicIdle/v1/suspend_on_ac_time".text = "None";
     ".config/cosmic/com.system76.CosmicIdle/v1/suspend_on_battery_time".text = "None";
 

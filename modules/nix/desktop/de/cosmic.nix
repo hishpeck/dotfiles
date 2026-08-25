@@ -74,49 +74,6 @@ let
     };
   };
 
-  cosmic-ext-applet-clipboard-manager = pkgs.rustPlatform.buildRustPackage {
-    pname = "cosmic-ext-applet-clipboard-manager";
-    version = "0-unstable-2026-05-07";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "cosmic-utils";
-      repo = "clipboard-manager";
-      rev = "d473e8f09e8bc2289a76707898063a13714c79dc";
-      hash = "sha256-RNRSShrT7wS4GmQNd3tXtT8G/4qLM9zxntXgBQ6C7ps=";
-    };
-
-    cargoHash = "sha256-+yqFV8HdPjkVny+6FKkZFEQAq1rwe7JXmoTJ7zge8bg=";
-
-    env.CLIPBOARD_MANAGER_COMMIT = "unknown";
-
-    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
-    buildInputs = [ pkgs.sqlite pkgs.systemd ];
-
-    dontUseJustBuild = true;
-    dontUseJustCheck = true;
-
-    justFlags = [
-      "--set"
-      "prefix"
-      (builtins.placeholder "out")
-      "--set"
-      "cargo-target-dir"
-      "target/${pkgs.stdenv.hostPlatform.rust.cargoShortTarget}"
-      "--set"
-      "CLIPBOARD_MANAGER_COMMIT"
-      "unknown"
-    ];
-
-    meta = {
-      description =
-        "Clipboard manager applet for the COSMIC Desktop Environment";
-      homepage = "https://github.com/cosmic-utils/clipboard-manager";
-      license = lib.licenses.gpl3Only;
-      mainProgram = "cosmic-ext-applet-clipboard-manager";
-      platforms = lib.platforms.linux;
-    };
-  };
-
   cosmic-viewer = pkgs.rustPlatform.buildRustPackage {
     pname = "cosmic-viewer";
     version = "0-unstable-2026-07-29";
@@ -200,7 +157,6 @@ in {
     pkgs.cosmic-ext-applet-privacy-indicator
     cosmic-applet-music-player
     cosmic-ext-whether
-    cosmic-ext-applet-clipboard-manager
     cosmic-viewer
   ];
 }

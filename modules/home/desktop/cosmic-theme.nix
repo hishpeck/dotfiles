@@ -12,6 +12,17 @@ let
   activeHint = "3";
   isFrosted = "true";
 
+  # Frosted-glass v2 (granular). cosmic-ctl 1.5.0's Theme/ThemeBuilder struct
+  # (from libcosmic@7151638, 2025-05-02) only has `is_frosted: bool` above —
+  # no v2 fields — so build-theme can't compute these. They bypass the
+  # Builder pipeline entirely and are written straight to the final theme
+  # files below, same mechanism as cosmic-config.nix.
+  frostedIntensity = "Medium"; # Off | Low | Medium | High
+  frostedApplets = "true";
+  frostedPanel = "true";
+  frostedSystemInterface = "true";
+  frostedWindows = "false";
+
   # ── Driven by global catppuccin options (set in theme.nix) ──────────────────
   accent = config.catppuccin.accent;
   lightFlavor = config.catppuccin.flavor;
@@ -242,6 +253,17 @@ let
     ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/spacing".text = spacing;
   };
 
+  # Final-file helper for settings the Builder pipeline can't produce (see
+  # frosted-glass v2 comment above). Written directly, not computed.
+  mkFrosted = variant: {
+    ".config/cosmic/com.system76.CosmicTheme.${variant}/v2/frosted".text = frostedIntensity;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}/v2/frosted_applets".text = frostedApplets;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}/v2/frosted_panel".text = frostedPanel;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}/v2/frosted_system_interface".text =
+      frostedSystemInterface;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}/v2/frosted_windows".text = frostedWindows;
+  };
+
 in
 {
   # CosmicTheme.Mode (light/dark toggle) is intentionally not managed here —
@@ -286,6 +308,8 @@ in
     home.file = lib.mapAttrs (name: value: value // { force = true; }) (
       (mkBuilder "Light" palettes.${lightFlavor} lightSemantic lightAccent)
       // (mkBuilder "Dark" palettes.${darkFlavor} darkSemantic darkAccent)
+      // (mkFrosted "Light")
+      // (mkFrosted "Dark")
     );
   };
 }

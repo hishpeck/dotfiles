@@ -71,7 +71,7 @@ in
     ".config/cosmic/com.system76.CosmicPanel.Panel/v1/layer".text = "Top";
     ".config/cosmic/com.system76.CosmicPanel.Panel/v1/output".text = "All";
     ".config/cosmic/com.system76.CosmicPanel.Panel/v1/background".text = "ThemeDefault";
-    ".config/cosmic/com.system76.CosmicPanel.Panel/v1/opacity".text = "0.8";
+    ".config/cosmic/com.system76.CosmicPanel.Panel/v1/opacity".text = "1.0";
     ".config/cosmic/com.system76.CosmicPanel.Panel/v1/margin".text = "4";
     ".config/cosmic/com.system76.CosmicPanel.Panel/v1/padding".text = "0";
     ".config/cosmic/com.system76.CosmicPanel.Panel/v1/spacing".text = "0";
@@ -81,7 +81,7 @@ in
     ".config/cosmic/com.system76.CosmicPanel.Panel/v1/exclusive_zone".text = "true";
     ".config/cosmic/com.system76.CosmicPanel.Panel/v1/expand_to_edges".text = "true";
     ".config/cosmic/com.system76.CosmicPanel.Panel/v1/keyboard_interactivity".text = "OnDemand";
-    ".config/cosmic/com.system76.CosmicPanel.Panel/v1/autohide".text = "None";
+    ".config/cosmic/com.system76.CosmicPanel.Panel/v1/autohide".text = "Never";
     ".config/cosmic/com.system76.CosmicPanel.Panel/v1/autohover_delay_ms".text = "Some(500)";
     ".config/cosmic/com.system76.CosmicPanel.Panel/v1/size_center".text = "None";
     ".config/cosmic/com.system76.CosmicPanel.Panel/v1/size_wings".text = "None";
@@ -104,13 +104,7 @@ in
     ".config/cosmic/com.system76.CosmicPanel.Dock/v1/exclusive_zone".text = "false";
     ".config/cosmic/com.system76.CosmicPanel.Dock/v1/expand_to_edges".text = "false";
     ".config/cosmic/com.system76.CosmicPanel.Dock/v1/keyboard_interactivity".text = "OnDemand";
-    ".config/cosmic/com.system76.CosmicPanel.Dock/v1/autohide".text = ''
-      Some((
-          wait_time: 1000,
-          transition_time: 200,
-          handle_size: 4,
-          unhide_delay: 200,
-      ))'';
+    ".config/cosmic/com.system76.CosmicPanel.Dock/v1/autohide".text = "OnOverlap";
     ".config/cosmic/com.system76.CosmicPanel.Dock/v1/autohover_delay_ms".text = "Some(500)";
     ".config/cosmic/com.system76.CosmicPanel.Dock/v1/size_center".text = "None";
     ".config/cosmic/com.system76.CosmicPanel.Dock/v1/size_wings".text = "None";

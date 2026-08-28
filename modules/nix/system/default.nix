@@ -71,6 +71,17 @@ in {
 
   networking.networkmanager.enable = true;
 
+  # Default 5s is too short for COSMIC's session manager to ask apps (esp.
+  # the browser) to close gracefully before logind SIGKILLs them, which is
+  # what causes "session not closed properly" warnings on next launch.
+  services.logind.settings.Login.InhibitDelayMaxSec = 20;
+
+  # Without this, cosmic-session can hang watching a missing GeoClue2 D-Bus
+  # service during shutdown, stalling session-N.scope until systemd's ~91s
+  # timeout mass-SIGKILLs the whole session (browser included) instead of
+  # letting it close gracefully. See nixpkgs#415901.
+  services.geoclue2.enable = true;
+
   services.avahi = {
     enable = true;
     nssmdns4 = true;

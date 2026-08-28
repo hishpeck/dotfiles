@@ -7,5 +7,6 @@ Skills live in `.agents/skills/`. Each subdirectory is a skill with a `SKILL.md`
 | Skill | Invocation | Description |
 |---|---|---|
 | sync-cosmic | `/sync-cosmic` | Sync live COSMIC DE config back into `cosmic-config.nix` |
+| declare-vicinae-extension | `/declare-vicinae-extension` | Turn a store-installed vicinae extension into a declarative `programs.vicinae.extensions` entry |
 
 When the user invokes a skill (e.g. `/sync-cosmic`), read the corresponding `.agents/skills/<name>/SKILL.md` and follow its instructions.

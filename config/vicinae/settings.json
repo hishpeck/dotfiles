@@ -1,0 +1,113 @@
+// This configuration is merged with the default vicinae configuration file, which you can obtain by running the `vicinae config default` command.
+// Every item defined in this file takes precedence over the values defined in the default config or any other imported file.
+//
+// You can make manual edits to this file, however you should keep in mind that this file may be written to by vicinae when a configuration change is made through the GUI.
+// When that happens, any custom comments or formatting will be lost.
+//
+// If you want to maintain a configuration file with your own comments and formatting, you should create a separate file and add it to the 'imports' array.
+//
+// Learn more about configuration at https://docs.vicinae.com/config
+
+{
+   "$schema": "https://vicinae.com/schemas/config.json",
+   "close_on_focus_loss": false,
+   "font": {
+      "rendering": "native",
+      "normal": {
+         "family": "Noto Sans",
+         "size": 11
+      }
+   },
+   "theme": {
+      "light": {
+         "name": "catppuccin-latte"
+      },
+      "dark": {
+         "name": "catppuccin-latte"
+      }
+   },
+   "launcher_window": {
+      "opacity": 1,
+      "client_side_decorations": {
+         "enabled": false
+      },
+      "compact_mode": {
+         "enabled": false
+      },
+      "material": "blur"
+   },
+   "providers": {
+      "@khasbilegt/store.raycast.1password": {
+         "preferences": {
+            "version": "v8",
+            "closeWindowAfterCopying": true,
+            "primaryAction": "open-in-1password",
+            "reduceItemListMemoryUsage": false,
+            "secondaryAction": "open-in-browser",
+            "zshPath": "/bin/zsh",
+            "cliPath": "/run/wrappers/bin/op"
+         }
+      },
+      "core": {
+         "entrypoints": {
+            "keybind-settings": {
+               "enabled": false
+            },
+            "open-config-file": {
+               "enabled": false
+            },
+            "open-default-config": {
+               "enabled": false
+            },
+            "search-emojis": {
+               "preferences": {
+                  "defaultAction": "paste",
+                  "skinTone": "medium-light"
+               }
+            },
+            "sponsor": {
+               "enabled": false
+            }
+         }
+      },
+      "font": {
+         "entrypoints": {
+            "browse": {
+               "enabled": false
+            }
+         }
+      },
+      "system": {
+         "entrypoints": {
+            "volume-0": {
+               "enabled": false
+            },
+            "volume-100": {
+               "enabled": false
+            },
+            "volume-25": {
+               "enabled": false
+            },
+            "volume-50": {
+               "enabled": false
+            },
+            "volume-75": {
+               "enabled": false
+            },
+            "volume-down": {
+               "enabled": false
+            },
+            "volume-up": {
+               "enabled": false
+            }
+         }
+      },
+      "theme": {
+         "entrypoints": {
+            "set": {
+               "enabled": false
+            }
+         }
+      }
+   }
+}

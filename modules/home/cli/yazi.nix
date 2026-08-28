@@ -16,7 +16,16 @@
 
     # Use packaged plugins from nixpkgs
     plugins = {
-      inherit (pkgs.yaziPlugins) git chmod smart-enter relative-motions piper;
+      inherit (pkgs.yaziPlugins) git chmod smart-enter piper;
+
+      # nixpkgs' relative-motions is pinned to a commit still using the
+      # `ya.mgr_emit` API, which was removed upstream (unified into `ya.emit`).
+      # Patch it until nixpkgs/upstream catches up.
+      relative-motions = pkgs.yaziPlugins.relative-motions.overrideAttrs (old: {
+        postInstall = (old.postInstall or "") + ''
+          substituteInPlace "$out/main.lua" --replace-quiet "ya.mgr_emit" "ya.emit"
+        '';
+      });
 
       # yamb (Yet another bookmarks) - manually fetched
       yamb = pkgs.fetchFromGitHub {
@@ -123,9 +132,23 @@
         }];
         xdg_open_with = [{
           run = "${pkgs.writeShellScript "yazi-open-with" ''
-            file="$1"
-            mime=$(${pkgs.xdg-utils}/bin/xdg-mime query filetype "$file" 2>/dev/null)
-            [ -z "$mime" ] && exit 1
+            files=("$@")
+            [ ''${#files[@]} -eq 0 ] && exit 1
+
+            # Collect the distinct mime types across all selected files
+            declare -A mime_seen
+            mimes=()
+            for f in "''${files[@]}"; do
+              m=$(${pkgs.xdg-utils}/bin/xdg-mime query filetype "$f" 2>/dev/null)
+              [ -z "$m" ] && continue
+              if [ -z "''${mime_seen[$m]:-}" ]; then
+                mime_seen[$m]=1
+                mimes+=("$m")
+              fi
+            done
+            [ ''${#mimes[@]} -eq 0 ] && exit 1
+
+            # Only offer apps that declare support for every selected mime type
             entries=""
             IFS=: read -ra dirs <<< "$XDG_DATA_DIRS"
             for dir in "''${dirs[@]}"; do
@@ -133,20 +156,34 @@
               [ -d "$appdir" ] || continue
               for desktop in "$appdir"/*.desktop; do
                 [ -f "$desktop" ] || continue
-                if grep -q "MimeType=.*$mime" "$desktop" 2>/dev/null; then
-                  name=$(grep "^Name=" "$desktop" | head -1 | cut -d= -f2-)
-                  exec_line=$(grep "^Exec=" "$desktop" | head -1 | cut -d= -f2-)
-                  entries="$entries$name\t$exec_line\n"
-                fi
+                supports_all=1
+                for m in "''${mimes[@]}"; do
+                  grep -q "MimeType=.*$m" "$desktop" 2>/dev/null || { supports_all=0; break; }
+                done
+                [ "$supports_all" -eq 1 ] || continue
+                name=$(grep "^Name=" "$desktop" | head -1 | cut -d= -f2-)
+                exec_line=$(grep "^Exec=" "$desktop" | head -1 | cut -d= -f2-)
+                entries="$entries$name\t$exec_line\n"
               done
             done
             entries=$(printf "%b" "$entries" | sort -u | sort -t$'\t' -k1,1 --stable | awk -F'\t' '!seen[$1]++')
             [ -z "$entries" ] && exit 1
-            chosen=$(printf "%b" "$entries" | ${pkgs.fzf}/bin/fzf --with-nth=1 --delimiter=$'\t' --prompt="Open with: ")
+
+            hint=$(IFS=,; echo "''${mimes[*]}")
+            chosen=$(printf "%b" "$entries" | ${pkgs.fzf}/bin/fzf --with-nth=1 --delimiter=$'\t' --prompt="Open ''${#files[@]} file(s) [$hint] with: ")
             [ -z "$chosen" ] && exit 0
+
             exec_line=$(printf "%s" "$chosen" | cut -f2)
-            cmd=$(printf "%s" "$exec_line" | sed 's/ %[fFuUdDnNickvm]//g')
-            setsid $cmd "$file" > /dev/null 2>&1 &
+            cmd=$(printf "%s" "$exec_line" | sed -E 's/ %[fFuUdDnNickvm]//g')
+            if printf "%s" "$exec_line" | grep -qE '%[FU]'; then
+              # App declares support for multiple files: launch once with all of them
+              setsid $cmd "''${files[@]}" > /dev/null 2>&1 &
+            else
+              # App only takes a single file: launch one instance per file
+              for f in "''${files[@]}"; do
+                setsid $cmd "$f" > /dev/null 2>&1 &
+              done
+            fi
             # Clear terminal so Yazi redraws cleanly after block returns
             clear
           ''} %s";

@@ -1,6 +1,4 @@
-{
-  pkgs ? import <nixpkgs> { },
-}:
+{ pkgs ? import <nixpkgs> { }, }:
 
 let
   version = "9.18.11";
@@ -8,13 +6,12 @@ let
 
   src = pkgs.fetchurl {
     url = "https://download.getupnote.com/app/UpNote.AppImage";
-    sha256 = "sha256-aMb07a/wrn1LChIkyUSA/QMeBDSo9Ixi+zemPbKJc9s=";
+    sha256 = "sha256-Ggzjbo+CPgvoV6SM4D8hg9pODzk22mOnjXHVjLDaQG4=";
   };
 
   appimageContents = pkgs.appimageTools.extract { inherit pname version src; };
 
-in
-pkgs.appimageTools.wrapType2 {
+in pkgs.appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''

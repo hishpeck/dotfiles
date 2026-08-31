@@ -97,6 +97,16 @@ When adding or updating any app, prefer in this order:
 - **catppuccin/nix does not yet have a COSMIC module** — tracked in catppuccin/nix PR #549 (draft, blocked on upstream). When it lands, `cosmic-theme.nix` can be replaced with a single `catppuccin.cosmic.enable = true` line.
 - `noctalia.nix` hardcodes Catppuccin Latte hex values for Material 3 color roles — these are overridden at runtime by `colorSchemes.useWallpaperColors = true`, so they're cosmetically moot and left as-is.
 
+## Live-symlinked configs (no rebuild needed)
+
+Some app configs are wired via `mkOutOfStoreSymlink` instead of being copied into the Nix store, so editing the file under `config/` in this repo takes effect immediately — no `niup`/`nisw`/`hms` required:
+
+- **nvim** (`modules/home/cli/nvim.nix`): `config/nvim/lua`, `config/nvim/after`, `config/nvim/spell`, `config/nvim/lazy-lock.json`, `config/.vimrc`
+- **mcphub** (`modules/home/cli/default.nix`): `config/mcphub`
+- **vicinae** (`modules/home/desktop/launcher/vicinae.nix`): `config/vicinae/settings.json`
+
+A rebuild is still needed the first time the symlink itself is created/changed (e.g. adding a new `xdg.configFile` entry), or for any other Home Manager–managed file that isn't in this list — those are realized as real files/symlinks into the Nix store and only pick up changes on `niup`/`nisw`/`hms`.
+
 ## Conventions
 
 - All relative import paths in `hosts/` go `../../modules/nix/...` or `../../modules/home/...`

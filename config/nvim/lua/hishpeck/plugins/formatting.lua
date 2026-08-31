@@ -4,19 +4,31 @@ return {
 	config = function()
 		local conform = require("conform")
 
+		-- Projects that ship oxfmt (node_modules/.bin/oxfmt + an .oxfmtrc.json/oxfmt.config.ts
+		-- above the buffer) use it in place of prettier, so formatting matches what their
+		-- lint-staged/CI pipeline actually applies.
+		local function oxfmt_or_prettier(bufnr)
+			if conform.get_formatter_info("oxfmt", bufnr).available then
+				return { "oxfmt" }
+			end
+			return { "prettier" }
+		end
+
 		conform.setup({
 			formatters_by_ft = {
-				javascript = { "prettier" },
-				typescript = { "prettier" },
-				javascriptreact = { "prettier" },
-				typescriptreact = { "prettier" },
+				javascript = oxfmt_or_prettier,
+				typescript = oxfmt_or_prettier,
+				javascriptreact = oxfmt_or_prettier,
+				typescriptreact = oxfmt_or_prettier,
+				vue = oxfmt_or_prettier,
+				css = oxfmt_or_prettier,
+				json = oxfmt_or_prettier,
+				yaml = oxfmt_or_prettier,
+				markdown = oxfmt_or_prettier,
+				-- oxfmt doesn't format these reliably (svelte is a no-op passthrough) and
+				-- carandclassic's own lint-staged config doesn't run oxfmt on them either.
 				svelte = { "prettier" },
-				vue = { "prettier" },
-				css = { "prettier" },
 				html = { "prettier" },
-				json = { "prettier" },
-				yaml = { "prettier" },
-				markdown = { "prettier" },
 				graphql = { "prettier" },
 				lua = { "stylua" },
 				php = { "php_cs_fixer" },

@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, inputs, ... }:
 
 {
   imports = [
@@ -10,6 +10,7 @@
     ../../modules/nix/desktop/de/cosmic.nix
     ../../modules/nix/work.nix
     # ../../modules/nix/desktop/wm/hyprland.nix
+    inputs.irlume.nixosModules.irlume
   ];
 
   networking.hostName = "ac-zenbook-2025";
@@ -178,6 +179,81 @@
       '';
     };
   };
+
+  # Windows Hello-style face unlock via the dedicated IR camera, 2026-08.
+  # Started with howdy (in nixpkgs, simplest to wire up) but swapped for
+  # irlume after comparing alternatives: unlike howdy, irlume actually uses
+  # the IR-tier hardware for something — TPM-sealed embeddings (AES-256-GCM,
+  # not raw images) plus a paired RGB+IR anti-spoof check, versus howdy's
+  # complete lack of any anti-spoof gate. Caveat worth remembering: irlume's
+  # own docs disclose the IR gate *alone* passes a printed photo 69/70 times
+  # in their testing — it's the combination of both models that mitigates
+  # this, not IR by itself. Pre-1.0 (v0.11.3), "self-tested against
+  # ISO/IEC 30107-3, not lab-certified" per its own README. Not from
+  # nixpkgs — pulled in as a flake input (see flake.nix), module imported
+  # above.
+  #
+  # video0 = RGB ("ASUS FHD webcam"), video2 = IR ("ASUS IR camera", index 0
+  # capture node — video3 at index 1 is the paired metadata node), both
+  # already confirmed working with the stock uvcvideo driver.
+  #
+  # cosmic-greeter is COSMIC's PAM service (confirmed the only one that
+  # exists for this DE — no separate lock-specific PAM file, so this same
+  # entry point covers both login and screen unlock). Classified here as
+  # "login" profile ([success=1 default=ignore]) since that's the closer
+  # match for a full greeter stack; irlume's own "auto" profile detection
+  # doesn't have a specific rule for cosmic-greeter's name.
+  #
+  # polkit-1 and sudo added 2026-09 so 1Password's system-authentication
+  # (which goes through polkit, not the GNOME keyring/KDE wallet path that
+  # `irlume keyring arm` handles) and sudo itself can also use face auth.
+  # Neither is a full greeter or a screen-lock in irlume's own taxonomy —
+  # they're one-shot permission prompts, closer in spirit to "lock" (a
+  # single sufficient check) than a full login sequence, so that's the
+  # profile used for both. Inference, not something the module's docs state
+  # explicitly for these two services — if it guesses wrong the likely
+  # failure mode is just falling back to password-only for that prompt,
+  # not anything breaking.
+  services.irlume = {
+    enable = true;
+    rgbDevice = "/dev/video0";
+    irDevice = "/dev/video2";
+    pam.services = {
+      cosmic-greeter.profile = "login";
+      polkit-1.profile = "lock";
+      sudo.profile = "lock";
+    };
+  };
+
+  # Lights the IR emitter LED for reliable detection in irlume above — also
+  # re-runs automatically after resume from sleep/hibernate. device already
+  # correctly defaults to "video2". Manual one-time steps still required
+  # after this applies, in order:
+  #   sudo linux-enable-ir-emitter configure   # finds the right command to light the IR LED
+  #   sudo irlume enroll --user $USER          # enroll a face
+  #   irlume doctor                            # sanity-check the whole setup
+  #   sudo irlume keyring arm                  # optional: bind login password to TPM
+  services.linux-enable-ir-emitter.enable = true;
+
+  # ISH (Integrated Sensor Hub) firmware fails to load on every boot with
+  # the stock linux-firmware blob ("ISH loader: cmd 2 failed 10") — this
+  # exact hardware revision needs a different build than the generic
+  # ish_lnlm.bin. Community-provided working replacement from the dedicated
+  # repo for this laptop:
+  # https://github.com/dantmnf/zenbook-s14-ux5406sa-linux (file
+  # firmware/intel/ish/ish_lnlm_ef534c00_fb3b8d86.bin). Installed at the
+  # exact path the kernel requests (intel/ish/ish_lnlm.bin) with hiPrio so
+  # it wins the collision against linux-firmware's own file at that same
+  # path when hardware.firmware gets merged into one tree.
+  hardware.firmware = [
+    (lib.hiPrio (pkgs.runCommand "ish-lnlm-firmware-fix" { } ''
+      mkdir -p $out/lib/firmware/intel/ish
+      cp ${pkgs.fetchurl {
+        url = "https://raw.githubusercontent.com/dantmnf/zenbook-s14-ux5406sa-linux/master/firmware/intel/ish/ish_lnlm_ef534c00_fb3b8d86.bin";
+        hash = "sha256-AdlQVdGuuy4leUZbR93aOW13t8BIZiyuB5FJpUbky0M=";
+      }} $out/lib/firmware/intel/ish/ish_lnlm.bin
+    ''))
+  ];
 
   system.stateVersion = "24.05";
 }

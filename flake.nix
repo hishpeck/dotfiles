@@ -27,6 +27,8 @@
     cosmic-ctl.inputs.nixpkgs.follows = "nixpkgs";
     herdr.url = "github:ogulcancelik/herdr";
     herdr.inputs.nixpkgs.follows = "nixpkgs";
+    irlume.url = "github:archledger/irlume";
+    irlume.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, home-manager, stylix, catppuccin

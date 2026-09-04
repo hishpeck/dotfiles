@@ -197,12 +197,14 @@
   # capture node — video3 at index 1 is the paired metadata node), both
   # already confirmed working with the stock uvcvideo driver.
   #
-  # cosmic-greeter is COSMIC's PAM service (confirmed the only one that
-  # exists for this DE — no separate lock-specific PAM file, so this same
-  # entry point covers both login and screen unlock). Classified here as
-  # "login" profile ([success=1 default=ignore]) since that's the closer
-  # match for a full greeter stack; irlume's own "auto" profile detection
-  # doesn't have a specific rule for cosmic-greeter's name.
+  # cosmic-greeter is COSMIC's greeter UI, but `irlume login status`
+  # revealed the actual active login manager underneath is greetd — that's
+  # the PAM service that matters for real login, and it was never wired
+  # (bug found 2026-09, after `keyring arm` left the login keyring
+  # unrecoverable by password: no PAM stack ever actually completed a face
+  # login to deliver the released secret to it). Both are wired now, "login"
+  # profile ([success=1 default=ignore]) since that's the closer match for
+  # a full greeter stack.
   #
   # polkit-1 and sudo added 2026-09 so 1Password's system-authentication
   # (which goes through polkit, not the GNOME keyring/KDE wallet path that
@@ -220,10 +222,22 @@
     irDevice = "/dev/video2";
     pam.services = {
       cosmic-greeter.profile = "login";
+      greetd.profile = "login";
       polkit-1.profile = "lock";
       sudo.profile = "lock";
     };
   };
+
+  # The other half of the same 2026-09 bug: even where irlume WAS wired, no
+  # PAM module ever picked up the password/secret it releases and handed it
+  # to the login keyring (`irlume login status` flagged this directly — a
+  # face login released the password but "no keyring module reads it
+  # afterwards"). This was true even before irlume existed; it just never
+  # mattered until `keyring arm` made the keyring depend on that hand-off
+  # actually working. Must sit BELOW the pam_irlume line to work — verify
+  # in /etc/pam.d/cosmic-greeter and /etc/pam.d/greetd after applying.
+  security.pam.services.cosmic-greeter.enableGnomeKeyring = true;
+  security.pam.services.greetd.enableGnomeKeyring = true;
 
   # Lights the IR emitter LED for reliable detection in irlume above — also
   # re-runs automatically after resume from sleep/hibernate. device already

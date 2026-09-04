@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   home.packages = [
@@ -6,30 +6,15 @@
   ];
 
   # Mirrors modules/home/cli/tmux.nix as closely as herdr's config model allows.
-  xdg.configFile."herdr/config.toml".text = ''
-    [keys]
-    prefix = "ctrl+space"
-
-    # Alt+arrows to move between panes without the prefix (tmux M-Left/Right/Up/Down)
-    focus_pane_left = ["prefix+h", "alt+left"]
-    focus_pane_down = ["prefix+j", "alt+down"]
-    focus_pane_up = ["prefix+k", "alt+up"]
-    focus_pane_right = ["prefix+l", "alt+right"]
-
-    # Shift+arrows to move between tabs without the prefix (tmux S-Left/Right/Up/Down)
-    previous_tab = ["prefix+p", "shift+left"]
-    next_tab = ["prefix+n", "shift+right"]
-    new_tab = ["prefix+c", "shift+up"]
-    close_tab = ["prefix+shift+x", "shift+down"]
-
-    # Keep tmux's '"' (stacked) / '%' (side by side) split keys alongside herdr's defaults
-    split_vertical = ["prefix+v", "prefix+percent"]
-    split_horizontal = ["prefix+minus", "prefix+double_quote"]
-
-    [theme]
-    name = "catppuccin-latte"
-
-    [theme.custom]
-    accent = "#ea76cb"
-  '';
+  #
+  # herdr writes onboarding/settings changes back to config.toml itself, so it
+  # needs to stay a real writable file instead of the usual read-only nix
+  # store symlink xdg.configFile.text would produce ("failed to save
+  # onboarding settings: read only file system"). Symlinked out-of-store to
+  # the repo instead, same trick as nvim (cli/nvim.nix) and vicinae
+  # (desktop/launcher/vicinae.nix) — edit config/herdr/config.toml by hand or
+  # let herdr write to it, both work.
+  xdg.configFile."herdr/config.toml".source =
+    config.lib.file.mkOutOfStoreSymlink
+      "${config.home.homeDirectory}/dotfiles/config/herdr/config.toml";
 }

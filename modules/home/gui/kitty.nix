@@ -153,4 +153,14 @@ in
     ".config/kitty/dark-theme.auto.conf".text = mkThemeConf mochaColors;
     ".config/kitty/no-preference-theme.auto.conf".text = mkThemeConf latteColors;
   };
+
+  # kitty ships a second, decoy desktop entry (kitty-open.desktop, meant only
+  # as a URL/file-open helper — Exec=kitty +open %U) that's *also* tagged
+  # Categories=...;TerminalEmulator;. Spec-compliant launchers picking a
+  # default terminal to run arbitrary commands in (e.g. vicinae launching a
+  # terminal-flagged app with no running window yet) can pick this decoy
+  # instead of the real kitty.desktop, producing "kitty +open -e <cmd>" —
+  # kitty then tries to interpret <cmd> as a URL and fails ("Open URL error").
+  # The xdg-terminal-exec spec's override file forces the correct one.
+  xdg.configFile."xdg-terminals.list".text = "kitty.desktop\n";
 }

@@ -3,24 +3,31 @@
   pkgs,
   inputs,
   lib,
+  osConfig ? null,
   ...
 }:
 
 let
+  # cosmic-comp has an open upstream bug where the frosted-glass blur flickers
+  # (opacity jumping ~0.8-0.95) on screen updates, reported almost exclusively
+  # on AMD GPUs: https://github.com/pop-os/cosmic-comp/issues/2557
+  isAMD =
+    osConfig != null && lib.elem "amdgpu" (osConfig.services.xserver.videoDrivers or [ ]);
+
   # ── User-facing knobs ────────────────────────────────────────────────────────
   gaps = "(0, 8)";
   activeHint = "3";
-  isFrosted = "true";
+  isFrosted = if isAMD then "false" else "true";
 
   # Frosted-glass v2 (granular). cosmic-ctl 1.5.0's Theme/ThemeBuilder struct
   # (from libcosmic@7151638, 2025-05-02) only has `is_frosted: bool` above —
   # no v2 fields — so build-theme can't compute these. They bypass the
   # Builder pipeline entirely and are written straight to the final theme
   # files below, same mechanism as cosmic-config.nix.
-  frostedIntensity = "Medium"; # Off | Low | Medium | High
-  frostedApplets = "true";
-  frostedPanel = "true";
-  frostedSystemInterface = "true";
+  frostedIntensity = if isAMD then "Off" else "Medium"; # Off | Low | Medium | High
+  frostedApplets = if isAMD then "false" else "true";
+  frostedPanel = if isAMD then "false" else "true";
+  frostedSystemInterface = if isAMD then "false" else "true";
   frostedWindows = "false";
 
   # ── Driven by global catppuccin options (set in theme.nix) ──────────────────

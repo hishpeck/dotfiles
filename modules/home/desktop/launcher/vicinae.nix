@@ -26,6 +26,21 @@
     ];
   };
 
+  # secrets.json is a plain, un-managed file living outside both the Nix
+  # store and the dotfiles repo — create it by hand once per machine (see
+  # config/vicinae/README.md) and never through the GUI, since anything typed
+  # into an extension's own preferences form gets written straight into the
+  # git-tracked settings.json instead. Values in here take precedence over
+  # settings.json for whatever keys they set (vicinae merges override files
+  # last), so this is the one place secrets belong.
+  #
+  # No `programs.vicinae.systemd.environment` option exists in this (the
+  # nixpkgs-native) home-manager module, so this is added directly to the
+  # unit it generates instead — it doesn't set Service.Environment itself,
+  # so there's nothing to conflict with.
+  systemd.user.services.vicinae.Service.Environment =
+    [ "VICINAE_OVERRIDES=${config.home.homeDirectory}/.config/vicinae/secrets.json" ];
+
   # Vicinae writes GUI-driven changes (theme picks, preferences, etc.) back to
   # settings.json, so it needs to stay a real writable file — not the usual
   # read-only nix store symlink `xdg.configFile`/`programs.vicinae.settings`

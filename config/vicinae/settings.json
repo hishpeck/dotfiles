@@ -11,6 +11,7 @@
 {
    "$schema": "https://vicinae.com/schemas/config.json",
    "close_on_focus_loss": false,
+   "pop_to_root_on_close": true,
    "font": {
       "rendering": "native",
       "normal": {
@@ -34,9 +35,31 @@
       "compact_mode": {
          "enabled": false
       },
+      "floating_status_bar": true,
       "material": "blur"
    },
    "providers": {
+      "@gebeto/store.raycast.translate": {
+         "preferences": {
+            "autoInput": true,
+            "defaultAction": "copy",
+            "lang1": "en",
+            "lang2": "pl",
+            "langFrom": "auto",
+            "prioritizeCrossLanguage": true
+         },
+         "entrypoints": {
+            "instant-translate-copy": {
+               "enabled": false
+            },
+            "instant-translate-paste": {
+               "enabled": false
+            },
+            "instant-translate-view": {
+               "enabled": false
+            }
+         }
+      },
       "@khasbilegt/store.raycast.1password": {
          "preferences": {
             "version": "v8",
@@ -48,6 +71,27 @@
             "cliPath": "/run/wrappers/bin/op"
          }
       },
+      "@tegola/store.raycast.remove-paywall": {
+         "preferences": {
+            "service": "https://www.removepaywall.com"
+         }
+      },
+      "@thomaslombart/store.raycast.linear": {
+         "entrypoints": {
+            "create-project": {
+               "enabled": false
+            },
+            "search-custom-views": {
+               "enabled": false
+            },
+            "search-documents": {
+               "enabled": false
+            },
+            "search-projects": {
+               "enabled": false
+            }
+         }
+      },
       "core": {
          "entrypoints": {
             "keybind-settings": {
@@ -57,6 +101,9 @@
                "enabled": false
             },
             "open-default-config": {
+               "enabled": false
+            },
+            "search-builtin-icons": {
                "enabled": false
             },
             "search-emojis": {
@@ -77,8 +124,46 @@
             }
          }
       },
+      "media": {
+         "entrypoints": {
+            "toggle-mute": {
+               "enabled": false
+            },
+            "volume-0": {
+               "enabled": false
+            },
+            "volume-100": {
+               "enabled": false
+            },
+            "volume-25": {
+               "enabled": false
+            },
+            "volume-50": {
+               "enabled": false
+            },
+            "volume-75": {
+               "enabled": false
+            },
+            "volume-down": {
+               "enabled": false
+            },
+            "volume-up": {
+               "enabled": false
+            }
+         }
+      },
+      "power": {
+         "entrypoints": {
+            "sleep": {
+               "enabled": false
+            }
+         }
+      },
       "system": {
          "entrypoints": {
+            "set-default-terminal": {
+               "enabled": false
+            },
             "volume-0": {
                "enabled": false
             },

@@ -175,6 +175,10 @@ in
               ],
               key: "Left",
           ): Disable,
+          (
+              modifiers: [],
+              key: "KP_Multiply",
+          ): System(MuteMic),
       }'';
     ".config/cosmic/com.system76.CosmicSettings.Shortcuts/v1/system_actions".text = ''
       {
@@ -224,10 +228,11 @@ in
     ".config/cosmic/com.system76.CosmicAppletTime/v1/first_day_of_week".text = "0";
 
     # ── Idle ────────────────────────────────────────────────────────────────────
-    # Idle-triggered suspend disabled entirely, 2026-08 — it hits the same
-    # unresolved xe/GuC resume freeze as lid-close suspend used to (still no
-    # upstream fix as of this date). Lid-close hibernate (confirmed working)
-    # is now the only automatic sleep-state transition on this host.
+    # Idle-triggered suspend disabled entirely — it used to hit the same
+    # xe/GuC resume freeze as lid-close suspend used to (see
+    # hosts/ac-zenbook-2025/default.nix; fixed upstream in linux-7.2,
+    # 2026-08-25). Left disabled since lid-close hibernate already covers
+    # sleep on this host; re-enable if wanted now that the freeze is fixed.
     # (Screen-off/lock timeout lives in modules/home/laptop.nix — desktops
     # like ac-main-pc should never lock on idle.)
     ".config/cosmic/com.system76.CosmicIdle/v1/suspend_on_ac_time".text = "None";

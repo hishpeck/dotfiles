@@ -21,5 +21,6 @@ split_horizontal = ["prefix+minus", "prefix+double_quote"]
 [theme]
 name = "catppuccin-latte"
 
+auto_switch = false
 [theme.custom]
 accent = "#ea76cb"

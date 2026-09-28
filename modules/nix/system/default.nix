@@ -135,6 +135,43 @@ in {
     alsa.support32Bit = true;
     pulse.enable = true;
     jack.enable = true;
+
+    # RNNoise-based "Noise Canceling Mic" virtual source. Has no fixed
+    # capture target, so it always follows whatever the system default
+    # input is — switching mics (e.g. laptop lid mic vs a headset) needs no
+    # config change. Point communication apps at this device instead of the
+    # raw mic; it strips notification dings/fan noise/etc. before the app's
+    # own (often weaker) suppression ever sees them.
+    extraConfig.pipewire."92-rnnoise" = {
+      "context.modules" = [{
+        name = "libpipewire-module-filter-chain";
+        args = {
+          "node.description" = "Noise Canceling Mic";
+          "media.name" = "Noise Canceling Mic";
+          "filter.graph" = {
+            nodes = [{
+              type = "ladspa";
+              name = "rnnoise";
+              plugin = "${pkgs.rnnoise-plugin}/lib/ladspa/librnnoise_ladspa.so";
+              label = "noise_suppressor_mono";
+              control = { "VAD Threshold (%)" = 50.0; };
+            }];
+          };
+          "audio.channels" = 1;
+          "audio.position" = [ "MONO" ];
+          "capture.props" = {
+            "node.name" = "capture.rnnoise_source";
+            "node.passive" = true;
+            "audio.rate" = 48000;
+          };
+          "playback.props" = {
+            "node.name" = "rnnoise_source";
+            "media.class" = "Audio/Source";
+            "audio.rate" = 48000;
+          };
+        };
+      }];
+    };
   };
 
   # Auto-mount removable media

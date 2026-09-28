@@ -7,7 +7,6 @@
     ../../modules/nix/gui/default.nix
     ../../modules/nix/system/default.nix
     ../../modules/nix/desktop/de/cosmic.nix
-    ../../modules/nix/work.nix
     ../../modules/nix/private.nix
   ];
 
@@ -19,17 +18,15 @@
   # dc_debug_mask=0x10 works around AMD DCN 4.0.1 mpc2_assert_idle_mpcc timeout bug —
   # causes panel flicker, screen-share hard crashes, and Slack huddle stutters.
   # Remove once the upstream amdgpu DCN 4.0.1 MPC idle fix lands in the kernel.
-  boot.kernelParams = [ "drm.debug=0x106" "amdgpu.dc_debug_mask=0x10" ];
+  boot.kernelParams = [
+    "drm.debug=0x106"
+    "amdgpu.dc_debug_mask=0x10"
+  ];
   services.resolved.enable = true;
 
   # Open ports for development
   networking.firewall.allowedTCPPorts = [
     9998 # Xdebug
-  ];
-
-  security.pki.certificateFiles = [
-    ./la.crt
-    ./cnc.crt
   ];
 
   # DroidCam virtual camera for using phone as webcam

@@ -34,6 +34,7 @@ return {
 				"vue_ls",
 				"astro",
 				"intelephense",
+				"laravel_lsp",
 				"gopls",
 			},
 		})

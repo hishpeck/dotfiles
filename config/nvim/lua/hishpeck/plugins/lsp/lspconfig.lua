@@ -215,12 +215,18 @@ return {
 					},
 				}
 			elseif server_name == "laravel_lsp" then
-				server_opts.cmd = { "laravel-lsp" }
-				server_opts.filetypes = { "php", "blade" }
-				server_opts.root_dir = function(bufnr, on_dir)
-					local root = vim.fs.root(bufnr, "artisan")
-					if root then
-						on_dir(root)
+				-- Projects run MySQL in Docker with DB_HOST=database, which only resolves inside
+				-- the container network; the LSP runs host PHP, so point it at the published port
+				server_opts.cmd_env = { DB_HOST = "127.0.0.1" }
+				server_opts.before_init = function(params, config)
+					-- Prefer the project's Docker wrapper (e.g. carandclassic's bin/car) so scripts
+					-- run with the container's PHP, extensions and database host
+					local car = config.root_dir and config.root_dir .. "/bin/car"
+					if car and vim.fn.executable(car) == 1 then
+						params.initializationOptions = { phpCommand = { car, "php" } }
+					else
+						-- The model index script exceeds PHP's default 128M on large apps and exits silently
+						params.initializationOptions = { phpCommand = { "php", "-d", "memory_limit=-1" } }
 					end
 				end
 			elseif server_name == "lua_ls" then

@@ -23,4 +23,4 @@ name = "catppuccin-latte"
 
 auto_switch = false
 [theme.custom]
-accent = "#ea76cb"
+accent = "#fe640b"

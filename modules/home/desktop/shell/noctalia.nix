@@ -173,7 +173,7 @@ in
 
       # Color scheme - use wallpaper colors or set custom Catppuccin colors below
       colorSchemes = {
-        useWallpaperColors = true;  # Extract colors from wallpaper.png
+        useWallpaperColors = true;  # Extract colors from the wallpaper
         darkMode = false;  # Latte is a light theme
         schedulingMode = "off";
         syncGsettings = true;

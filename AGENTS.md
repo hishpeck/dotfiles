@@ -77,10 +77,10 @@ When adding or updating any app, prefer in this order:
 ## Theme
 
 - Catppuccin **Latte** (light) throughout — `flavor` and `accent` are set once in `modules/theme-values.nix` as plain Nix values and imported by both `modules/home/theme.nix` (HM) and `modules/nix/system/default.nix` (NixOS). They propagate automatically to all programs via `catppuccin/nix` modules.
-- Current accent: **pink**
+- Current accent: **peach**
 - Font: **Lato** (sans), **FiraCode Nerd Font** (mono)
 - Cursor: **Bibata-Modern-Ice**
-- Wallpaper: `wallpaper.png` at repo root
+- Wallpaper: `wallpapers/autumn.jpg` (COSMIC background + Stylix image)
 
 ### Theming architecture
 
@@ -92,8 +92,9 @@ When adding or updating any app, prefer in this order:
   - **tmux** — accent used as `@thm_${accent}` token in status bar config in `tmux.nix`
   - **bat** — fully managed by `catppuccin.bat` module; no manual config needed
   - **sddm** — NixOS module reads `config.catppuccin.flavor` directly (system-level catppuccin module)
-- `modules/home/desktop/cosmic-theme.nix` — generates COSMIC Builder config files for both Light (Latte) and Dark (Mocha) themes via `home.file`, then runs `cosmic-ext-ctl build-theme` via `home.activation.buildCosmicTheme` (after `writeBoundary`) to regenerate the computed theme from the Builder files. Imported directly in each COSMIC host's `home.nix` (not in `theme.nix`, since `theme.nix` is a shared module loaded on all hosts including non-COSMIC ones). User-facing knobs (gaps, activeHint, isFrosted) are local vars at the top of the file. `CosmicTheme.Mode` (light/dark toggle) is intentionally NOT managed — user controls it via COSMIC Settings at runtime.
-- `cosmic-ctl` (flake input `github:cosmic-utils/cosmic-ctl`) provides `cosmic-ctl` binary (package output is `packages.${system}.cosmic-ext-ctl`, but the binary inside is named `cosmic-ctl`). Used exclusively in `cosmic-theme.nix` for `build-theme` activation.
+  - **herdr** — `config/herdr/config.toml` is a writable out-of-store symlink, so it can't be templated; `home.activation.herdrTheme` in `herdr.nix` sed-patches its `name = "catppuccin-…"` and `accent = "#…"` lines from the catppuccin palette on every switch
+- `modules/home/desktop/cosmic-theme.nix` — generates COSMIC Builder config files (`CosmicTheme.{Light,Dark}.Builder/v2/*`) for both Light (Latte) and Dark (Mocha) themes via `home.file`, then runs `cosmic-build-theme` via `home.activation.buildCosmicTheme` (after `writeBoundary`) to regenerate the computed theme (`CosmicTheme.{Light,Dark}/v2/*`) from them. COSMIC 1.9's Theme/ThemeBuilder are config **version 2**: each key is read from `v2/` first, falling back to `v1/` — so Builder files must be written to `v2/`, or stale keys left there by COSMIC Settings shadow them. Imported directly in each COSMIC host's `home.nix` (not in `theme.nix`, since `theme.nix` is a shared module loaded on all hosts including non-COSMIC ones). User-facing knobs (gaps, activeHint, frosted*) are local vars at the top of the file. `CosmicTheme.Mode` (light/dark toggle) is intentionally NOT managed — user controls it via COSMIC Settings at runtime.
+- `custom-apps/cosmic-build-theme` — tiny headless theme builder (ThemeBuilder → `build()` → write Theme, light + dark), compiled as an extra bin inside `cosmic-settings-daemon`'s source tree reusing its `cargoDeps`, so it always matches the installed COSMIC's theme schema. Replaced `cosmic-ctl`, whose `build-theme` was stuck on pre-v2 libcosmic and only wrote `v1/` (which v2 keys silently override).
 - **catppuccin/nix does not yet have a COSMIC module** — tracked in catppuccin/nix PR #549 (draft, blocked on upstream). When it lands, `cosmic-theme.nix` can be replaced with a single `catppuccin.cosmic.enable = true` line.
 - `noctalia.nix` hardcodes Catppuccin Latte hex values for Material 3 color roles — these are overridden at runtime by `colorSchemes.useWallpaperColors = true`, so they're cosmetically moot and left as-is.
 

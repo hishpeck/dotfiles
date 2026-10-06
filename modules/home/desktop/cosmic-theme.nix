@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  inputs,
   lib,
   osConfig ? null,
   ...
@@ -17,13 +16,8 @@ let
   # ── User-facing knobs ────────────────────────────────────────────────────────
   gaps = "(0, 8)";
   activeHint = "3";
-  isFrosted = if isAMD then "false" else "true";
 
-  # Frosted-glass v2 (granular). cosmic-ctl 1.5.0's Theme/ThemeBuilder struct
-  # (from libcosmic@7151638, 2025-05-02) only has `is_frosted: bool` above —
-  # no v2 fields — so build-theme can't compute these. They bypass the
-  # Builder pipeline entirely and are written straight to the final theme
-  # files below, same mechanism as cosmic-config.nix.
+  # Frosted glass (granular, ThemeBuilder v2 fields).
   frostedIntensity = if isAMD then "Off" else "Medium"; # Off | Low | Medium | High
   frostedApplets = if isAMD then "false" else "true";
   frostedPanel = if isAMD then "false" else "true";
@@ -236,61 +230,57 @@ let
   darkAccent = accentColors.${darkFlavor}.${accent};
 
   # ── Builder file helper ──────────────────────────────────────────────────────
-  # Returns an attrset of home.file entries for one theme variant
+  # Returns an attrset of home.file entries for one theme variant. COSMIC 1.9's
+  # ThemeBuilder is config version 2, which reads v2/<key> before falling back
+  # to v1/<key> — so everything goes in v2, or stale keys COSMIC Settings left
+  # there would shadow ours.
   mkBuilder = variant: pal: sem: acc: {
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/palette".text = pal;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/accent".text = acc;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/window_hint".text = acc;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/bg_color".text = sem.bg;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/text_tint".text = sem.text;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/success".text = sem.success;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/warning".text = sem.warning;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/destructive".text = sem.destructive;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/palette".text = pal;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/accent".text = acc;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/window_hint".text = acc;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/bg_color".text = sem.bg;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/text_tint".text = sem.text;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/success".text = sem.success;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/warning".text = sem.warning;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/destructive".text = sem.destructive;
     # Keep as None — COSMIC derives sane values from the palette
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/neutral_tint".text = "None";
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/primary_container_bg".text = "None";
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/secondary_container_bg".text =
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/neutral_tint".text = "None";
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/primary_container_bg".text = "None";
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/secondary_container_bg".text =
       "None";
     # User-facing knobs (top of file)
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/gaps".text = gaps;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/active_hint".text = activeHint;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/is_frosted".text = isFrosted;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/gaps".text = gaps;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/active_hint".text = activeHint;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/frosted".text = frostedIntensity;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/frosted_applets".text = frostedApplets;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/frosted_panel".text = frostedPanel;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/frosted_system_interface".text =
+      frostedSystemInterface;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/frosted_windows".text = frostedWindows;
     # COSMIC defaults — no reason to change these outside COSMIC Settings
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/corner_radii".text = cornerRadii;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v1/spacing".text = spacing;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/corner_radii".text = cornerRadii;
+    ".config/cosmic/com.system76.CosmicTheme.${variant}.Builder/v2/spacing".text = spacing;
   };
 
-  # Final-file helper for settings the Builder pipeline can't produce (see
-  # frosted-glass v2 comment above). Written directly, not computed.
-  mkFrosted = variant: {
-    ".config/cosmic/com.system76.CosmicTheme.${variant}/v2/frosted".text = frostedIntensity;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}/v2/frosted_applets".text = frostedApplets;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}/v2/frosted_panel".text = frostedPanel;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}/v2/frosted_system_interface".text =
-      frostedSystemInterface;
-    ".config/cosmic/com.system76.CosmicTheme.${variant}/v2/frosted_windows".text = frostedWindows;
-  };
+  buildTheme = pkgs.callPackage ../../../custom-apps/cosmic-build-theme/default.nix { };
 
 in
 {
   # CosmicTheme.Mode (light/dark toggle) is intentionally not managed here —
   # the user controls that at runtime via COSMIC Settings.
   config = {
-    home.packages = [
-      inputs.cosmic-ctl.packages.${pkgs.stdenv.hostPlatform.system}.cosmic-ext-ctl
-    ];
+    home.packages = [ buildTheme ];
 
+    # Regenerates the computed theme (CosmicTheme.{Light,Dark}/v2) from the
+    # Builder files above. Called by store path: the activation script's PATH
+    # doesn't include the user profile.
     home.activation.buildCosmicTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      if command -v cosmic-ctl &>/dev/null; then
-        $DRY_RUN_CMD cosmic-ctl build-theme
-      fi
+      $DRY_RUN_CMD ${lib.getExe buildTheme}
     '';
 
     home.file = lib.mapAttrs (name: value: value // { force = true; }) (
       (mkBuilder "Light" palettes.${lightFlavor} lightSemantic lightAccent)
       // (mkBuilder "Dark" palettes.${darkFlavor} darkSemantic darkAccent)
-      // (mkFrosted "Light")
-      // (mkFrosted "Dark")
     );
   };
 }

@@ -17,7 +17,6 @@ let
 
     extraPkgs = pkgs:
       with pkgs; [
-        openssl_3
         tzdata
         cacert
 

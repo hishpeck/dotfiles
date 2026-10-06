@@ -7,7 +7,7 @@ let
         cat > $out/share/plymouth/themes/nixos-catppuccin/nixos-catppuccin.plymouth << EOF
     [Plymouth Theme]
     Name=NixOS Catppuccin
-    Description=Spinning NixOS logo on Catppuccin Mocha background
+    Description=Spinning NixOS logo below the firmware (BGRT) vendor logo
     ModuleName=two-step
 
     [two-step]
@@ -17,10 +17,13 @@ let
     VerticalAlignment=.5
     Transition=none
     TransitionDuration=0.0
+    # Keep the motherboard/laptop vendor logo on screen and spin underneath it,
+    # Windows-style. Falls back to the solid background on non-BGRT firmware.
+    UseFirmwareBackground=true
     BackgroundStartColor=0x1e1e2e
     BackgroundEndColor=0x1e1e2e
     ProgressBarBackgroundColor=0x45475a
-    ProgressBarForegroundColor=0xf5c2e7
+    ProgressBarForegroundColor=0xfab387
     MessageBelowAnimation=true
 
     [boot-up]
@@ -199,7 +202,17 @@ in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.timeout = 0;
 
-  boot.kernelParams = [ "quiet" "splash" ];
+  # Silent boot: keep kernel/udev/systemd chatter off the console so it
+  # doesn't draw white text over (or instead of) the Plymouth splash.
+  boot.consoleLogLevel = 3;
+  boot.initrd.verbose = false;
+  boot.kernelParams = [
+    "quiet"
+    "splash"
+    "rd.udev.log_level=3"
+    "udev.log_priority=3"
+    "rd.systemd.show_status=auto"
+  ];
   boot.initrd.systemd.enable = true;
   boot.plymouth = {
     enable = true;

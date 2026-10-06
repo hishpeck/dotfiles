@@ -19,6 +19,10 @@
   hardware.enableRedistributableFirmware = true;
 
   boot.kernelModules = [ "xe" ];
+  # Load the GPU driver in initrd so Plymouth starts on the real KMS device.
+  # Otherwise it starts on simpledrm, which gets torn down mid-boot when xe
+  # loads after switch-root — the splash vanishes and you get a black screen.
+  boot.initrd.kernelModules = [ "xe" ];
 
   boot.kernelParams = [
     "xe.force_probe=a840"

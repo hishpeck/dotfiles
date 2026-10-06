@@ -11,19 +11,13 @@ checking theming too.
 - **`cosmic-config.nix`**: every tracked key is a direct 1:1 `home.file` entry — the `.text`
   value *is* the live file's content. Compare live vs. nix directly.
 - **`cosmic-theme.nix`**: most tracked values are the `let`-bound "User-facing knobs" at the
-  top of the file (`gaps`, `activeHint`, `isFrosted`, `frostedIntensity`, etc.), not raw
-  paths. Two sub-cases:
-  - Knobs consumed by `mkBuilder` (palette, accent, colors, `gaps`, `activeHint`,
-    `isFrosted`, `corner_radii`, `spacing`) are written only to the **Builder input** path
-    (`.../{Light,Dark}.Builder/v1/<key>`) — compare live values there, not the final
-    `.../{Light,Dark}/v1/<key>` file. The final file is *computed* by `cosmic-ctl
-    build-theme` at activation, so it's a derived artifact, not a second source of truth to
-    sync from.
-  - Knobs consumed by `mkFrosted` (or any future helper that skips `mkBuilder`) are written
-    straight to the **final** file (`.../{Light,Dark}/v2/<key>`) because `cosmic-ctl` (see
-    its pinned `libcosmic` rev in `Cargo.lock`) has no compute step for them — check
-    `cosmic-ctl`'s binary strings / upstream source before assuming a new theme key follows
-    either pattern; it may be a schema COSMIC introduced after `cosmic-ctl` last updated.
+  top of the file (`gaps`, `activeHint`, `frostedIntensity`, etc.), not raw paths. All of
+  them are consumed by `mkBuilder` and written only to the **Builder input** path
+  (`.../{Light,Dark}.Builder/v2/<key>`) — compare live values there, not the final
+  `.../{Light,Dark}/v2/<key>` file. The final file is *computed* by `cosmic-build-theme`
+  at activation, so it's a derived artifact, not a second source of truth to sync from.
+  COSMIC Settings' Appearance page writes Builder keys to `v2/` too, so that's where live
+  changes show up.
 
 ## Workflow
 

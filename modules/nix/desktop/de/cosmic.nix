@@ -73,61 +73,6 @@ let
       platforms = lib.platforms.linux;
     };
   };
-
-  cosmic-viewer = pkgs.rustPlatform.buildRustPackage {
-    pname = "cosmic-viewer";
-    version = "0-unstable-2026-07-29";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "pop-os";
-      repo = "cosmic-viewer";
-      rev = "6c999eb5100353260d481077f1820ef95ee68ea7";
-      hash = "sha256-KUfWA6ZZMSnzagFJNlHJoWJTcMP2jTd0j7BYTYKfBF4=";
-    };
-
-    cargoHash = "sha256-Ws8ozNY3hwxdkb5g6RuSDyzt3IRk1svm3byXkIpknQE=";
-
-    # Upstream builds libheif-rs with the "embedded-libheif" feature, which
-    # vendor-builds libheif from source along with ~10 codec libraries (some
-    # of which, e.g. uvg266/vvdec, aren't packaged in nixpkgs at all). Link
-    # against nixpkgs' own libheif via pkg-config instead.
-    postPatch = ''
-            substituteInPlace Cargo.toml \
-              --replace-fail \
-                'libheif-rs = { version = "2.7.0", default-features = false, features = [
-        "embedded-libheif",
-        "v1_17",
-      ] }' \
-                'libheif-rs = { version = "2.7.0", features = ["v1_17"] }'
-    '';
-
-    # turbojpeg-sys also defaults to vendor-building libjpeg-turbo via cmake;
-    # point it at nixpkgs' libjpeg-turbo via pkg-config instead.
-    env.TURBOJPEG_SOURCE = "pkg-config";
-
-    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
-    buildInputs = [ pkgs.glib pkgs.libheif pkgs.libjpeg_turbo ];
-
-    dontUseJustBuild = true;
-    dontUseJustCheck = true;
-
-    justFlags = [
-      "--set"
-      "prefix"
-      (builtins.placeholder "out")
-      "--set"
-      "cargo-target-dir"
-      "target/${pkgs.stdenv.hostPlatform.rust.cargoShortTarget}"
-    ];
-
-    meta = {
-      description = "Image viewer for the COSMIC Desktop Environment";
-      homepage = "https://github.com/pop-os/cosmic-viewer";
-      license = lib.licenses.gpl3Only;
-      mainProgram = "cosmic-viewer";
-      platforms = lib.platforms.linux;
-    };
-  };
 in {
   services.desktopManager.cosmic.enable = true;
   services.displayManager.cosmic-greeter.enable = true;
@@ -157,6 +102,5 @@ in {
     pkgs.cosmic-ext-applet-privacy-indicator
     cosmic-applet-music-player
     cosmic-ext-whether
-    cosmic-viewer
   ];
 }

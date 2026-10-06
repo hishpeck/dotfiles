@@ -23,14 +23,12 @@
     };
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
-    cosmic-ctl.url = "github:cosmic-utils/cosmic-ctl";
-    cosmic-ctl.inputs.nixpkgs.follows = "nixpkgs";
     herdr.url = "github:ogulcancelik/herdr";
     herdr.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, home-manager, stylix, catppuccin
-    , nix-index-database, noctalia, cosmic-ctl, ... }@inputs:
+    , nix-index-database, noctalia, ... }@inputs:
     let
       user = "ac";
 

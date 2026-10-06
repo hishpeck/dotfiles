@@ -1,1 +1,1 @@
-{ flavor = "latte"; accent = "pink"; }
+{ flavor = "latte"; accent = "peach"; }

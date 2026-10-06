@@ -1,7 +1,7 @@
 { lib, ... }:
 
 let
-  wallpaper = ../../../wallpapers/takashi-miyazaki.jpg;
+  wallpaper = ../../../wallpapers/autumn.jpg;
 
   # Panel applet lists
   panelLeft = ''

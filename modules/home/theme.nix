@@ -6,7 +6,7 @@ in
   imports = [ ./desktop/cosmic-theme.nix ];
   stylix = {
     enable = true;
-    image = ../../wallpaper.png;
+    image = ../../wallpapers/autumn.jpg;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-${flavor}.yaml";
     targets = {
       neovim.enable = false;

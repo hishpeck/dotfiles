@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
+  imports = [ inputs.edgepad.nixosModules.default ];
+
   networking.networkmanager.enable = true;
 
   hardware.bluetooth = {
@@ -47,6 +49,11 @@
       disableWhileTyping = true;
     };
   };
+
+  # Touchpad edge sliders (brightness/volume, like ASUS Smart Gesture on
+  # Windows). Loads uinput and grants the seat user touchpad access; the
+  # bindings and user service live in modules/home/laptop.nix.
+  services.edgepad.enable = true;
 
   services.fprintd = {
     enable = true;

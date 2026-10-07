@@ -146,6 +146,27 @@
         "type": "github"
       }
     },
+    "edgepad": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": "rust-overlay"
+      },
+      "locked": {
+        "lastModified": 1789637141,
+        "narHash": "sha256-DeUmu/mzLoIySbulHOmyI1iJjlPfxpg3tQ/65InzmxY=",
+        "owner": "assembledev",
+        "repo": "edgepad",
+        "rev": "cdd3fd91dc36d32e56fab0de04fe05cb66601a32",
+        "type": "github"
+      },
+      "original": {
+        "owner": "assembledev",
+        "repo": "edgepad",
+        "type": "github"
+      }
+    },
     "firefox-gnome-theme": {
       "flake": false,
       "locked": {
@@ -257,7 +278,7 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "rust-overlay": "rust-overlay"
+        "rust-overlay": "rust-overlay_2"
       },
       "locked": {
         "lastModified": 1791128034,
@@ -408,6 +429,7 @@
         "antigravity-nix": "antigravity-nix",
         "catppuccin": "catppuccin",
         "dms": "dms",
+        "edgepad": "edgepad",
         "herdr": "herdr",
         "home-manager": "home-manager",
         "nix-index-database": "nix-index-database",
@@ -417,6 +439,27 @@
       }
     },
     "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "edgepad",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783058364,
+        "narHash": "sha256-felUcVUtcdI15evRNkVfLq3opwceShhbrJt6hDlZvrk=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "e7a078c7feb51f37955a832b22a96de5fccb1f7a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "rust-overlay_2": {
       "inputs": {
         "nixpkgs": [
           "herdr",

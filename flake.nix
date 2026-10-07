@@ -25,6 +25,10 @@
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     herdr.url = "github:ogulcancelik/herdr";
     herdr.inputs.nixpkgs.follows = "nixpkgs";
+    edgepad = {
+      url = "github:assembledev/edgepad";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, stylix, catppuccin

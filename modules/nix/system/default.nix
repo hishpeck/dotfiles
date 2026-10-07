@@ -3,8 +3,14 @@ let
   inherit (import ../../theme-values.nix) flavor accent;
 
   nixosCatppuccinPlymouth = pkgs.runCommand "nixos-catppuccin-plymouth" { } ''
-        mkdir -p $out/share/plymouth/themes/nixos-catppuccin
-        cat > $out/share/plymouth/themes/nixos-catppuccin/nixos-catppuccin.plymouth << EOF
+        theme=$out/share/plymouth/themes/nixos-catppuccin
+        mkdir -p $theme
+        # Ship the spinner images inside this theme. Pointing ImageDir at the
+        # nixos-bgrt package instead breaks in the initrd: NixOS only copies
+        # this theme's own dir there, so the boot splash had no images and
+        # drew nothing (shutdown worked since the full store is mounted then).
+        cp ${pkgs.nixos-bgrt-plymouth}/share/plymouth/themes/nixos-bgrt/images/* $theme/
+        cat > $theme/nixos-catppuccin.plymouth << EOF
     [Plymouth Theme]
     Name=NixOS Catppuccin
     Description=Spinning NixOS logo below the firmware (BGRT) vendor logo
@@ -12,7 +18,7 @@ let
 
     [two-step]
     Font=Cantarell 20
-    ImageDir=${pkgs.nixos-bgrt-plymouth}/share/plymouth/themes/nixos-bgrt/images
+    ImageDir=$out/share/plymouth/themes/nixos-catppuccin
     HorizontalAlignment=.5
     VerticalAlignment=.5
     Transition=none

@@ -68,6 +68,14 @@ return {
 					[vim.diagnostic.severity.INFO] = " ",
 				},
 			},
+			-- Show the message of the diagnostic that `[d`/`]d` jumps to
+			jump = {
+				on_jump = function(diagnostic, bufnr)
+					if diagnostic then
+						vim.diagnostic.open_float({ bufnr = bufnr, scope = "cursor", focus = false })
+					end
+				end,
+			},
 		})
 
 		-- List of all servers to be configured and enabled

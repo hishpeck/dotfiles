@@ -3,30 +3,18 @@ return {
 	keys = {
 		{ "<Leader>dt", function() require("dap").toggle_breakpoint() end, desc = "Toggle breakpoint" },
 		{ "<Leader>dc", function() require("dap").continue() end, desc = "Continue debugging" },
-		{ "<Leader>dx", function() require("dapui").close() end, desc = "Close debugger" },
+		{ "<Leader>dx", function() require("dap-view").close() end, desc = "Close debugger" },
 	},
 	dependencies = {
-		"rcarriga/nvim-dap-ui",
-		"nvim-neotest/nvim-nio",
+		{
+			"igorlfs/nvim-dap-view",
+			opts = {
+				auto_toggle = true, -- open when a session starts, close when it ends
+			},
+		},
 	},
 	config = function()
 		local dap = require("dap")
-		local dapui = require("dapui")
-
-		dapui.setup()
-
-		dap.listeners.before.attach.dapui_config = function()
-			dapui.open()
-		end
-		dap.listeners.before.launch.dapui_config = function()
-			dapui.open()
-		end
-		dap.listeners.before.event_terminated.dapui_config = function()
-			dapui.close()
-		end
-		dap.listeners.before.event_exited.dapui_config = function()
-			dapui.close()
-		end
 
 		dap.adapters.codelldb = {
 			type = "server",

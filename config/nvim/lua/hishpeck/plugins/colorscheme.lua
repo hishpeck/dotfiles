@@ -74,7 +74,6 @@ return {
 				alpha = true,
 				blink_cmp = true,
 				dap = true,
-				dap_ui = true,
 				gitsigns = true,
 				leap = true,
 				mason = true,

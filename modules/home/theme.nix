@@ -50,6 +50,7 @@ in
     lazygit.enable = true;
     btop.enable = true;
     kitty.enable = false;
+    nvim.enable = false;
     tmux.enable = true;
     bat.enable = true;
     fzf.enable = true;

@@ -5,8 +5,10 @@
 
   # Lock/turn off the screen after 5 minutes idle. Desktops (ac-main-pc)
   # don't import this and are left unmanaged, i.e. never lock on idle.
-  home.file.".config/cosmic/com.system76.CosmicIdle/v1/screen_off_time".text =
-    "Some(300000)";
+  home.file.".config/cosmic/com.system76.CosmicIdle/v1/screen_off_time" = {
+    text = "Some(300000)";
+    force = true;
+  };
 
   # Replicates ASUS Smart Gesture edge sliders from Windows: slide one finger
   # along the left edge for brightness, right edge for volume. edgepad grabs
@@ -16,7 +18,7 @@
   services.edgepad = {
     enable = true;
     device = "auto";
-    edgeWidth = 0.08;
+    edgeWidth = 8.0e-2;
     sliders = [
       {
         zone = "left";

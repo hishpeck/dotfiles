@@ -1,16 +1,10 @@
 return {
 	"nvim-lualine/lualine.nvim",
 	event = "VimEnter",
-	dependencies = { "nvim-tree/nvim-web-devicons", "f-person/git-blame.nvim" },
+	dependencies = { "nvim-tree/nvim-web-devicons" },
 	config = function()
 		local lualine = require("lualine")
 		local lazy_status = require("lazy.status") -- to configure lazy pending updates count
-
-		local git_blame = require("gitblame")
-		vim.g.gitblame_display_virtual_text = 0
-		vim.g.gitblame_date_format = "%x"
-		vim.g.gitblame_max_commit_summary_length = 25
-		vim.g.gitblame_delay = 1000
 
 		lualine.setup({
 			options = {
@@ -34,8 +28,12 @@ return {
 				},
 				lualine_c = {
 					{
-						git_blame.get_current_blame_text,
-						cond = git_blame.is_blame_text_available,
+						function()
+							return vim.b.gitsigns_blame_line
+						end,
+						cond = function()
+							return vim.b.gitsigns_blame_line ~= nil
+						end,
 						padding = 0,
 						color = {
 							fg = "#7C7F93",

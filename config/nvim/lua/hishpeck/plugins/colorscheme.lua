@@ -72,7 +72,7 @@ return {
 			},
 			integrations = {
 				alpha = true,
-				cmp = true,
+				blink_cmp = true,
 				dap = true,
 				dap_ui = true,
 				gitsigns = true,

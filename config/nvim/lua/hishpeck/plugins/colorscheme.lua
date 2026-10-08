@@ -102,9 +102,8 @@ return {
 					scope_color = accent,
 					colored_indent_levels = false,
 				},
-				nvimtree = true,
 				neotest = true,
-				telescope = {
+				snacks = {
 					enabled = true,
 				},
 				which_key = true,

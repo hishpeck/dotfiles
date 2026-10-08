@@ -17,11 +17,91 @@ return {
 		scratch = { enabled = true },
 		scroll = { enabled = true },
 		words = { enabled = true },
+		explorer = { enabled = true },
 		picker = {
 			ui_select = true,
+			-- nix has no global libsqlite3; the path is exported by the neovim wrapper
+			db = { sqlite3_path = vim.env.LIBSQLITE },
+			win = {
+				input = {
+					keys = {
+						["<C-PageDown>"] = { "history_forward", mode = { "i", "n" } },
+						["<C-PageUp>"] = { "history_back", mode = { "i", "n" } },
+						["<C-Up>"] = { "preview_scroll_up", mode = { "i", "n" } },
+						["<C-Down>"] = { "preview_scroll_down", mode = { "i", "n" } },
+						["<C-Left>"] = { "preview_scroll_left", mode = { "i", "n" } },
+						["<C-Right>"] = { "preview_scroll_right", mode = { "i", "n" } },
+						["<C-x>"] = { "edit_split", mode = { "i", "n" } },
+					},
+				},
+			},
+			sources = {
+				files = { hidden = true },
+				explorer = {
+					hidden = true,
+					ignored = true,
+					jump = { close = true },
+					actions = {
+						picker_files = function(_, item)
+							if item then
+								Snacks.picker.files({ cwd = Snacks.picker.util.dir(item) })
+							end
+						end,
+					},
+					win = {
+						list = {
+							keys = {
+								-- search from the directory under the cursor
+								["<leader>ff"] = "picker_files",
+								["<leader>fs"] = "picker_grep",
+							},
+						},
+					},
+				},
+			},
 		},
 	},
 	keys = {
+		-- stylua: ignore start
+		{ "<leader>ff", function() Snacks.picker.files() end, desc = "Fuzzy find files in cwd" },
+		{ "<leader>fs", function() Snacks.picker.grep() end, desc = "Find string in cwd" },
+		{ "<leader>fr", function() Snacks.picker.recent() end, desc = "Find recent files" },
+		{ "<leader>fw", function() Snacks.picker.lsp_workspace_symbols() end, desc = "Fuzzy find project symbols" },
+		{ "<leader>fd", function() Snacks.picker.lsp_symbols() end, desc = "Fuzzy find document symbols" },
+		{ "<leader>fc", function() Snacks.picker.grep_word() end, desc = "Find string under cursor in cwd" },
+		{ "<leader>fb", function() Snacks.picker.buffers() end, desc = "Fuzzy find open buffers" },
+		{ "<leader>fh", function() Snacks.picker.help() end, desc = "Fuzzy find available help tags" },
+		{ "<leader>ft", function() Snacks.picker.todo_comments() end, desc = "Find todos" },
+		-- stylua: ignore end
+		{
+			"<leader>ee",
+			function()
+				local explorer = Snacks.picker.get({ source = "explorer" })[1]
+				if explorer then
+					explorer:close()
+				else
+					Snacks.explorer()
+				end
+			end,
+			desc = "Toggle file explorer",
+		},
+		{
+			"<leader>ef",
+			function()
+				Snacks.explorer.reveal()
+			end,
+			desc = "Reveal current file in file explorer",
+		},
+		{
+			"<leader>ec",
+			function()
+				local explorer = Snacks.picker.get({ source = "explorer" })[1]
+				if explorer then
+					explorer:action("explorer_close_all")
+				end
+			end,
+			desc = "Collapse file explorer",
+		},
 		{
 			"<leader>.",
 			function()

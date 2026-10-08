@@ -3,7 +3,6 @@ return {
 	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
 		"hrsh7th/cmp-nvim-lsp",
-		{ "antosha417/nvim-lsp-file-operations", config = true },
 	},
 	config = function()
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
@@ -16,25 +15,33 @@ return {
 
 			-- set keybinds
 			opts.desc = "Show LSP references"
-			keymap.set("n", "gr", "<cmd>Telescope lsp_references<CR>", opts)
+			keymap.set("n", "gr", function()
+				Snacks.picker.lsp_references()
+			end, opts)
 
 			opts.desc = "Show LSP references to the current file"
 			keymap.set("n", "gR", function()
 				local component_name = vim.fn.expand("%:t:r")
-				require("telescope.builtin").grep_string({ search = component_name })
+				Snacks.picker.grep_word({ search = component_name })
 			end, opts)
 
 			opts.desc = "Go to declaration"
 			keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
 
 			opts.desc = "Show LSP definitions"
-			keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts)
+			keymap.set("n", "gd", function()
+				Snacks.picker.lsp_definitions()
+			end, opts)
 
 			opts.desc = "Show LSP implementations"
-			keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts)
+			keymap.set("n", "gi", function()
+				Snacks.picker.lsp_implementations()
+			end, opts)
 
 			opts.desc = "Show LSP type definitions"
-			keymap.set("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts)
+			keymap.set("n", "gt", function()
+				Snacks.picker.lsp_type_definitions()
+			end, opts)
 
 			opts.desc = "See available code actions"
 			keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)

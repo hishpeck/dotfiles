@@ -1,5 +1,17 @@
 return {
-	"NvChad/nvim-colorizer.lua",
+	"catgoose/nvim-colorizer.lua",
 	event = { "BufReadPre", "BufNewFile" },
-	config = true,
+	opts = {
+		options = {
+			parsers = {
+				-- names highlight immediately, then the Tailwind LSP corrects them with
+				-- colors from the project's theme config
+				tailwind = {
+					enable = true,
+					lsp = true,
+					update_names = true,
+				},
+			},
+		},
+	},
 }

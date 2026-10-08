@@ -33,7 +33,7 @@ return {
 				"pyright",
 				"vue_ls",
 				"astro",
-				"intelephense",
+				"phpantom_lsp",
 				"laravel_lsp",
 				"gopls",
 			},

@@ -78,7 +78,7 @@ return {
 			"graphql",
 			"emmet_ls",
 			"astro",
-			"intelephense",
+			"phpantom_lsp",
 			"laravel_lsp",
 			"pyright",
 			"glsl_analyzer",
@@ -196,23 +196,6 @@ return {
 					"svelte",
 					"vue",
 					"blade.php",
-				}
-			elseif server_name == "intelephense" then
-				server_opts.settings = {
-					intelephense = {
-						files = {
-							exclude = {
-								"**/.git/**",
-								"**/node_modules/**",
-								"**/storage/framework/**",
-								"**/storage/logs/**",
-								"**/bootstrap/cache/**",
-								"**/public/build/**",
-								"**/public/hot",
-							},
-						},
-						compatibility = { preferPsalmPhpstanPrefixedAnnotations = true },
-					},
 				}
 			elseif server_name == "laravel_lsp" then
 				-- Projects run MySQL in Docker with DB_HOST=database, which only resolves inside

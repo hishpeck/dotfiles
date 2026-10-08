@@ -10,7 +10,6 @@ return {
 				branch = "main", -- Textobjects must also track main
 			},
 			"windwp/nvim-ts-autotag",
-			"JoosepAlviste/nvim-ts-context-commentstring",
 			"nvim-treesitter/nvim-treesitter-context",
 		},
 		init = function()
@@ -71,7 +70,6 @@ return {
 			})
 
 			-- 4. Setup External Dependencies natively
-			require("ts_context_commentstring").setup({})
 			require("nvim-ts-autotag").setup({}) -- Autotag now requires its own setup call
 
 			-- 5. Setup Textobjects

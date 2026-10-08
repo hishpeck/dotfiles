@@ -75,7 +75,6 @@ return {
 				blink_cmp = true,
 				dap = true,
 				gitsigns = true,
-				leap = true,
 				mason = true,
 				notify = true,
 				native_lsp = {
@@ -96,14 +95,10 @@ return {
 						background = true,
 					},
 				},
-				indent_blankline = {
-					enabled = true,
-					scope_color = accent,
-					colored_indent_levels = false,
-				},
 				neotest = true,
 				snacks = {
 					enabled = true,
+					indent_scope_color = accent,
 				},
 				which_key = true,
 			},

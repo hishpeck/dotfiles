@@ -46,7 +46,6 @@ return {
 				"php",
 				"phpdoc",
 				"rust",
-				"tmux",
 				"vue",
 				"sql",
 				"glsl",

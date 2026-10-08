@@ -110,6 +110,13 @@ return {
 			desc = "Select Scratch Buffer",
 		},
 		{
+			"<leader>sm",
+			function()
+				Snacks.zen.zoom()
+			end,
+			desc = "Maximize/minimize a split",
+		},
+		{
 			"<leader>gl",
 			function()
 				Snacks.lazygit.log_file()

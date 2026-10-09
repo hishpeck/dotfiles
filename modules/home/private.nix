@@ -18,7 +18,7 @@
     shared-mime-info
     desktop-file-utils
     ncdu
-    inputs.antigravity-nix.packages.${pkgs.system}.google-antigravity-cli
+    inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.google-antigravity-cli
     vlc
     prismlauncher
   ];

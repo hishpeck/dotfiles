@@ -13,33 +13,38 @@ let
         cat > $theme/nixos-catppuccin.plymouth << EOF
     [Plymouth Theme]
     Name=NixOS Catppuccin
-    Description=Spinning NixOS logo below the firmware (BGRT) vendor logo
+    Description=NixOS spinner under the firmware logo on boot, on Catppuccin Mocha at shutdown
     ModuleName=two-step
 
     [two-step]
     Font=Cantarell 20
     ImageDir=$out/share/plymouth/themes/nixos-catppuccin
+    # Position is shared by all modes (two-step has no per-mode alignment), so
+    # sit low enough to clear the vendor logo on boot.
     HorizontalAlignment=.5
-    VerticalAlignment=.5
+    VerticalAlignment=.8
     Transition=none
     TransitionDuration=0.0
-    # Keep the motherboard/laptop vendor logo on screen and spin underneath it,
-    # Windows-style. Falls back to the solid background on non-BGRT firmware.
-    UseFirmwareBackground=true
     BackgroundStartColor=0x1e1e2e
     BackgroundEndColor=0x1e1e2e
     ProgressBarBackgroundColor=0x45475a
     ProgressBarForegroundColor=0xfab387
     MessageBelowAnimation=true
 
+    # UseFirmwareBackground is only read from these per-mode sections. On boot
+    # it keeps the BIOS vendor logo (on black, which two-step forces) with the
+    # spinner underneath, Windows-style; shutdown/reboot use the colors above.
     [boot-up]
     UseEndAnimation=false
+    UseFirmwareBackground=true
 
     [shutdown]
     UseEndAnimation=false
+    UseFirmwareBackground=false
 
     [reboot]
     UseEndAnimation=false
+    UseFirmwareBackground=false
     EOF
   '';
 in {

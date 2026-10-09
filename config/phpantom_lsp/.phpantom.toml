@@ -1,0 +1,11 @@
+# Global PHPantom config, merged under each project's .phpantom.toml
+
+# nvim-lint already runs PHPStan and PHPCS, and conform runs php-cs-fixer
+[phpstan]
+command = ""
+
+[phpcs]
+command = ""
+
+[formatting]
+php-cs-fixer = ""

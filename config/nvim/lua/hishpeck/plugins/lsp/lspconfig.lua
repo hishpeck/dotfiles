@@ -218,12 +218,22 @@ return {
 					-- Prefer the project's Docker wrapper (e.g. carandclassic's bin/car) so scripts
 					-- run with the container's PHP, extensions and database host
 					local car = config.root_dir and config.root_dir .. "/bin/car"
+					local opts = {}
 					if car and vim.fn.executable(car) == 1 then
-						params.initializationOptions = { phpCommand = { car, "php" } }
+						opts.phpCommand = { car, "php" }
 					else
 						-- The model index script exceeds PHP's default 128M on large apps and exits silently
-						params.initializationOptions = { phpCommand = { "php", "-d", "memory_limit=-1" } }
+						opts.phpCommand = { "php", "-d", "memory_limit=-1" }
 					end
+					-- laravel-localized-routes registers names as "<locale>.<name>" and resolves the bare
+					-- name at runtime, so every route('...') call would be flagged as unknown
+					local composer = config.root_dir and vim.fs.joinpath(config.root_dir, "composer.json")
+					if composer and vim.fn.filereadable(composer) == 1
+						and table.concat(vim.fn.readfile(composer), "\n"):find("laravel-localized-routes", 1, true)
+					then
+						opts.routeDiagnostics = false
+					end
+					params.initializationOptions = opts
 				end
 			elseif server_name == "lua_ls" then
 				server_opts.settings = {

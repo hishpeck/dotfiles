@@ -61,7 +61,8 @@ return {
 					},
 				},
 				-- unwrapped so long lines can be scrolled horizontally
-				preview = { wo = { wrap = false } },
+				-- virtualedit lets the hidden cursor sit past short lines so it never drags the view back left
+				preview = { wo = { wrap = false, virtualedit = "all" } },
 			},
 			actions = {
 				-- the built-in preview_scroll_left/right move a single column; scroll half a screen like Telescope

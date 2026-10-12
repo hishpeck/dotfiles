@@ -1,3 +1,25 @@
+-- Scrolls the picker preview half a screen sideways. Sets leftcol directly because `zl`
+-- stops short on tab-indented lines, hiding the end of the longest visible line
+local function preview_hscroll(picker, direction)
+	local win = picker.preview.win.win
+	if not (win and vim.api.nvim_win_is_valid(win)) then
+		return
+	end
+
+	vim.api.nvim_win_call(win, function()
+		local text_width = vim.api.nvim_win_get_width(win) - vim.fn.getwininfo(win)[1].textoff
+		local longest = 0
+		for lnum = vim.fn.line("w0"), vim.fn.line("w$") do
+			longest = math.max(longest, vim.fn.virtcol({ lnum, "$" }) - 1)
+		end
+
+		local view = vim.fn.winsaveview()
+		local leftcol = view.leftcol + direction * math.floor(text_width / 2)
+		view.leftcol = math.max(0, math.min(leftcol, longest - text_width))
+		vim.fn.winrestview(view)
+	end)
+end
+
 return {
 	"folke/snacks.nvim",
 	priority = 1000,
@@ -31,6 +53,8 @@ return {
 						["<C-Down>"] = { "preview_scroll_down", mode = { "i", "n" } },
 						["<C-Left>"] = { "preview_hscroll_left", mode = { "i", "n" } },
 						["<C-Right>"] = { "preview_hscroll_right", mode = { "i", "n" } },
+						["<ScrollWheelLeft>"] = { "preview_hscroll_left", mode = { "i", "n" } },
+						["<ScrollWheelRight>"] = { "preview_hscroll_right", mode = { "i", "n" } },
 						["<C-x>"] = { "edit_split", mode = { "i", "n" } },
 					},
 				},
@@ -40,14 +64,10 @@ return {
 			actions = {
 				-- the built-in preview_scroll_left/right move a single column; scroll half a screen like Telescope
 				preview_hscroll_left = function(picker)
-					vim.api.nvim_win_call(picker.preview.win.win, function()
-						vim.cmd("normal! zH")
-					end)
+					preview_hscroll(picker, -1)
 				end,
 				preview_hscroll_right = function(picker)
-					vim.api.nvim_win_call(picker.preview.win.win, function()
-						vim.cmd("normal! zL")
-					end)
+					preview_hscroll(picker, 1)
 				end,
 			},
 			sources = {

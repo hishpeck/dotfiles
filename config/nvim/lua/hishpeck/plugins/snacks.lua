@@ -13,10 +13,12 @@ local function preview_hscroll(picker, direction)
 			longest = math.max(longest, vim.fn.virtcol({ lnum, "$" }) - 1)
 		end
 
-		local view = vim.fn.winsaveview()
-		local leftcol = view.leftcol + direction * math.floor(text_width / 2)
-		view.leftcol = math.max(0, math.min(leftcol, longest - text_width))
-		vim.fn.winrestview(view)
+		local leftcol = vim.fn.winsaveview().leftcol + direction * math.floor(text_width / 2)
+		leftcol = math.max(0, math.min(leftcol, longest - text_width))
+		-- Park the cursor on the first visible column, otherwise scrolling vertically
+		-- snaps the view back to wherever the cursor was left
+		vim.cmd(("normal! %d|"):format(leftcol + 1))
+		vim.fn.winrestview({ leftcol = leftcol })
 	end)
 end
 

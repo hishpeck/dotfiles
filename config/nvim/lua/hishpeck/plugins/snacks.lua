@@ -1,24 +1,76 @@
--- Scrolls the picker preview half a screen sideways. Sets leftcol directly because `zl`
--- stops short on tab-indented lines, hiding the end of the longest visible line
-local function preview_hscroll(picker, direction)
+-- Snacks.scroll animates from the cursor's real column, which on a short line is the line end
+-- rather than the virtual column the preview parks it on, so it would replay every vertical
+-- scroll from the left edge. Preview windows are animated by preview_scroll below instead.
+local function is_picker_preview(buf)
+	if not package.loaded["snacks.picker"] then
+		return false
+	end
+	for _, picker in ipairs(Snacks.picker.get()) do
+		local win = picker.preview and picker.preview.win.win
+		if win and vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_buf(win) == buf then
+			return true
+		end
+	end
+	return false
+end
+
+-- Scrolls the picker preview half a screen in either direction, animated like Snacks.scroll.
+-- Sets leftcol directly because `zl` stops short on tab-indented lines, hiding the end of the
+-- longest visible line
+local function preview_scroll(picker, dx, dy)
 	local win = picker.preview.win.win
 	if not (win and vim.api.nvim_win_is_valid(win)) then
 		return
 	end
 
-	vim.api.nvim_win_call(win, function()
-		local text_width = vim.api.nvim_win_get_width(win) - vim.fn.getwininfo(win)[1].textoff
-		local longest = 0
-		for lnum = vim.fn.line("w0"), vim.fn.line("w$") do
-			longest = math.max(longest, vim.fn.virtcol({ lnum, "$" }) - 1)
-		end
+	-- Move the view and park the hidden cursor on its top-left corner; the window's
+	-- virtualedit=all lets it sit past short lines so it never drags the view back
+	local function set_view(topline, leftcol)
+		vim.api.nvim_win_call(win, function()
+			vim.cmd(("keepjumps normal! %dG%d|"):format(topline, leftcol + 1))
+			vim.fn.winrestview({ topline = topline, leftcol = leftcol })
+		end)
+	end
 
-		local leftcol = vim.fn.winsaveview().leftcol + direction * math.floor(text_width / 2)
-		leftcol = math.max(0, math.min(leftcol, longest - text_width))
-		-- Park the cursor on the first visible column, otherwise scrolling vertically
-		-- snaps the view back to wherever the cursor was left
-		vim.cmd(("normal! %d|"):format(leftcol + 1))
-		vim.fn.winrestview({ leftcol = leftcol })
+	vim.api.nvim_win_call(win, function()
+		local view = vim.fn.winsaveview()
+		-- step from the pending target so repeated presses during an animation add up
+		local target = vim.w[win].preview_scroll_target or { view.topline, view.leftcol }
+		local top, left = target[1], target[2]
+
+		if dy ~= 0 then
+			local height = vim.api.nvim_win_get_height(win)
+			top = math.max(1, math.min(top + dy * math.floor(height / 2), vim.fn.line("$") - height + 1))
+		end
+		if dx ~= 0 then
+			local text_width = vim.api.nvim_win_get_width(win) - vim.fn.getwininfo(win)[1].textoff
+			local longest = 0
+			for lnum = top, math.min(top + vim.api.nvim_win_get_height(win) - 1, vim.fn.line("$")) do
+				longest = math.max(longest, vim.fn.virtcol({ lnum, "$" }) - 1)
+			end
+			left = math.max(0, math.min(left + dx * math.floor(text_width / 2), longest - text_width))
+		end
+		vim.w[win].preview_scroll_target = { top, left }
+
+		local from_top, from_left = view.topline, view.leftcol
+		Snacks.animate(0, 100, function(value, ctx)
+			if not vim.api.nvim_win_is_valid(win) then
+				return
+			end
+			if ctx.done then
+				vim.w[win].preview_scroll_target = nil
+				return set_view(top, left)
+			end
+			set_view(
+				math.floor(from_top + (top - from_top) * value / 100 + 0.5),
+				math.floor(from_left + (left - from_left) * value / 100 + 0.5)
+			)
+		end, {
+			int = true,
+			id = "preview_scroll_" .. win,
+			duration = { step = 10, total = 200 },
+			easing = "linear",
+		})
 	end)
 end
 
@@ -39,7 +91,15 @@ return {
 		quickfile = { enabled = true },
 		scope = { enabled = true },
 		scratch = { enabled = true },
-		scroll = { enabled = true },
+		scroll = {
+			enabled = true,
+			filter = function(buf)
+				return vim.g.snacks_scroll ~= false
+					and vim.b[buf].snacks_scroll ~= false
+					and vim.bo[buf].buftype ~= "terminal"
+					and not is_picker_preview(buf)
+			end,
+		},
 		words = { enabled = true },
 		explorer = { enabled = true },
 		picker = {
@@ -53,24 +113,30 @@ return {
 						["<C-PageUp>"] = { "history_back", mode = { "i", "n" } },
 						["<C-Up>"] = { "preview_scroll_up", mode = { "i", "n" } },
 						["<C-Down>"] = { "preview_scroll_down", mode = { "i", "n" } },
-						["<C-Left>"] = { "preview_hscroll_left", mode = { "i", "n" } },
-						["<C-Right>"] = { "preview_hscroll_right", mode = { "i", "n" } },
-						["<ScrollWheelLeft>"] = { "preview_hscroll_left", mode = { "i", "n" } },
-						["<ScrollWheelRight>"] = { "preview_hscroll_right", mode = { "i", "n" } },
+						["<C-Left>"] = { "preview_scroll_left", mode = { "i", "n" } },
+						["<C-Right>"] = { "preview_scroll_right", mode = { "i", "n" } },
+						["<ScrollWheelLeft>"] = { "preview_scroll_left", mode = { "i", "n" } },
+						["<ScrollWheelRight>"] = { "preview_scroll_right", mode = { "i", "n" } },
 						["<C-x>"] = { "edit_split", mode = { "i", "n" } },
 					},
 				},
-				-- unwrapped so long lines can be scrolled horizontally
-				-- virtualedit lets the hidden cursor sit past short lines so it never drags the view back left
+				-- unwrapped so long lines can be scrolled horizontally; virtualedit lets the hidden
+				-- cursor sit past short lines so it never drags the view back left
 				preview = { wo = { wrap = false, virtualedit = "all" } },
 			},
 			actions = {
-				-- the built-in preview_scroll_left/right move a single column; scroll half a screen like Telescope
-				preview_hscroll_left = function(picker)
-					preview_hscroll(picker, -1)
+				-- replace the built-in preview scrolls: see preview_scroll above
+				preview_scroll_up = function(picker)
+					preview_scroll(picker, 0, -1)
 				end,
-				preview_hscroll_right = function(picker)
-					preview_hscroll(picker, 1)
+				preview_scroll_down = function(picker)
+					preview_scroll(picker, 0, 1)
+				end,
+				preview_scroll_left = function(picker)
+					preview_scroll(picker, -1, 0)
+				end,
+				preview_scroll_right = function(picker)
+					preview_scroll(picker, 1, 0)
 				end,
 			},
 			sources = {

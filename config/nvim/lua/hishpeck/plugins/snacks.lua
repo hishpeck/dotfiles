@@ -29,11 +29,26 @@ return {
 						["<C-PageUp>"] = { "history_back", mode = { "i", "n" } },
 						["<C-Up>"] = { "preview_scroll_up", mode = { "i", "n" } },
 						["<C-Down>"] = { "preview_scroll_down", mode = { "i", "n" } },
-						["<C-Left>"] = { "preview_scroll_left", mode = { "i", "n" } },
-						["<C-Right>"] = { "preview_scroll_right", mode = { "i", "n" } },
+						["<C-Left>"] = { "preview_hscroll_left", mode = { "i", "n" } },
+						["<C-Right>"] = { "preview_hscroll_right", mode = { "i", "n" } },
 						["<C-x>"] = { "edit_split", mode = { "i", "n" } },
 					},
 				},
+				-- unwrapped so long lines can be scrolled horizontally
+				preview = { wo = { wrap = false } },
+			},
+			actions = {
+				-- the built-in preview_scroll_left/right move a single column; scroll half a screen like Telescope
+				preview_hscroll_left = function(picker)
+					vim.api.nvim_win_call(picker.preview.win.win, function()
+						vim.cmd("normal! zH")
+					end)
+				end,
+				preview_hscroll_right = function(picker)
+					vim.api.nvim_win_call(picker.preview.win.win, function()
+						vim.cmd("normal! zL")
+					end)
+				end,
 			},
 			sources = {
 				files = { hidden = true },

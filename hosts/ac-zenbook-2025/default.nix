@@ -79,9 +79,27 @@
   # (this) plus the file's physical offset on it (resume_offset above).
   boot.resumeDevice = "/dev/disk/by-uuid/bde83dae-eb2d-4e2a-80d8-77ee274e2bd5";
 
+  # Lid-close hibernate is handled by acpid rather than logind, 2026-10-16.
+  # cosmic-comp takes a logind "handle-lid-switch" block inhibitor whenever
+  # an external output is connected (src/dbus/logind.rs, "External output
+  # connected"), so with the monitor plugged in logind never acts on the lid
+  # and the laptop just keeps running clamshell-style on the monitor.
+  # HandleLidSwitchDocked can't override a block inhibitor. acpid sees the
+  # raw ACPI lid event regardless, so it hibernates docked or not; logind is
+  # set to ignore so the undocked case doesn't fire twice.
   services.logind.settings.Login = {
-    HandleLidSwitch = "hibernate";
-    HandleLidSwitchExternalPower = "hibernate";
+    HandleLidSwitch = "ignore";
+    HandleLidSwitchExternalPower = "ignore";
+    HandleLidSwitchDocked = "ignore";
+  };
+
+  services.acpid = {
+    enable = true;
+    lidEventCommands = ''
+      case "$1" in
+        *close*) ${pkgs.systemd}/bin/systemctl hibernate ;;
+      esac
+    '';
   };
 
   # Root cause of the recurring silent hard freezes, found 2026-08-14:

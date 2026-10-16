@@ -8,7 +8,7 @@ let
 
   src = pkgs.fetchurl {
     url = "https://download.getupnote.com/app/UpNote.AppImage";
-    sha256 = "sha256-SJLdWoN9Xgm6OhXy5i8Pagw1kItCRJLkFWPgZEsiIMQ=";
+    sha256 = "sha256-hODa7wmO3cuEnTeBbdE9dJAmCyq5atelnR2XxfoSeDA=";
   };
 
   appimageContents = pkgs.appimageTools.extract { inherit pname version src; };

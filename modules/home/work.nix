@@ -9,6 +9,7 @@
     slack
     notion
     claude-code
+    awscli2
 
     font-adobe-100dpi
     font-adobe-75dpi

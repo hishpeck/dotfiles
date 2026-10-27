@@ -17,6 +17,7 @@ return {
 					package_uninstalled = "✗",
 				},
 			},
+			automatic_enable = false,
 		})
 		mason_lspconfig.setup({
 			-- list of servers for mason to install

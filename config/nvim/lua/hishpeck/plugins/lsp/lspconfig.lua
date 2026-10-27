@@ -52,7 +52,7 @@ return {
 			keymap.set("n", "K", vim.lsp.buf.hover, opts)
 
 			opts.desc = "Restart LSP"
-			keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts)
+			keymap.set("n", "<leader>rs", "<cmd>lsp restart<CR>", opts)
 		end
 
 		-- Get default capabilities for autocompletion
@@ -105,6 +105,8 @@ return {
 			local server_opts = {
 				on_attach = on_attach,
 				capabilities = capabilities,
+				-- Force-stop servers that ignore shutdown (e.g. lua_ls), otherwise `:lsp restart` waits forever
+				exit_timeout = 1000,
 			}
 
 			local tsserver_filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" }
@@ -191,7 +193,7 @@ return {
 					vim.api.nvim_create_autocmd("BufWritePost", {
 						pattern = { "*.js", "*.ts" },
 						callback = function(ctx)
-							pcall(client.notify, "$/onDidChangeTsOrJsFile", { uri = ctx.file })
+							client:notify("$/onDidChangeTsOrJsFile", { uri = ctx.file })
 						end,
 					})
 				end
@@ -208,7 +210,7 @@ return {
 					"less",
 					"svelte",
 					"vue",
-					"blade.php",
+					"blade",
 				}
 			elseif server_name == "laravel_lsp" then
 				-- Projects run MySQL in Docker with DB_HOST=database, which only resolves inside

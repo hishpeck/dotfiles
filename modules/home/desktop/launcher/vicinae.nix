@@ -4,7 +4,15 @@
 # worked around cosmic-comp's strict Wayland protocol validation itself), so
 # this doesn't need the useLayerShell/USE_LAYER_SHELL dance older guides
 # mention for COSMIC.
-{ config, lib, pkgs, ... }: {
+{ config, lib, pkgs, osConfig ? null, ... }:
+let
+  # Same AMD check as cosmic-theme.nix: cosmic-comp's blur flickers on AMD
+  # (https://github.com/pop-os/cosmic-comp/issues/2557), so COSMIC's frosted
+  # glass is off there and vicinae stays opaque to match.
+  isAMD =
+    osConfig != null && lib.elem "amdgpu" (osConfig.services.xserver.videoDrivers or [ ]);
+in
+{
   programs.vicinae = {
     enable = true;
     systemd.enable = true;
@@ -55,4 +63,14 @@
   xdg.configFile."vicinae/settings.json".source = lib.mkForce
     (config.lib.file.mkOutOfStoreSymlink
       "${config.home.homeDirectory}/dotfiles/config/vicinae/settings.json");
+
+  # Vicinae can't read COSMIC's frosted setting, but cosmic-comp supports
+  # ext-background-effect-v1, so "material": "blur" in settings.json blurs
+  # behind the window once opacity < 1. Opacity is per-host, so it lives in
+  # this generated file (pulled in via settings.json's "imports") instead of
+  # the shared settings.json — and must stay out of settings.json, whose
+  # values always win over imported ones.
+  xdg.configFile."vicinae/window.json".text = builtins.toJSON {
+    launcher_window.opacity = if isAMD then 1 else 0.9;
+  };
 }

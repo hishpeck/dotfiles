@@ -22,13 +22,29 @@
     sliders = [
       {
         zone = "left";
-        up = [ "${pkgs.brightnessctl}/bin/brightnessctl" "set" "5%+" ];
-        down = [ "${pkgs.brightnessctl}/bin/brightnessctl" "set" "5%-" ];
+        up = [
+          "${pkgs.brightnessctl}/bin/brightnessctl"
+          "set"
+          "5%+"
+        ];
+        down = [
+          "${pkgs.brightnessctl}/bin/brightnessctl"
+          "set"
+          "5%-"
+        ];
       }
       {
         zone = "right";
-        up = [ "${pkgs.pamixer}/bin/pamixer" "-i" "3" ];
-        down = [ "${pkgs.pamixer}/bin/pamixer" "-d" "3" ];
+        up = [
+          "${pkgs.pamixer}/bin/pamixer"
+          "-i"
+          "5"
+        ];
+        down = [
+          "${pkgs.pamixer}/bin/pamixer"
+          "-d"
+          "5"
+        ];
       }
     ];
   };

@@ -100,6 +100,8 @@
 
     uv
     python3
+
+    jq
   ];
 
   home.file = { };
@@ -108,6 +110,7 @@
   programs.bat.enable = true;
 
   xdg.configFile = {
-    "mcphub".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/mcphub";
+    "mcphub".source =
+      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/mcphub";
   };
 }

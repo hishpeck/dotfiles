@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 let
   wallpaper = ../../../wallpapers/autumn.jpg;
@@ -18,7 +18,7 @@ let
         "com.system76.CosmicAppletAudio",
         "com.system76.CosmicAppletBluetooth",
         "com.system76.CosmicAppletNetwork",
-        "com.system76.CosmicAppletBattery",
+        ${lib.optionalString config.cosmic.batteryApplet ''"com.system76.CosmicAppletBattery",''}
         "com.system76.CosmicAppletNotifications",
         "com.system76.CosmicAppletPower",
     ]))'';
@@ -41,7 +41,10 @@ let
 
 in
 {
-  home.file = lib.mapAttrs (name: value: value // { force = true; }) {
+  # Only laptops have a battery — set by modules/home/laptop.nix.
+  options.cosmic.batteryApplet = lib.mkEnableOption "the COSMIC panel battery applet";
+
+  config.home.file = lib.mapAttrs (name: value: value // { force = true; }) {
     # ── Wallpaper ───────────────────────────────────────────────────────────────
     ".config/cosmic/com.system76.CosmicBackground/v1/all".text = ''
       (

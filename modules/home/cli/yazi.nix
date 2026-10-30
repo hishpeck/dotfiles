@@ -67,7 +67,7 @@
 
       table.insert(bookmarks, {
         tag = "Pi5",
-        path = home_path .. path_sep .. "Pi5" .. path_sep,
+        path = path_sep .. "mnt" .. path_sep .. "pi5" .. path_sep,
         key = "p"
       })
 

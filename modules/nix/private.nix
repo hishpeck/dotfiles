@@ -13,7 +13,7 @@
 
   environment.systemPackages = with pkgs; [ sshfs ];
 
-  fileSystems."/home/ac/Pi5" = {
+  fileSystems."/mnt/pi5" = {
     device = "ac@rpi5.local:/";
     fsType = "fuse.sshfs";
     options = [

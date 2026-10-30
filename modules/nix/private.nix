@@ -19,7 +19,7 @@
     options = [
       "x-systemd.automount"
       "noauto"
-      "x-systemd.idle-timeout=600"
+      "x-systemd.idle-timeout=60"
       "x-systemd.mount-timeout=5"
       "_netdev"
 

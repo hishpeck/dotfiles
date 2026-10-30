@@ -102,6 +102,8 @@
     python3
 
     jq
+
+    claude-code
   ];
 
   home.file = { };

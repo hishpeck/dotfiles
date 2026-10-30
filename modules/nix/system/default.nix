@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   inherit (import ../../theme-values.nix) flavor accent;
 
@@ -47,13 +52,17 @@ let
     UseFirmwareBackground=false
     EOF
   '';
-in {
+in
+{
   nixpkgs.config.allowUnfree = true;
 
   nix.settings = {
     max-substitution-jobs = 128; # Default is 16
     http-connections = 128; # Default is 25
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
     auto-optimise-store = true;
     substituters = [
       "https://cache.nixos.org/"
@@ -67,21 +76,41 @@ in {
     ];
   };
 
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
+  # Keep the 5 newest system + Home Manager generations; nh clean also
+  # covers per-user profiles, which nix.gc doesn't.
+  programs.nh = {
+    enable = true;
+    clean = {
+      enable = true;
+      dates = "weekly";
+      extraArgs = "--keep 5";
+    };
   };
 
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  swapDevices = [{
-    device = "/var/lib/swapfile";
-    size = 16384;
-  }];
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 16384;
+    }
+  ];
 
-  boot.kernel.sysctl = { "vm.swappiness" = 10; };
+  boot.kernel.sysctl = {
+    "vm.swappiness" = 10;
+  };
+
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings = {
+      General = {
+        Experimental = true;
+      };
+    };
+  };
+  services.blueman.enable = true;
 
   networking.networkmanager.enable = true;
 
@@ -99,13 +128,13 @@ in {
   services.avahi = {
     enable = true;
     nssmdns4 = true;
-    publish = {
-      enable = true;
-      addresses = true;
-      domain = true;
-      hinfo = true;
-      userServices = true;
-      workstation = true;
+    settings.publish = {
+      disable-publishing = false;
+      disable-user-service-publishing = false;
+      publish-addresses = true;
+      publish-domain = true;
+      publish-hinfo = true;
+      publish-workstation = true;
     };
   };
 
@@ -128,8 +157,14 @@ in {
   users.users.ac = {
     isNormalUser = true;
     description = "ac";
-    extraGroups =
-      [ "networkmanager" "wheel" "docker" "video" "render" "uinput" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+      "video"
+      "render"
+      "uinput"
+    ];
     shell = pkgs.zsh;
   };
 
@@ -157,34 +192,40 @@ in {
     # raw mic; it strips notification dings/fan noise/etc. before the app's
     # own (often weaker) suppression ever sees them.
     extraConfig.pipewire."92-rnnoise" = {
-      "context.modules" = [{
-        name = "libpipewire-module-filter-chain";
-        args = {
-          "node.description" = "Noise Canceling Mic";
-          "media.name" = "Noise Canceling Mic";
-          "filter.graph" = {
-            nodes = [{
-              type = "ladspa";
-              name = "rnnoise";
-              plugin = "${pkgs.rnnoise-plugin}/lib/ladspa/librnnoise_ladspa.so";
-              label = "noise_suppressor_mono";
-              control = { "VAD Threshold (%)" = 50.0; };
-            }];
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+          args = {
+            "node.description" = "Noise Canceling Mic";
+            "media.name" = "Noise Canceling Mic";
+            "filter.graph" = {
+              nodes = [
+                {
+                  type = "ladspa";
+                  name = "rnnoise";
+                  plugin = "${pkgs.rnnoise-plugin}/lib/ladspa/librnnoise_ladspa.so";
+                  label = "noise_suppressor_mono";
+                  control = {
+                    "VAD Threshold (%)" = 50.0;
+                  };
+                }
+              ];
+            };
+            "audio.channels" = 1;
+            "audio.position" = [ "MONO" ];
+            "capture.props" = {
+              "node.name" = "capture.rnnoise_source";
+              "node.passive" = true;
+              "audio.rate" = 48000;
+            };
+            "playback.props" = {
+              "node.name" = "rnnoise_source";
+              "media.class" = "Audio/Source";
+              "audio.rate" = 48000;
+            };
           };
-          "audio.channels" = 1;
-          "audio.position" = [ "MONO" ];
-          "capture.props" = {
-            "node.name" = "capture.rnnoise_source";
-            "node.passive" = true;
-            "audio.rate" = 48000;
-          };
-          "playback.props" = {
-            "node.name" = "rnnoise_source";
-            "media.class" = "Audio/Source";
-            "audio.rate" = 48000;
-          };
-        };
-      }];
+        }
+      ];
     };
   };
 
@@ -205,18 +246,19 @@ in {
     home-manager
     nps
     cachix
-    nh
     nix-output-monitor
     nvd
   ];
 
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot = {
+    enable = true;
+    configurationLimit = 5;
+  };
   boot.loader.timeout = 0;
 
   # Silent boot: keep kernel/udev/systemd chatter off the console so it
   # doesn't draw white text over (or instead of) the Plymouth splash.
   boot.consoleLogLevel = 3;
-  boot.initrd.verbose = false;
   boot.kernelParams = [
     "quiet"
     "splash"
@@ -224,7 +266,6 @@ in {
     "udev.log_priority=3"
     "rd.systemd.show_status=auto"
   ];
-  boot.initrd.systemd.enable = true;
   boot.plymouth = {
     enable = true;
     theme = "nixos-catppuccin";

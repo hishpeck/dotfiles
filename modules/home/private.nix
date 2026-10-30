@@ -1,4 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 {
   home.packages = with pkgs; [
@@ -21,6 +27,7 @@
     inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.google-antigravity-cli
     vlc
     prismlauncher
+    gamescope
   ];
 
   xdg.desktopEntries.nvim-kitty = {
@@ -28,7 +35,11 @@
     genericName = "Text Editor";
     exec = "kitty -e nvim %F";
     terminal = false;
-    categories = [ "Utility" "TextEditor" "Development" ];
+    categories = [
+      "Utility"
+      "TextEditor"
+      "Development"
+    ];
     mimeType = [
       "text/plain"
       "text/english"
@@ -53,7 +64,11 @@
     comment = "Ultra-fast viewer for 3D STL files";
     exec = "fstl %f"; # The %f tells the file manager to pass the file path
     terminal = false;
-    categories = [ "Graphics" "3DGraphics" "Viewer" ];
+    categories = [
+      "Graphics"
+      "3DGraphics"
+      "Viewer"
+    ];
     mimeType = [
       "model/stl"
       "application/vnd.ms-pki.stl"
@@ -69,7 +84,11 @@
     exec = "lycheeslicer %U";
     terminal = false;
     icon = "lycheeslicer";
-    categories = [ "Graphics" "3DGraphics" "Engineering" ];
+    categories = [
+      "Graphics"
+      "3DGraphics"
+      "Engineering"
+    ];
     mimeType = [
       "application/x-lychee-slicer" # .lys files
       "model/stl"
@@ -87,7 +106,11 @@
     exec = "bambu-studio %U";
     terminal = false;
     icon = "bambu-studio";
-    categories = [ "Graphics" "3DGraphics" "Engineering" ];
+    categories = [
+      "Graphics"
+      "3DGraphics"
+      "Engineering"
+    ];
     mimeType = [
       "model/stl"
       "model/3mf"
@@ -106,14 +129,26 @@
     enable = true;
     defaultApplications = {
       # STL files - fstl is default, but all three listed so handlr selector works
-      "model/stl" =
-        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
-      "application/vnd.ms-pki.stl" =
-        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
-      "application/sla" =
-        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
-      "application/x-navistyle" =
-        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
+      "model/stl" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
+      "application/vnd.ms-pki.stl" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
+      "application/sla" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
+      "application/x-navistyle" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
 
       # Lychee Slicer files
       "application/x-lychee-slicer" = "lychee-slicer.desktop";
@@ -189,14 +224,26 @@
 
     # Additional associations allow multiple handlers for same file type
     associations.added = {
-      "model/stl" =
-        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
-      "application/vnd.ms-pki.stl" =
-        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
-      "application/sla" =
-        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
-      "application/x-navistyle" =
-        [ "fstl.desktop" "lychee-slicer.desktop" "bambu-studio.desktop" ];
+      "model/stl" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
+      "application/vnd.ms-pki.stl" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
+      "application/sla" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
+      "application/x-navistyle" = [
+        "fstl.desktop"
+        "lychee-slicer.desktop"
+        "bambu-studio.desktop"
+      ];
     };
   };
 
@@ -233,9 +280,8 @@
   '';
 
   # Force MIME database update on activation
-  home.activation.updateMimeDatabase =
-    config.lib.dag.entryAfter [ "writeBoundary" ] ''
-      run ${pkgs.shared-mime-info}/bin/update-mime-database $HOME/.local/share/mime
-      run ${pkgs.desktop-file-utils}/bin/update-desktop-database $HOME/.local/share/applications
-    '';
+  home.activation.updateMimeDatabase = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+    run ${pkgs.shared-mime-info}/bin/update-mime-database $HOME/.local/share/mime
+    run ${pkgs.desktop-file-utils}/bin/update-desktop-database $HOME/.local/share/applications
+  '';
 }

@@ -151,6 +151,16 @@ return {
 								Snacks.picker.files({ cwd = Snacks.picker.util.dir(item) })
 							end
 						end,
+						copy_name = function(_, item)
+							if item then
+								vim.fn.setreg("+", vim.fs.basename(item.file))
+							end
+						end,
+						copy_relative_path = function(picker, item)
+							if item then
+								vim.fn.setreg("+", vim.fs.relpath(picker:cwd(), item.file) or item.file)
+							end
+						end,
 					},
 					win = {
 						list = {
@@ -158,6 +168,10 @@ return {
 								-- search from the directory under the cursor
 								["<leader>ff"] = "picker_files",
 								["<leader>fs"] = "picker_grep",
+								-- nvim-tree's copy keys; the explorer's own yank (used by `p` to paste files) moves to gy
+								["y"] = "copy_name",
+								["Y"] = "copy_relative_path",
+								["gy"] = { "explorer_yank", mode = { "n", "x" } },
 							},
 						},
 					},
@@ -238,6 +252,16 @@ return {
 	config = function(_, opts)
 		local snacks = require("snacks")
 		snacks.setup(opts)
+
+		-- Centre the file the explorer jumps to (e.g. <leader>ef) instead of leaving it at the bottom edge
+		local explorer_actions = require("snacks.explorer.actions")
+		local reveal = explorer_actions.reveal
+		explorer_actions.reveal = function(picker, path)
+			if reveal(picker, path) then
+				Snacks.picker.actions.list_scroll_center(picker)
+				return true
+			end
+		end
 
 		-- Track git branch for auto-session restore on lazygit close
 		vim.g.last_git_branch = nil

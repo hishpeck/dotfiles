@@ -229,6 +229,12 @@ in
     };
   };
 
+  # Restarting these on switch drops every app's audio/mic connection;
+  # pick up PipeWire changes on next login/reboot instead.
+  systemd.user.services.pipewire.restartIfChanged = false;
+  systemd.user.services.pipewire-pulse.restartIfChanged = false;
+  systemd.user.services.wireplumber.restartIfChanged = false;
+
   # Auto-mount removable media
   # services.udisks2.enable = true;
 

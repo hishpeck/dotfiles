@@ -13,6 +13,13 @@ keymap.set("n", "x", '"_x', { desc = "Remove character without copying it" })
 keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment a number" })
 keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement a number" })
 
+keymap.set("n", "<leader>yn", function()
+  vim.fn.setreg("+", vim.fn.expand("%:t"))
+end, { desc = "Copy file name" })
+keymap.set("n", "<leader>yp", function()
+  vim.fn.setreg("+", vim.fn.expand("%:."))
+end, { desc = "Copy file path relative to cwd" })
+
 -- window management
 keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" })
 keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" })

@@ -168,10 +168,8 @@ return {
 								-- search from the directory under the cursor
 								["<leader>ff"] = "picker_files",
 								["<leader>fs"] = "picker_grep",
-								-- nvim-tree's copy keys; the explorer's own yank (used by `p` to paste files) moves to gy
-								["y"] = "copy_name",
-								["Y"] = "copy_relative_path",
-								["gy"] = { "explorer_yank", mode = { "n", "x" } },
+								["gn"] = "copy_name",
+								["gp"] = "copy_relative_path",
 								["<C-t>"] = "tab", -- the explorer maps it to a terminal; other pickers open a tab
 							},
 						},

@@ -172,6 +172,7 @@ return {
 								["y"] = "copy_name",
 								["Y"] = "copy_relative_path",
 								["gy"] = { "explorer_yank", mode = { "n", "x" } },
+								["<C-t>"] = "tab", -- the explorer maps it to a terminal; other pickers open a tab
 							},
 						},
 					},

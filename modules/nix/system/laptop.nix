@@ -34,6 +34,20 @@
 
   boot.kernelParams = [ "asus_wmi.battery_charge_limit=80" ];
 
+  # After resume from hibernate the ASUS EC comes back on its own default
+  # thermal policy while sysfs/power-profiles-daemon still report the old
+  # profile, so the fan stays slow under load. Bounce the profile so asus-wmi
+  # writes it to the EC again (writing the same value can be a no-op).
+  powerManagement.resumeCommands = ''
+    p=/sys/firmware/acpi/platform_profile
+    if [ -w "$p" ]; then
+      cur=$(cat "$p")
+      [ "$cur" = balanced ] && tmp=quiet || tmp=balanced
+      echo "$tmp" > "$p"
+      echo "$cur" > "$p"
+    fi
+  '';
+
   services.libinput = {
     enable = true;
     touchpad = {

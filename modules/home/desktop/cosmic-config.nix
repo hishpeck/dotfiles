@@ -14,7 +14,7 @@ let
         "com.system76.CosmicAppletInputSources",
         "com.system76.CosmicAppletStatusArea",
         "com.system76.CosmicAppletTiling",
-        "com.github.MusicPlayer",
+        "com.github.cosmic_media_now_playing_applet",
         "com.system76.CosmicAppletAudio",
         "com.system76.CosmicAppletBluetooth",
         "com.system76.CosmicAppletNetwork",

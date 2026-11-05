@@ -52,7 +52,7 @@ modules/
 
 - **`modules/nix/` vs `modules/home/`**: Hard split between NixOS system modules and Home Manager modules. Never mix them. If a domain (e.g. `gui`, `work`) needs both, there are two separate files at the same path under each tree.
 - **`nixosHosts` list in `flake.nix`**: Single source of truth for NixOS machines. `nixosConfigurations` is derived from it via `builtins.listToAttrs`. Adding a new NixOS host means adding one entry here only. Non-NixOS generic profiles (`x84_64`, `aarch64`) are added to `homeConfigurations` separately.
-- **`niup`** (`nh os switch --update ~/dotfiles`): The only way to apply changes on NixOS machines — rebuilds the full NixOS system including the Home Manager module, and updates all flake inputs. Use `niup` in instructions, never `nix-update`.
+- **`niup`** (`pkg-update && nh os switch --update ~/dotfiles`): The only way to apply changes on NixOS machines — rebuilds the full NixOS system including the Home Manager module, and updates all flake inputs. Use `niup` in instructions, never `nix-update`.
 - **`nisw`** (`nh os switch ~/dotfiles`): Same as `niup` but without `--update` — keeps `flake.lock` pinned. Use this instead of `niup` when iterating on a broken build, since bumping `nixpkgs` changes the derivation hash of every locally-built package (custom `fetchFromGitHub`-sourced apps in particular) and forces them to rebuild from scratch even if unrelated to the fix.
 - **`hms`** (`nh home switch ~/dotfiles`): standalone Home Manager switch — must not be run on NixOS hosts where HM is managed as a NixOS module. `hms-update` also updates flake inputs before switching.
 
@@ -62,6 +62,7 @@ When adding or updating any app, prefer in this order:
 
 1. **nixpkgs**, if the package is actually substitutable (cached prebuilt binary). Presence in nixpkgs is not enough — unfree-licensed packages (e.g. `bambu-studio`) generally aren't built by Hydra and would compile from source locally despite being "in nixpkgs". Verify before switching: `nix build --dry-run` should show it being fetched, not built; or check `https://cache.nixos.org/<store-path-hash>.narinfo` returns 200, not 404.
 2. **A prebuilt binary from the project's own releases** (GitHub Releases, AppImage, vendor download) — see `custom-apps/` for the wrapping pattern (`appimageTools.wrapType2`, `fetchurl` + `dpkg`/`fetchzip`, etc.).
+   **`pkg-update`** (`modules/home/cli/pkg-update.sh`, run automatically at the start of `niup`) finds every installed package defined in `custom-apps/` whose `src` is a GitHub release asset, and offers to bump it in an fzf picker (Esc skips). For it to see an app, the derivation must expose `version` and `src` (add `passthru = { inherit version src; };` if it's wrapped, e.g. in `symlinkJoin`), the file must contain `version = "…"`, and the URL must be written with `${version}`.
 3. **Building from source** (`fetchFromGitHub` + `buildRustPackage`/`stdenv.mkDerivation`/etc.) — last resort, only when no prebuilt option exists anywhere.
 
 ## Hosts Summary

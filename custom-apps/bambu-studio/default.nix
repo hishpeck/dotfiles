@@ -84,6 +84,8 @@ let
 
 in pkgs.symlinkJoin {
   name = pname;
+  # exposed so pkg-update can find the version and release URL
+  passthru = { inherit version src; };
   paths = [ unwrapped ];
   nativeBuildInputs = [ pkgs.makeWrapper ];
   postBuild = ''

@@ -1,6 +1,14 @@
 { config, pkgs, lib, ... }:
 
 {
+  home.packages = [
+    (pkgs.writeShellApplication {
+      name = "pkg-update";
+      runtimeInputs = with pkgs; [ nix-update gh fzf jq git util-linux gnused ];
+      text = builtins.readFile ./pkg-update.sh;
+    })
+  ];
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -24,7 +32,7 @@
       hms = "nh home switch ~/dotfiles";
       hms-update = "nh home switch --update ~/dotfiles";
       nisw = "nh os switch ~/dotfiles";
-      niup = "nh os switch --update ~/dotfiles";
+      niup = "pkg-update && nh os switch --update ~/dotfiles";
       nipu =
         "nix path-info --recursive /run/current-system | cachix push hishpeck";
       docker-compose = "docker compose";

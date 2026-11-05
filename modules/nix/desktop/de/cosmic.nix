@@ -1,79 +1,6 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
-let
-  cosmic-applet-music-player = pkgs.rustPlatform.buildRustPackage {
-    pname = "cosmic-ext-applet-music-player";
-    version = "0-unstable-2026-05-07";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "Ebbo";
-      repo = "cosmic-applet-music-player";
-      rev = "1fe94a89a85be34b867ee94268e46e7fd72e88b8";
-      hash = "sha256-GAIzV/BdU4SOV6P+qNGWmPzF5mvNym9D99/7Hg5/Amc=";
-    };
-
-    cargoHash = "sha256-Cs9g2w480jquSNyEG41WqOEMPQ/BJKcOgN8VnCfZBLQ=";
-
-    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook pkgs.pkg-config ];
-    buildInputs = [ pkgs.openssl pkgs.dbus pkgs.libpulseaudio ];
-
-    dontUseJustBuild = true;
-    dontUseJustCheck = true;
-
-    justFlags = [
-      "--set"
-      "prefix"
-      (builtins.placeholder "out")
-      "--set"
-      "bin-src"
-      "target/${pkgs.stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-ext-applet-music-player"
-    ];
-
-    meta = {
-      description = "Music player applet for the COSMIC Desktop Environment";
-      homepage = "https://github.com/Ebbo/cosmic-applet-music-player";
-      license = lib.licenses.gpl3Only;
-      mainProgram = "cosmic-ext-applet-music-player";
-      platforms = lib.platforms.linux;
-    };
-  };
-
-  cosmic-ext-whether = pkgs.rustPlatform.buildRustPackage {
-    pname = "cosmic-ext-whether";
-    version = "0-unstable-2026-05-07";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "nwxnw";
-      repo = "cosmic-ext-whether";
-      rev = "92afacb3f77f5cb0c4e6bae05424a32401dcf5c3";
-      hash = "sha256-UaxdnZrpnjlR0/jdg0aRg4JAbcbD9BHC1af0tIETPGU=";
-    };
-
-    cargoHash = "sha256-7CSXz8QDmTvmnY/TjJMdYhM5ZyKBW8YdkYcKzKcAc18=";
-
-    nativeBuildInputs = [ pkgs.just pkgs.libcosmicAppHook ];
-
-    dontUseJustBuild = true;
-    dontUseJustCheck = true;
-
-    justFlags = [
-      "--set"
-      "prefix"
-      (builtins.placeholder "out")
-      "--set"
-      "bin-src"
-      "target/${pkgs.stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-ext-whether"
-    ];
-
-    meta = {
-      description = "Weather applet for the COSMIC Desktop Environment";
-      homepage = "https://github.com/nwxnw/cosmic-ext-whether";
-      license = lib.licenses.gpl3Only;
-      mainProgram = "cosmic-ext-whether";
-      platforms = lib.platforms.linux;
-    };
-  };
-in {
+{
   services.desktopManager.cosmic.enable = true;
   services.displayManager.cosmic-greeter.enable = true;
 
@@ -100,7 +27,7 @@ in {
     pkgs.cutecosmic
     pkgs.cosmic-ext-applet-minimon
     pkgs.cosmic-ext-applet-privacy-indicator
-    cosmic-applet-music-player
-    cosmic-ext-whether
+    (pkgs.callPackage ../../../../custom-apps/cosmic-media-now-playing-applet { })
+    (pkgs.callPackage ../../../../custom-apps/cosmic-ext-whether { })
   ];
 }

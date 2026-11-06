@@ -59,7 +59,6 @@
 
   home.packages = with pkgs; [
     gh
-    weave
 
     # Clipboard utilities
     wl-clipboard # Wayland clipboard (wl-copy, wl-paste)

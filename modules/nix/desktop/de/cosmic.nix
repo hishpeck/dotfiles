@@ -25,8 +25,8 @@
 
   environment.systemPackages = [
     pkgs.cutecosmic
-    pkgs.cosmic-ext-applet-minimon
-    pkgs.cosmic-ext-applet-privacy-indicator
+    (pkgs.callPackage ../../../../custom-apps/cosmic-ext-applet-minimon { })
+    (pkgs.callPackage ../../../../custom-apps/cosmic-ext-applet-privacy-indicator { })
     (pkgs.callPackage ../../../../custom-apps/cosmic-media-now-playing-applet { })
     (pkgs.callPackage ../../../../custom-apps/cosmic-ext-whether { })
   ];

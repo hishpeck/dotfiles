@@ -241,6 +241,11 @@ in
     ".config/cosmic/com.system76.CosmicIdle/v1/suspend_on_ac_time".text = "None";
     ".config/cosmic/com.system76.CosmicIdle/v1/suspend_on_battery_time".text = "None";
 
+    # ── Privacy indicator applet ────────────────────────────────────────────────
+    # The blinking dot redraws every 20ms while any mic stream is open (always,
+    # with noise suppression running), pinning cosmic-panel at ~20-30% CPU.
+    ".config/cosmic/dev.DBrox.CosmicPrivacyIndicator/v1/animated".text = "false";
+
     # ── Minimon applet ──────────────────────────────────────────────────────────
     ".config/cosmic/io.github.cosmic_utils.minimon-applet-panel/v1/content_order".text = ''
       (

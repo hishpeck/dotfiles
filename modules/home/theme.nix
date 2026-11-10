@@ -45,6 +45,7 @@ in
   catppuccin = {
     enable = true;
     autoEnable = true;
+    cache.enable = true;
     inherit flavor accent;
 
     # Upstream still uses the deprecated `gui.authorColors` key; lazygit tries to

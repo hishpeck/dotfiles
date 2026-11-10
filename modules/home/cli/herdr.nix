@@ -1,9 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  inherit (config.catppuccin) flavor accent;
-  palette = lib.importJSON "${config.catppuccin.sources.palette}/palette.json";
-  accentHex = palette.${flavor}.colors.${accent}.hex;
+  inherit (import ../../theme-values.nix) flavor accent accentHex;
   configPath = "${config.home.homeDirectory}/dotfiles/config/herdr/config.toml";
 in
 {

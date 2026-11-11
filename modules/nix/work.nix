@@ -10,6 +10,8 @@
       "dev.lesanciennes.com"
       "internal.lesanciennes.com"
     ];
+    # carandclassic `car worktree` stacks (each on its own port).
+    "127.0.0.1" = [ "worktree.dev.carandclassic.com" ];
   };
 
   environment.systemPackages = with pkgs; [ helm k3d kubectl ];

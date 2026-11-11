@@ -1,6 +1,7 @@
-{ pkgs, options, ... }:
+{ pkgs, inputs, ... }:
 let
   inherit (import ../theme-values.nix) flavor accent;
+  upstreamSources = inputs.catppuccin.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
   imports = [ ./desktop/cosmic-theme.nix ];
@@ -48,17 +49,21 @@ in
     cache.enable = true;
     inherit flavor accent;
 
-    # Upstream still uses the deprecated `gui.authorColors` key; lazygit tries to
-    # migrate it in place and fails on the read-only store path.
-    sources.lazygit =
-      pkgs.runCommand "catppuccin-lazygit-migrated" { nativeBuildInputs = [ pkgs.yq-go ]; }
-        ''
-          cp -r ${options.catppuccin.sources.default.lazygit} $out
-          chmod -R u+w $out
-          for f in $out/*/*.yml; do
-            yq -i '.gui.theme.authorColors = .gui.authorColors | del(.gui.authorColors)' "$f"
-          done
-        '';
+    # Prebuilt ports from catppuccin's pinned nixpkgs (what catppuccin.cachix serves);
+    # the default builds them against our nixpkgs, recompiling whiskers on every update.
+    sources = upstreamSources // {
+      # Upstream still uses the deprecated `gui.authorColors` key; lazygit tries to
+      # migrate it in place and fails on the read-only store path.
+      lazygit =
+        pkgs.runCommand "catppuccin-lazygit-migrated" { nativeBuildInputs = [ pkgs.yq-go ]; }
+          ''
+            cp -r ${upstreamSources.lazygit} $out
+            chmod -R u+w $out
+            for f in $out/*/*.yml; do
+              yq -i '.gui.theme.authorColors = .gui.authorColors | del(.gui.authorColors)' "$f"
+            done
+          '';
+    };
 
     chromium.enable = true;
     lazygit.enable = true;

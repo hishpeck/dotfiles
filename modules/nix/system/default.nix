@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 let
@@ -68,13 +69,11 @@ in
       "https://cache.nixos.org/"
       "https://cosmic.cachix.org/"
       "https://hishpeck.cachix.org"
-      "https://catppuccin.cachix.org"
     ];
     trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "cosmic.cachix.org-1:D7qyvniWny9W6jnP799Aunmdfn35p0qT3Y6E3n5M9f4="
       "hishpeck.cachix.org-1:mZfdMDcOQs9JIpXeT0T/F0DgAXaaTVYblSXFnIr9y7E="
-      "catppuccin.cachix.org-1:noG/4HkbhJb+lUAdKrph6LaozJvAeEEZj4N732IysmU="
     ];
   };
 
@@ -285,6 +284,7 @@ in
     autoEnable = false;
     inherit flavor accent;
     limine.enable = true;
+    sources = inputs.catppuccin.packages.${pkgs.stdenv.hostPlatform.system};
     cache.enable = true;
   };
 }

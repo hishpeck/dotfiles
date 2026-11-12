@@ -1,31 +1,51 @@
 { lib, pkgs, ... }:
 
 let
-  # Each Pi directory gets its own sshfs mount (and so its own ssh connection +
-  # sftp-server on the Pi). sftp-server is single-threaded, so with one mount of
-  # the Pi's whole `/` a single stuck disk froze every path under it. Split
-  # mounts keep a failing USB drive from blocking the others, and keep file
-  # managers / recursive tools out of the Pi's /proc, /sys, /dev.
+  # Pi 5 is shared by several Linux machines — keep mount paths identical on
+  # every host importing this module.
   #
-  # Shared by every NixOS host that imports this module — keep paths identical
-  # across devices.
-  pi5Mounts = {
-    home = "/home/ac";
+  # `rpi5.local` (mDNS) may resolve to the Pi's Wi-Fi address; pin its wired
+  # eth0 address instead. Keep it stable with a DHCP reservation on the router.
+  pi5Addr = "192.168.0.200";
+  pi5 = "rpi5";
+
+  # Disks: NFSv4, exported from the Pi's /etc/exports (LAN + ZeroTier only,
+  # all_squash → ac). To add a disk, export it on the Pi and add it here.
+  # NFS is kernel-side and multi-threaded, far faster than sshfs for large
+  # media files, and `soft` makes a dead disk return EIO instead of freezing
+  # every process that touches the mount.
+  pi5NfsMounts = {
     external_big = "/mnt/external_big";
-    external1 = "/mnt/external1";
-    external2 = "/mnt/external2";
   };
 
-  mkPi5Mount = remotePath: {
-    device = "ac@rpi5.local:${remotePath}";
-    fsType = "fuse.sshfs";
-    options = [
-      "x-systemd.automount"
-      "noauto"
-      "x-systemd.idle-timeout=60"
-      "x-systemd.mount-timeout=5"
-      "_netdev"
+  # Home dir: sshfs (no NFS export needed, auth via ssh key).
+  pi5SshfsMounts = {
+    home = "/home/ac";
+  };
 
+  automountOpts = [
+    "x-systemd.automount"
+    "noauto"
+    "x-systemd.idle-timeout=300"
+    "x-systemd.mount-timeout=10"
+    "_netdev"
+  ];
+
+  mkNfsMount = remotePath: {
+    device = "${pi5}:${remotePath}";
+    fsType = "nfs";
+    options = automountOpts ++ [
+      "nfsvers=4.2"
+      "soft"
+      "timeo=150" # 15s per try (deciseconds)
+      "retrans=3"
+    ];
+  };
+
+  mkSshfsMount = remotePath: {
+    device = "ac@${pi5}:${remotePath}";
+    fsType = "fuse.sshfs";
+    options = automountOpts ++ [
       "allow_other"
       # sshfs runs as root via systemd; present files as owned by local `ac`
       # (uid 1000, group `users`) instead of the Pi's raw ids. Access checks
@@ -36,11 +56,14 @@ let
       "ServerAliveInterval=15"
       "ServerAliveCountMax=3"
       "StrictHostKeyChecking=accept-new"
-
       "ConnectTimeout=3"
       "IdentityFile=/home/ac/.ssh/id_zenbook"
     ];
   };
+
+  mkMounts =
+    mk: mounts:
+    lib.mapAttrs' (name: remotePath: lib.nameValuePair "/mnt/pi5/${name}" (mk remotePath)) mounts;
 in
 {
   services.zerotierone.enable = true;
@@ -51,11 +74,11 @@ in
     ACTION=="add|change", SUBSYSTEM=="net", KERNEL=="zt*", ATTR{mtu}="1280"
   '';
 
+  networking.hosts.${pi5Addr} = [ pi5 ];
+
   programs.fuse.userAllowOther = true;
 
   environment.systemPackages = with pkgs; [ sshfs ];
 
-  fileSystems = lib.mapAttrs' (
-    name: remotePath: lib.nameValuePair "/mnt/pi5/${name}" (mkPi5Mount remotePath)
-  ) pi5Mounts;
+  fileSystems = mkMounts mkNfsMount pi5NfsMounts // mkMounts mkSshfsMount pi5SshfsMounts;
 }

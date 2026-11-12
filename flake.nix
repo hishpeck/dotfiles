@@ -27,9 +27,6 @@
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    herdr.url = "github:ogulcancelik/herdr";
-    herdr.inputs.nixpkgs.follows = "nixpkgs";
-    herdr.inputs.rust-overlay.follows = "rust-overlay";
     edgepad = {
       url = "github:assembledev/edgepad";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   inherit (config.catppuccin) flavor accent;
@@ -8,7 +8,7 @@ let
 in
 {
   home.packages = [
-    inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
+    pkgs.herdr
   ];
 
   # Mirrors modules/home/cli/tmux.nix as closely as herdr's config model allows.

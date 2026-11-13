@@ -7,6 +7,11 @@
       runtimeInputs = with pkgs; [ nix-update gh fzf jq git util-linux gnused ];
       text = builtins.readFile ./pkg-update.sh;
     })
+    (pkgs.writeShellApplication {
+      name = "check-videos";
+      runtimeInputs = with pkgs; [ python3 ffmpeg-headless ];
+      text = ''exec python3 ${./check-videos.py} "$@"'';
+    })
   ];
 
   programs.zsh = {

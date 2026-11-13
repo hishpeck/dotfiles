@@ -39,6 +39,18 @@ def run(cmd, timeout):
         return -1, "", "timed out"
 
 
+# ffmpeg noise that isn't damage: timestamp/keyframe/audio-header warnings
+# common in AVI/MPG/WMV files that play fine.
+BENIGN = (
+    "non monotonically increasing dts", "non monotonous dts", "Timestamps are unset",
+    "Last message repeated", "first frame is no keyframe", "Header missing", "unknown stream",
+)
+
+
+def real_errors(stderr):
+    return [l for l in stderr.splitlines() if l.strip() and not any(b in l for b in BENIGN)]
+
+
 def first_line(s):
     return next((l.strip() for l in s.splitlines() if l.strip()), "")[:120]
 
@@ -79,17 +91,18 @@ def check(path, deep):
              "-map", "0:v:0", "-t", "10", "-f", "null", "-"],
             timeout=300,
         )
-        if rc != 0 or err.strip():
-            return "TRUNCATED", first_line(err) or f"ffmpeg exit {rc}"
+        errs = real_errors(err)
+        if rc != 0 or errs:
+            return "TRUNCATED", (errs[0][:120] if errs else f"ffmpeg exit {rc}")
 
     if deep:
         rc, _, err = run(
             ["ffmpeg", "-nostdin", "-v", "error", "-i", path, "-map", "0:v:0", "-f", "null", "-"],
             timeout=6 * 3600,
         )
-        if rc != 0 or err.strip():
-            n = len([l for l in err.splitlines() if l.strip()])
-            return "CORRUPT", f"{n} decode errors, first: {first_line(err)}"
+        errs = real_errors(err)
+        if rc != 0 or errs:
+            return "CORRUPT", f"{len(errs)} decode errors, first: {errs[0][:120] if errs else rc}"
 
     return "OK", ""
 

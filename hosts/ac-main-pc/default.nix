@@ -57,13 +57,14 @@
   # Extra data disks. nofail so a missing/dirty disk never blocks boot.
   # NTFS disks are shared with Windows — disable Windows Fast Startup/hibernation,
   # otherwise ntfs3 refuses to mount them read-write.
+  # x-gvfs-show: list them in file manager sidebars (GIO hides fstab mounts outside /media by default).
   # No windows_names: Proton writes filenames containing ':' into compatdata.
   fileSystems =
     let
       ntfs = uuid: {
         device = "/dev/disk/by-uuid/${uuid}";
         fsType = "ntfs3";
-        options = [ "uid=1000" "gid=100" "umask=022" "nofail" "x-systemd.device-timeout=5s" ];
+        options = [ "uid=1000" "gid=100" "umask=022" "nofail" "x-systemd.device-timeout=5s" "x-gvfs-show" ];
       };
     in
     {
@@ -74,7 +75,7 @@
       "/mnt/data" = {
         device = "/dev/disk/by-uuid/2270ce9f-0f40-4ff4-9d98-9d5d56b3623c";
         fsType = "ext4";
-        options = [ "nofail" "x-systemd.device-timeout=5s" ];
+        options = [ "nofail" "x-systemd.device-timeout=5s" "x-gvfs-show" ];
       };
     };
 

@@ -24,7 +24,10 @@ let
     home = "/home/ac";
   };
 
-  automountOpts = [
+  automountOpts = name: [
+    # show in file manager sidebars (GIO hides fstab mounts outside /media)
+    "x-gvfs-show"
+    "x-gvfs-name=Pi5%20${name}"
     "x-systemd.automount"
     "noauto"
     "x-systemd.idle-timeout=300"
@@ -32,10 +35,10 @@ let
     "_netdev"
   ];
 
-  mkNfsMount = remotePath: {
+  mkNfsMount = name: remotePath: {
     device = "${pi5}:${remotePath}";
     fsType = "nfs";
-    options = automountOpts ++ [
+    options = automountOpts name ++ [
       "nfsvers=4.2"
       "soft"
       "timeo=150" # 15s per try (deciseconds)
@@ -43,10 +46,10 @@ let
     ];
   };
 
-  mkSshfsMount = remotePath: {
+  mkSshfsMount = name: remotePath: {
     device = "ac@${pi5}:${remotePath}";
     fsType = "fuse.sshfs";
-    options = automountOpts ++ [
+    options = automountOpts name ++ [
       "allow_other"
       # sshfs runs as root via systemd; present files as owned by local `ac`
       # (uid 1000, group `users`) instead of the Pi's raw ids. Access checks
@@ -64,7 +67,7 @@ let
 
   mkMounts =
     mk: mounts:
-    lib.mapAttrs' (name: remotePath: lib.nameValuePair "/mnt/pi5/${name}" (mk remotePath)) mounts;
+    lib.mapAttrs' (name: remotePath: lib.nameValuePair "/mnt/pi5/${name}" (mk name remotePath)) mounts;
 in
 {
   services.zerotierone.enable = true;

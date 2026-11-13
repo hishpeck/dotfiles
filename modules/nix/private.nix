@@ -16,6 +16,7 @@ let
   # every process that touches the mount.
   pi5NfsMounts = {
     external_big = "/mnt/external_big";
+    external1 = "/mnt/external1";
   };
 
   # Home dir: sshfs (no NFS export needed, auth via ssh key).

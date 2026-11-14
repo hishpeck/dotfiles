@@ -36,9 +36,22 @@
     config.common.default = [ "cosmic" ];
   };
 
-  # NFS thumbnails would need patching cosmic-files (src/tab.rs `fs_kind` hardcodes
-  # nfs/nfs4 as remote; upstream issue pop-os/cosmic-files#1150). Tried and
-  # reverted 2026-11-13: building it from source here kept crashing.
+  # COSMIC Files hardcodes nfs/nfs4 as "remote" (src/tab.rs `fs_kind`) and never
+  # thumbnails remote files — no setting for it (pop-os/cosmic-files#1150). Our
+  # only NFS mounts are the Pi disks on the LAN, fast enough to thumbnail, so
+  # treat NFS as local. Builds cosmic-files from source; --replace-fail breaks
+  # the build loudly if upstream changes that line. Drop once #1150 adds a setting.
+  nixpkgs.overlays = [
+    (final: prev: {
+      cosmic-files = prev.cosmic-files.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+          substituteInPlace src/tab.rs \
+            --replace-fail '"nfs" | "nfs4" => FsKind::Remote' '"nfs" | "nfs4" => FsKind::Local'
+        '';
+      });
+    })
+  ];
+
   environment.pathsToLink = [ "/share/thumbnailers" ];
 
   environment.systemPackages = [

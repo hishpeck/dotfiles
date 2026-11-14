@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -41,6 +41,12 @@
       enable = true;
       sbctl = pkgs.sbctl.override { databasePath = "/var/lib/sbctl"; };
     };
+    # BIOS updates wipe NVRAM boot entries; firmware then falls back to the
+    # removable path, so keep the signed Limine there too (overwrites old systemd-boot).
+    extraInstallCommands = ''
+      ${pkgs.coreutils}/bin/install -D ${config.boot.loader.efi.efiSysMountPoint}/EFI/limine/BOOTX64.EFI \
+        ${config.boot.loader.efi.efiSysMountPoint}/EFI/BOOT/BOOTX64.EFI
+    '';
   };
 
   environment.systemPackages = [ (pkgs.sbctl.override { databasePath = "/var/lib/sbctl"; }) ];

@@ -12,6 +12,21 @@
 
   services.dbus.enable = true;
 
+  # Backport cosmic-protocols 815b2c5 into the portal's vendored client-toolkit:
+  # destroy a finished frame before waking the screencast thread, else it can send
+  # create_frame first → protocol error → portal crash → frozen screen share.
+  # shortcut: remove once xdg-desktop-portal-cosmic's Cargo.lock includes 815b2c5.
+  nixpkgs.overlays = [
+    (final: prev: {
+      xdg-desktop-portal-cosmic = prev.xdg-desktop-portal-cosmic.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+          patch -p1 -d "$(echo $NIX_BUILD_TOP/$(stripHash $cargoDeps)/*/cosmic-client-toolkit-*)" \
+            < ${./cctk-destroy-frame-before-callback.patch}
+        '';
+      });
+    })
+  ];
+
   xdg.portal = {
     enable = true;
 

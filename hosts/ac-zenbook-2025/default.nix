@@ -27,21 +27,8 @@
   # cold-rebooted instead (seen 2026-05-12, 05-22, 06-09, 07-22 — matches
   # "lid opened after a night, looks like it restarted"). Try S3 "deep"
   # sleep instead, which this board also supports (see /sys/power/mem_sleep).
-  #
-  # The recurring silent hard-freezes (no kernel trace, load/thermal
-  # independent) match a known Lunar Lake (Core Ultra 258V) silicon erratum:
-  # a MONITOR/MWAIT wakeup can be lost while a core sits in the C3_ACPI idle
-  # state (state3 on this board), hanging it with no chance to log anything.
-  # Upstream only fixed the kernel's own internal wakeup path
-  # (X86_BUG_MONITOR / wake_up_idle_cpu IPI, landed 6.12.5/6.13-rc2) — an
-  # external interrupt (e.g. the USB-C dock) waking a core from C3 can still
-  # hit the same erratum. Capping cstates below C3 sidesteps it entirely,
-  # at the cost of higher idle power draw. 2026-08-14 experiment — see if
-  # this eliminates the freezes; loosen back to C3 once confirmed one way
-  # or the other.
   boot.kernelParams = [
     "mem_sleep_default=deep"
-    "intel_idle.max_cstate=2"
     # Where to find the hibernation image on resume — see the hibernate
     # block below. Offset is only valid for the current swapfile; recompute
     # with `sudo filefrag -v /var/lib/swapfile` if it's ever moved/resized.

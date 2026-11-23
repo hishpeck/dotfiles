@@ -12,6 +12,10 @@
     force = true;
   };
 
+  # Suspend after 15 min idle on battery, 30 min on AC.
+  home.file.".config/cosmic/com.system76.CosmicIdle/v1/suspend_on_battery_time".text = "Some(900000)";
+  home.file.".config/cosmic/com.system76.CosmicIdle/v1/suspend_on_ac_time".text = "Some(1800000)";
+
   # Replicates ASUS Smart Gesture edge sliders from Windows: slide one finger
   # along the left edge for brightness, right edge for volume. edgepad grabs
   # the touchpad and forwards non-edge input through a virtual one, so the

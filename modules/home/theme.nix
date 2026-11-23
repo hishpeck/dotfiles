@@ -51,19 +51,7 @@ in
 
     # Prebuilt ports from catppuccin's pinned nixpkgs (what catppuccin.cachix serves);
     # the default builds them against our nixpkgs, recompiling whiskers on every update.
-    sources = upstreamSources // {
-      # Upstream still uses the deprecated `gui.authorColors` key; lazygit tries to
-      # migrate it in place and fails on the read-only store path.
-      lazygit =
-        pkgs.runCommand "catppuccin-lazygit-migrated" { nativeBuildInputs = [ pkgs.yq-go ]; }
-          ''
-            cp -r ${upstreamSources.lazygit} $out
-            chmod -R u+w $out
-            for f in $out/*/*.yml; do
-              yq -i '.gui.theme.authorColors = .gui.authorColors | del(.gui.authorColors)' "$f"
-            done
-          '';
-    };
+    sources = upstreamSources;
 
     chromium.enable = true;
     lazygit.enable = true;

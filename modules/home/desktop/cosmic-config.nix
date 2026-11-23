@@ -146,6 +146,12 @@ in
               modifiers: [
                   Super,
               ],
+              key: "slash",
+          ): Spawn("vicinae vicinae://launch/search-engines/search"),
+          (
+              modifiers: [
+                  Super,
+              ],
               key: "Return",
           ): Disable,
           (

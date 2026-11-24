@@ -23,9 +23,6 @@ in
       qt.enable = false;
       vicinae.enable = false;
       rofi.enable = false; # unused; still sets the renamed programs.rofi.font
-      # Home Manager removed programs.wayprompt; stylix still sets it.
-      # shortcut: drop once stylix removes its wayprompt module.
-      wayprompt.enable = false;
     };
 
     cursor = {

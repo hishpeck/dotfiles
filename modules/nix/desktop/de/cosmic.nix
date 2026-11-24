@@ -12,16 +12,30 @@
 
   services.dbus.enable = true;
 
-  # Backport cosmic-protocols 815b2c5 into the portal's vendored client-toolkit:
-  # destroy a finished frame before waking the screencast thread, else it can send
-  # create_frame first → protocol error → portal crash → frozen screen share.
-  # shortcut: remove once xdg-desktop-portal-cosmic's Cargo.lock includes 815b2c5.
   nixpkgs.overlays = [
+    # Backport cosmic-protocols 815b2c5 into the portal's vendored client-toolkit:
+    # destroy a finished frame before waking the screencast thread, else it can send
+    # create_frame first → protocol error → portal crash → frozen screen share.
+    # shortcut: remove once xdg-desktop-portal-cosmic's Cargo.lock includes 815b2c5.
     (final: prev: {
       xdg-desktop-portal-cosmic = prev.xdg-desktop-portal-cosmic.overrideAttrs (old: {
         postPatch = (old.postPatch or "") + ''
           patch -p1 -d "$(echo $NIX_BUILD_TOP/$(stripHash $cargoDeps)/*/cosmic-client-toolkit-*)" \
             < ${./cctk-destroy-frame-before-callback.patch}
+        '';
+      });
+    })
+
+    # COSMIC Files hardcodes nfs/nfs4 as "remote" (src/tab.rs `fs_kind`) and never
+    # thumbnails remote files — no setting for it (pop-os/cosmic-files#1150). Our
+    # only NFS mounts are the Pi disks on the LAN, fast enough to thumbnail, so
+    # treat NFS as local. Builds cosmic-files from source; --replace-fail breaks
+    # the build loudly if upstream changes that line. Drop once #1150 adds a setting.
+    (final: prev: {
+      cosmic-files = prev.cosmic-files.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+          substituteInPlace src/tab.rs \
+            --replace-fail '"nfs" | "nfs4" => FsKind::Remote' '"nfs" | "nfs4" => FsKind::Local'
         '';
       });
     })
@@ -35,22 +49,6 @@
 
     config.common.default = [ "cosmic" ];
   };
-
-  # COSMIC Files hardcodes nfs/nfs4 as "remote" (src/tab.rs `fs_kind`) and never
-  # thumbnails remote files — no setting for it (pop-os/cosmic-files#1150). Our
-  # only NFS mounts are the Pi disks on the LAN, fast enough to thumbnail, so
-  # treat NFS as local. Builds cosmic-files from source; --replace-fail breaks
-  # the build loudly if upstream changes that line. Drop once #1150 adds a setting.
-  nixpkgs.overlays = [
-    (final: prev: {
-      cosmic-files = prev.cosmic-files.overrideAttrs (old: {
-        postPatch = (old.postPatch or "") + ''
-          substituteInPlace src/tab.rs \
-            --replace-fail '"nfs" | "nfs4" => FsKind::Remote' '"nfs" | "nfs4" => FsKind::Local'
-        '';
-      });
-    })
-  ];
 
   environment.pathsToLink = [ "/share/thumbnailers" ];
 

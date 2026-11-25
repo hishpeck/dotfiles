@@ -27,8 +27,11 @@
   # cold-rebooted instead (seen 2026-05-12, 05-22, 06-09, 07-22 — matches
   # "lid opened after a night, looks like it restarted"). Try S3 "deep"
   # sleep instead, which this board also supports (see /sys/power/mem_sleep).
+  # Deep never resumed (hung twice, 2026-11-24 and 11-25), while s2idle on
+  # linux 7.3.5 woke cleanly after 1 min and after 8 h (~95% S0ix residency),
+  # so back to s2idle, set explicitly so the firmware's deep option is never used.
   boot.kernelParams = [
-    "mem_sleep_default=deep"
+    "mem_sleep_default=s2idle"
     # Where to find the hibernation image on resume — see the hibernate
     # block below. Offset is only valid for the current swapfile; recompute
     # with `sudo filefrag -v /var/lib/swapfile` if it's ever moved/resized.
@@ -66,7 +69,9 @@
   # (this) plus the file's physical offset on it (resume_offset above).
   boot.resumeDevice = "/dev/disk/by-uuid/bde83dae-eb2d-4e2a-80d8-77ee274e2bd5";
 
-  # Lid-close hibernate is handled by acpid rather than logind, 2026-10-16.
+  # Lid close suspends (s2idle) since 2026-11-25; on trial, and if it starts
+  # failing again, switch the command below back to `systemctl hibernate`.
+  # Lid close is handled by acpid rather than logind, 2026-10-16.
   # cosmic-comp takes a logind "handle-lid-switch" block inhibitor whenever
   # an external output is connected (src/dbus/logind.rs, "External output
   # connected"), so with the monitor plugged in logind never acts on the lid
@@ -84,7 +89,7 @@
     enable = true;
     lidEventCommands = ''
       case "$1" in
-        *close*) ${pkgs.systemd}/bin/systemctl hibernate ;;
+        *close*) ${pkgs.systemd}/bin/systemctl suspend ;;
       esac
     '';
   };

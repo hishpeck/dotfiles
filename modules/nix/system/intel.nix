@@ -27,12 +27,6 @@
   boot.kernelParams = [
     "xe.force_probe=a840"
     "i915.force_probe=!a840"
-
-    "i915.enable_dc=0"
-
-    "i915.enable_fbc=0"
-
-    "i915.enable_psr=0"
   ];
 
   hardware.cpu.intel.updateMicrocode = true;

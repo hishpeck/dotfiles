@@ -30,6 +30,8 @@
   # Deep never resumed (hung twice, 2026-11-24 and 11-25), while s2idle on
   # linux 7.3.5 woke cleanly after 1 min and after 8 h (~95% S0ix residency),
   # so back to s2idle, set explicitly so the firmware's deep option is never used.
+  # Measured 2026-11-25: 16.5 h lid-closed on battery used 7% (~0.27 W, ~99%
+  # S0ix residency), so no suspend-then-hibernate needed.
   boot.kernelParams = [
     "mem_sleep_default=s2idle"
     # Where to find the hibernation image on resume — see the hibernate

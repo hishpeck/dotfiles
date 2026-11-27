@@ -45,6 +45,29 @@ in
             hash = "sha256-JCnz2lGgBNrXgTVBD8ztS0BBHbUqBk6wyE089+ySNhw=";
           }}/extensions/nix";
         })
+      ]
+      # Raycast ports, sparse-checked out of raycast/extensions. Each needs its
+      # own hash (different sparse tree); work-only ones live in work.nix and
+      # pin the same rev — bump both together.
+      ++ map (e: config.lib.vicinae.mkRayCastExtension (e // {
+        rev = "b3e7c0d11cb48a3246adf3b386c9d1d15ebe0b52";
+      })) [
+        { name = "1password"; sha256 = "sha256-6md+hO725IM/8NMk599agG4gB3mZufOHFEMnNAxSAfg="; }
+        { name = "github"; sha256 = "sha256-j3Hsd+qgieVQicQlNau3zU16t0u/ALSZFWWCbKdeEdM="; }
+        { name = "remove-paywall"; sha256 = "sha256-/tOWoyD5wX1chHciy4PGcO9LfXIY3GZvyRYwE0/yK5c="; }
+      ]
+      # Lives in extensions/google-translate but its package name is
+      # "translate", and the helper uses one name for both — so pass src.
+      ++ [
+        (config.lib.vicinae.mkRayCastExtension {
+          name = "translate";
+          src = "${pkgs.fetchgit {
+            url = "https://github.com/raycast/extensions";
+            rev = "b3e7c0d11cb48a3246adf3b386c9d1d15ebe0b52";
+            sparseCheckout = [ "/extensions/google-translate" ];
+            hash = "sha256-1FiE4KE04/hH1b3YfvQXrLwA5rsnNb221cpAVLuncUU=";
+          }}/extensions/google-translate";
+        })
       ];
     };
 

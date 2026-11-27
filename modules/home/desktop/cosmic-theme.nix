@@ -18,11 +18,16 @@ let
   activeHint = "3";
 
   # Frosted glass (granular, ThemeBuilder v2 fields).
-  frostedIntensity = if isAMD then "Off" else "Medium"; # Off | Low | Medium | High
+  # The Settings "thickness" slider (0-13), saved as a name: {ExtremelyLow,
+  # VeryLow, Low, Medium, High, VeryHigh, ExtremelyHigh}, each also with a
+  # "2" step (e.g. Low2). No "Off": on AMD the frosted* toggles below do that.
+  frostedIntensity = "Low";
   frostedApplets = if isAMD then "false" else "true";
   frostedPanel = if isAMD then "false" else "true";
   frostedSystemInterface = if isAMD then "false" else "true";
-  frostedWindows = "false";
+  # Also gates ext-background-effect blur for ordinary client windows
+  # (cosmic-comp passes blur strength 0 when off) — vicinae's launcher is one.
+  frostedWindows = if isAMD then "false" else "true";
 
   # ── Driven by global catppuccin options (set in theme.nix) ──────────────────
   accent = config.catppuccin.accent;
